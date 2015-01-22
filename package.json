@@ -1,0 +1,30 @@
+{
+  "name": "seqservice",
+  "version": "0.0.1",
+  "description": "API for retrieval of biological sequences from FASTA DBs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bioinformatics",
+    "fasta",
+    "api"
+  ],
+  "dependencies": {
+    "async": "0.9.x",
+    "body-parser": "1.x",
+    "compression": "1.x",
+    "ejs": "1.x",
+    "errorhandler": "1.x",
+    "express": "4.x",
+    "less-middleware": "1.x",
+    "nconf": "0.6.x",
+    "procstreams": "0.3",
+    "request": "2.x",
+    "socket.io": "1.0.x",
+    "temp": "0.8.x"
+  },
+  "author": "Toni Hermoso",
+  "license": "GPLv3"
+}

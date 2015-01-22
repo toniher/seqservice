@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Socket.IO BLAST</title>
+		<link rel="stylesheet" href="blast.css">
+	</head>
+	<body>
+	<div id="blastform">
+	<label>Sequence:</label>
+	<textarea name='seq'></textarea>
+	<br>
+	<select name='moltype'>
+		<option>nucl</option>
+		<option>prot</option>
+	</select>
+	<select class="dbselect" id="nucl" name="nucllist">
+	  <% nucllist.forEach(function(element){ %>
+		<option><%= element %></option>
+	  <% }) %>
+	</select>
+	<select class="dbselect" id="prot" name="protlist">
+	  <% protlist.forEach(function(element){ %>
+		<option><%= element %></option>
+	  <% }) %>
+	</select>
+	<button data-exec="<%= exec %>">Submit</button>
+	</div>
+	<div id="data"></div>
+	<script src='http://code.jquery.com/jquery-1.11.1.js'></script>
+	<script src='/socket.io/socket.io.js'></script>
+	<script src='js/blast.js'></script>
+	</body>
+</html>
