@@ -26,7 +26,7 @@
 		"wrapper": "/home/toniher/seqservice/wrapper.sh",
 		"port": "10030",
 		"jsonp": false,
-		"basepath": "/api"
+		"basepath": ""
 	}
 }
 

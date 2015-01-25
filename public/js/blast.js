@@ -4,7 +4,6 @@ var socket = io.connect(); // TODO: Check this!
 socket.on('output', function(message) { console.log('output: ', message); $("#blast-data").append( message ); });
 
 $( "[name=moltype]" ).change(function() {
-	console.log( $(this).val() );
 	var valid = "#" + $(this).val();
 	$( ".dbselect" ).hide();
 	$( valid ).show();
@@ -12,7 +11,7 @@ $( "[name=moltype]" ).change(function() {
 });
 
 $(function() {
-	$('#blast-exec').click(function() {
+	$("button").click(function() {
 		var exec = $(this).attr("data-blast-exec");
 		var binary = null;
 		var db = null;
@@ -24,7 +23,7 @@ $(function() {
 			binary = "blastp";
 			db = $( "[name=protlist]" ).val();
 		}
-
+		
 		$.post( exec, { seq: $('textarea').val(), binary: binary, db: db });
 	});
 });
