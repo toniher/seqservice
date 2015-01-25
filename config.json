@@ -4,26 +4,26 @@
 			"def": "prot",
 			"list": {
 				"prot": {
-					"exnr": {
-						"path": "/home/toniher/blastdb/example-prot.fasta"
+					"drosoph": {
+						"path": "/home/toniher/seqservice/db/drosoph.aa"
 					}
 				},
 				"nucl": {
-					"exnt": {
-						"path": "/home/toniher/blastdb/example-nucl.fasta"
+					"drosoph": {
+						"path": "/home/toniher/seqservice/db/drosoph.nt"
 					}
 				}
 			}
 		},
 		"exec": {
-			"path": "/home/toniher/soft/ncbi-blast-2.2.30+/bin",
-			"blastdbcmd":"/home/toniher/soft/ncbi-blast-2.2.30+/bin/blastdbcmd"
+			"path": "/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin",
+			"blastdbcmd":"/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin/blastdbcmd"
 		},
 		"xsl": {
-			"blastn": "/home/toniher/blastn.xsl",
-			"blastp": "/home/toniher/blastp.xsl"
+			"blastn": "/home/toniher/seqservice/blastn.xsl",
+			"blastp": "/home/toniher/seqservice/blastp.xsl"
 		},
-		"wrapper": "/home/toniher/soft/wrapper.sh",
+		"wrapper": "/home/toniher/seqservice/wrapper.sh",
 		"port": "10030",
 		"jsonp": false,
 		"basepath": "/api"
