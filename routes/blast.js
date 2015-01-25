@@ -96,7 +96,7 @@ function run_blast( params, req, res, seqidpath ){
 
 	console.log( seq + "-" + program + "-" + DBpath + "-" + xsl_blast );
 	
-	run_cmd( config.wrapper, [seq, program, DBpath, xsl_blast, opts], function (object) {
+	run_cmd( [seq, program, DBpath, xsl_blast, opts], function (object) {
 		
 		// TODO: Handle here error!
 		console.log( object );
@@ -117,7 +117,7 @@ function run_blast( params, req, res, seqidpath ){
 	});
 }
 
-function run_cmd ( cmd, args, callBack ) {
+function run_cmd ( args, callBack ) {
 
 	var resp = "";
 	

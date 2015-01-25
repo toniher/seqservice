@@ -23,7 +23,6 @@
 			"blastn": "/home/toniher/seqservice/xsl/blastn.xsl",
 			"blastp": "/home/toniher/seqservice/xsl/blastp.xsl"
 		},
-		"wrapper": "/home/toniher/seqservice/wrapper.sh",
 		"port": "10030",
 		"jsonp": false,
 		"basepath": ""
