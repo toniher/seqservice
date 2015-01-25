@@ -20,8 +20,8 @@
 			"blastdbcmd":"/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin/blastdbcmd"
 		},
 		"xsl": {
-			"blastn": "/home/toniher/seqservice/blastn.xsl",
-			"blastp": "/home/toniher/seqservice/blastp.xsl"
+			"blastn": "/home/toniher/seqservice/xsl/blastn.xsl",
+			"blastp": "/home/toniher/seqservice/xsl/blastp.xsl"
 		},
 		"wrapper": "/home/toniher/seqservice/wrapper.sh",
 		"port": "10030",
