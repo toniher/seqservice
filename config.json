@@ -1,40 +1,32 @@
 {	
 	"express":{
 		"db": {
-			"def": "nt",
+			"def": "prot",
 			"list": {
+				"prot": {
+					"exnr": {
+						"path": "/home/toniher/blastdb/example-prot.fasta"
+					}
+				},
 				"nucl": {
-					"greenc": {
-						"path": "/home/toni/db/greenc/greenc.fasta"
+					"exnt": {
+						"path": "/home/toniher/blastdb/example-nucl.fasta"
 					}
 				}
 			}
 		},
-		"mysql": {
-			"host": "localhost",
-			"user": "lncrnar",
-			"password": "456rna987read" ,
-			"db": "lncrna"
-		},
 		"exec": {
-			"path": "/home/toni/soft/ncbi-blast-2.2.30+/bin",
-			"blastdbcmd":"/home/toni/soft/ncbi-blast-2.2.30+/bin/blastdbcmd"
+			"path": "/home/toniher/soft/ncbi-blast-2.2.30+/bin",
+			"blastdbcmd":"/home/toniher/soft/ncbi-blast-2.2.30+/bin/blastdbcmd"
 		},
 		"xsl": {
-			"blastn": "/home/toni/blastn.xsl"
+			"blastn": "/home/toniher/blastn.xsl",
+			"blastp": "/home/toniher/blastp.xsl"
 		},
-		"wrapper": "/home/toni/git/lncrna-plants/seqservice/wrapper.sh",
+		"wrapper": "/home/toniher/soft/wrapper.sh",
 		"port": "10030",
 		"jsonp": false,
-		"basepath": "/api",
-		"externalapi": "http://prgdb.crg.eu/api",
-		"mediawiki": {
-			"server": "greenc.sciencedesigners.com",
-			"path": "/w",
-			"debug": true,
-			"username": "Cepabot",
-			"password": "calcot321"
-		}
+		"basepath": "/api"
 	}
 }
 
