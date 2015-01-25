@@ -10,15 +10,18 @@ exports.getDBlist = function(req, res) {
 };
 
 // TODO: Some refactorize work could be needed
+// TODO: Handle numeric values
 
 exports.getBlastDBcmd = function(req, res) {
 
 	var config = req.app.set('config');
 
-	var range = "1-";
+
 	var outcome = {};
 
-	var download = false;
+	var download = false; // Whether files are downloaded
+	
+	var split = true; // Whether FASTA sequence is split
 
 	var db = config.db.def;
 	if ( req.body.db ) {
@@ -67,8 +70,6 @@ exports.getBlastDBcmd = function(req, res) {
 		entry_batch = req.params.entry_batch;
 	}
 
-	console.log( entry_batch );
-
 	// Stop if none
 	if ( ( !entry || entry === '' ) && ! entry_batch ) {
 		var outcome = {};
@@ -77,19 +78,44 @@ exports.getBlastDBcmd = function(req, res) {
 	}
 
 	// Extra params
+	
+	var range = "1-";
+	var rangeval = "";
+	
 	if ( req.body.range ) {
-		range = req.body.range;
+		rangeval = req.body.range;
 	}
 	if ( req.params.range ) {
-		range = req.params.range;
+		rangeval = req.params.range;
 	}
-
+	
+	if ( rangeval !== "" ) {
+		if ( rangeval !== "0" ) {
+			range = rangeval;
+		}
+	}
+	
 	var length = "";
+	var lengthval = "";
+	// TODO: Handle numeric
 	if ( req.body.line ) {
-		length = " -line_length "+req.body.line;
+		lengthval = req.body.line;
 	}
 	if ( req.params.line ) {
-		length = " -line_length "+req.params.line;
+		lengthval = req.params.line;
+	}
+		
+	if ( lengthval !== "" ) {
+		var lineval = parseInt( lengthval, 10 );
+
+		if ( lineval ) {
+			length = " -line_length "+lengthval;
+			if ( lineval < 1 ) {
+				split = false;
+			}
+		} else {
+			split = false;
+		}
 	}
 
 	var targetDB = functions.getPath( db, config.db.list ); // Get path from array
@@ -121,19 +147,19 @@ exports.getBlastDBcmd = function(req, res) {
 							fs.close(info.fd, function(err) {
 								// Entry batch generated automatically
 								cmd = blastdbcmd+" -db "+fullpath+" -entry_batch "+info.path+" -outfmt "+outfmt;
-								execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download" } );
+								execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 							});
 						}
 					});
 				}
 			} else {
 				cmd = blastdbcmd+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
-				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry } );
+				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
 			}
 		} else {
 			// Entry batch passed as param
 			cmd = blastdbcmd+" -db "+fullpath+" -entry_batch "+entry_batch+" -outfmt "+outfmt;
-			execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download" } );
+			execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 		}
 	}
 };
@@ -152,15 +178,13 @@ function execBlastChild( cmd, res, params ) {
 			if ( params.download ) {
 				functions.downloadFasta( res, stdout, params.title );
 			} else {
-				outcome = processFasta( stdout );
+				outcome = processFasta( stdout, params.split );
 
 				if ( parseInt( params.fmt, 10 ) === 0 ) {
 					delete( outcome.def );
 				}
 				functions.returnJSON( res, outcome );
 			}
-
-
 
 		} else {
 			outcome.msg = "Error! "+error;
@@ -170,7 +194,7 @@ function execBlastChild( cmd, res, params ) {
 
 }
 
-function processFasta( stringSeq ) {
+function processFasta( stringSeq, split ) {
 
 	var fastaSeq = [];
 
@@ -199,7 +223,14 @@ function processFasta( stringSeq ) {
 		var hash = {};
 		hash.def = splitvar[0].trim();
 		// we ignore possibility of comment
-		hash.seq = splitvar.slice( 1, splitvar.length ).join("\n").trim();
+		
+		// Delimiter
+		var delimiter = "";
+		if ( split ) {
+			delimiter = "\n";
+		}
+		
+		hash.seq = splitvar.slice( 1, splitvar.length ).join( delimiter ).trim();
 
 		fastaSeq[f] = hash;
 	}
