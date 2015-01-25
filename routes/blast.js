@@ -2,6 +2,8 @@ var functions = require('../functions/index.js');
 var temp = require('temp'),
     fs   = require('fs');
 
+var $p = require('procstreams');
+
 // We should include other Blast Programs here
 exports.performBlast = function (req, res) {
 
@@ -94,11 +96,12 @@ function run_blast( params, req, res, seqidpath ){
 
 	console.log( seq + "-" + program + "-" + DBpath + "-" + xsl_blast );
 	
-	// TODO: Check if we can get rid of wrapper. Idea: https://github.com/polotek/procstreams
 	run_cmd( config.wrapper, [seq, program, DBpath, xsl_blast, opts], function (object) {
+		
+		// TODO: Handle here error!
+		console.log( object );
 		io.emit("output", functions.printBlastHTML( object ) );
-		console.log(object);
-	
+
 		if ( format && format === 'html' ) {
 			functions.printBlastHTML( object, res );
 		} else {
@@ -115,11 +118,29 @@ function run_blast( params, req, res, seqidpath ){
 }
 
 function run_cmd ( cmd, args, callBack ) {
-	var spawn = require('child_process').spawn;
-	var child = spawn(cmd, args);
+
 	var resp = "";
-	child.stderr.on('data', function (err) { console.log("ERR: " + err.toString()); });
-	child.stdout.on('data', function (buffer) { resp += buffer.toString(); });
-	child.stdout.on('end', function () { callBack(resp); });
+	
+	// Elements to pipe
+	var textfile = [ ">ENTRY", args[0] ].join("\n");
+	var blastprog = args[1] + " -db " + args[2] + " -outfmt 5 " + args[4];
+	var xslt = "xsltproc " + args[3] + " - ";
+
+	// We pass thru STDOUT, we avoid temp file
+	// Handled by procstreams
+	$p("echo \"" + textfile + "\"" ).pipe( blastprog ).pipe( xslt )
+	.data(function(err, stdout, stderr) {
+		if ( err ) {
+			console.log("ERR");
+			console.log( stderr.toString() );
+		} else {
+			console.log("OUT");
+			resp += stdout.toString();
+			callBack(resp);
+		}
+	
+	});
+
 }
+
 
