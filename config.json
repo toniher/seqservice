@@ -17,7 +17,8 @@
 		},
 		"exec": {
 			"path": "/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin",
-			"blastdbcmd":"/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin/blastdbcmd"
+			"blastdbcmd":"/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin/blastdbcmd",
+			"samtools": "/home/toniher/seqservice/soft/samtools-1.1/samtools"
 		},
 		"xsl": {
 			"blastn": "/home/toniher/seqservice/xsl/blastn.xsl",

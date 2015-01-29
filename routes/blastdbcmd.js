@@ -129,6 +129,11 @@ exports.getBlastDBcmd = function(req, res) {
 
 		var blastdbcmd = config.exec.blastdbcmd;
 
+		// TODO: for samtools ->
+		// ONE: samtools faidx base seq
+		// MANY: xargs samtools faidx base < list
+		// PENDING RANGE and LENGTH
+
 		var cmd;
 
 		if ( ! entry_batch ) {
