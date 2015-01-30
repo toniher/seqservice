@@ -16,7 +16,6 @@ exports.getBlastDBcmd = function(req, res) {
 
 	var config = req.app.set('config');
 
-
 	var outcome = {};
 
 	var download = false; // Whether files are downloaded
@@ -29,6 +28,29 @@ exports.getBlastDBcmd = function(req, res) {
 	}
 	if ( req.params.db ) {
 		db = req.params.db;
+	}
+	
+	var blastdbcmd = null;
+	
+	var method = null;
+	if ( req.body.method ) {
+		method = req.body.method;
+	}
+	if ( req.params.method ) {
+		method = req.params.method;
+	}
+	
+	if ( method && config.exec["method"][ method ] ) {
+		blastdbcmd = config.exec["method"][ method ];
+	} else {
+		
+		if ( config.exec["method"][ "blastdbcmd" ] ) {
+			blastdbcmd = config.exec["method"][ "blastdbcmd" ];
+		} else {
+			outcome.msg = "Error. No retrieval method defined!";
+			functions.returnJSON( res, outcome );
+		}
+		
 	}
 
 	// Code for output of information
@@ -72,7 +94,6 @@ exports.getBlastDBcmd = function(req, res) {
 
 	// Stop if none
 	if ( ( !entry || entry === '' ) && ! entry_batch ) {
-		var outcome = {};
 		outcome.msg = "Error. No entry!";
 		functions.returnJSON( res, outcome );
 	}
@@ -127,8 +148,6 @@ exports.getBlastDBcmd = function(req, res) {
 		functions.returnJSON( res, outcome );
 	} else {
 
-		var blastdbcmd = config.exec.blastdbcmd;
-
 		// TODO: for samtools ->
 		// ONE: samtools faidx base seq
 		// MANY: xargs samtools faidx base < list
@@ -151,19 +170,40 @@ exports.getBlastDBcmd = function(req, res) {
 							fs.write(info.fd, listID.join("\n"));
 							fs.close(info.fd, function(err) {
 								// Entry batch generated automatically
-								cmd = blastdbcmd+" -db "+fullpath+" -entry_batch "+info.path+" -outfmt "+outfmt;
+								if ( method === 'samtools ') {
+									cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + info.path;
+								} else {
+									cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
+								}
+								
 								execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 							});
 						}
 					});
 				}
 			} else {
-				cmd = blastdbcmd+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
+			
+				if ( method === 'samtools' ) {
+					if ( range === "1-") {
+						range = "";
+					} else {
+						range = ":" + range;
+					}
+					cmd = blastdbcmd + " faidx "+ fullpath + " " + entry+range ;
+				} else {
+					cmd = blastdbcmd+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
+				}
+				
 				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
 			}
 		} else {
 			// Entry batch passed as param
-			cmd = blastdbcmd+" -db "+fullpath+" -entry_batch "+entry_batch+" -outfmt "+outfmt;
+			if ( method === 'samtools ') {
+				cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + entry_batch;
+			} else {
+				cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
+			}
+			
 			execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 		}
 	}

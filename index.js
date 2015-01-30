@@ -52,10 +52,10 @@ app.get(basepath + '/db', blastdbcmd.getDBlist);
 // TODO: Multiple sequences at one
 // All possibilities (range is xx-yy)
 
-app.get(basepath + '/db/:db/entry/:entry/fasta', blastdbcmd.getBlastDBcmd);
-app.get(basepath + '/db/:db/entry/:entry/fasta/:fmt', blastdbcmd.getBlastDBcmd);
-app.get(basepath + '/db/:db/entry/:entry/fasta/:fmt/:range', blastdbcmd.getBlastDBcmd);
-app.get(basepath + '/db/:db/entry/:entry/fasta/:fmt/:range/:line', blastdbcmd.getBlastDBcmd);
+app.get(basepath + '/db/:db/:method/:entry/fasta', blastdbcmd.getBlastDBcmd);
+app.get(basepath + '/db/:db/:method/:entry/fasta/:fmt', blastdbcmd.getBlastDBcmd);
+app.get(basepath + '/db/:db/:method/:entry/fasta/:fmt/:range', blastdbcmd.getBlastDBcmd);
+app.get(basepath + '/db/:db/:method/:entry/fasta/:fmt/:range/:line', blastdbcmd.getBlastDBcmd);
 
 // Retrieval by POST
 app.post(basepath + '/db', blastdbcmd.getBlastDBcmd);
