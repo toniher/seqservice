@@ -99,7 +99,24 @@ $(document).on('DOMNodeInserted', function(e) {
 	}
 });
 
+// Mutation observer on results 
+// TODO: Fallback Mutation Events
+var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+var list = document.querySelector('#blast-data');
 
-
+var observer = new MutationObserver(function(mutations) {  
+	mutations.forEach(function(mutation) {
+		if (mutation.type === 'childList') {
+			console.log("tal!");
+		}
+	});
+});
+  
+observer.observe(list, {
+	attributes: true, 
+	childList: true, 
+	characterData: true,
+	subtree: true
+});
 
 
