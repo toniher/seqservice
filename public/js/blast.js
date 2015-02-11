@@ -1,7 +1,9 @@
 /*globals console io $ document */
 
 var socket = io.connect();
-socket.on('output', function(message) { console.log('output: ', message); $("#blast-data").append( message ); });
+socket.on('output', function(message) { 
+	$("#blast-data").append( message ); 
+});
 
 $(document).ready( function(){
 
@@ -96,3 +98,8 @@ $(document).on('DOMNodeInserted', function(e) {
 		// TODO: Link here to Database or system
 	}
 });
+
+
+
+
+
