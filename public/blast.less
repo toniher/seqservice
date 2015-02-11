@@ -4,4 +4,91 @@
 
 #nucl { display: inline-block; }
 
+#blast-data {
 
+	.hit {
+
+		span {
+			display: inline-block;
+		}
+		.id {
+			width: 450px;
+		}
+		.evalue {
+			text-align: right;
+			margin-left: 1em;
+			min-width: 100px;
+		}
+
+		.link {
+			padding-left: 0.5em;
+		}
+
+		.org {
+			padding-left: 0.5em;
+			font-size: 95%;
+			font-style: italic;
+		}
+
+		.hsps {
+			display: none;
+
+			.hsp {
+				.stats {
+					.field {
+						font-size: 95%;
+						text-decoration: underline;
+						padding-right: 0.5em;
+					}
+					.value {
+						font-family: monospace;
+						padding-right: 1em;
+					}
+				}
+				.block {
+
+					.align {
+						margin: 1em 0;
+					}
+
+					.seq {
+
+						font-size: 75%;
+						font-family: monospace;
+
+						span {
+							display: inline-block;
+						}
+						.frame {
+							width: 3em;
+							text-align: left;
+						}
+						.start {
+							width: 3em;
+							text-align: left;
+						}
+						.end {
+							width: 3em;
+							text-align: right;
+						}
+						p {
+							margin-left: 1em;
+							display: inline-block;
+						}
+					}
+					.mid {
+						font-family: monospace;
+					}
+				}
+			}
+		}
+
+		.details {
+			margin-left: 2em;
+			text-decoration: underline;
+		}
+
+	}
+
+
+}
