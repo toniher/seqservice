@@ -13,8 +13,8 @@ NodeJS express API for handling biological sequences
 	RewriteEngine On
 	RewriteRule ^/api/(.*)$ http://localhost:10030/api/$1 [P]
 	
-	ProxyPass        /socket.io http://localhost:10030/socket.io
-	ProxyPassReverse /socket.io http://localhost:10030/socket.io
+	ProxyPass        /api/socket.io http://localhost:10030/api/socket.io
+	ProxyPassReverse /api/socket.io http://localhost:10030/api/socket.io
 
 
 #### NGINX
@@ -28,7 +28,7 @@ NodeJS express API for handling biological sequences
 	   ...
 	
 	
-	    location /socket.io {
+	    location /api/socket.io {
 	        proxy_pass http://api;
 	        proxy_http_version 1.1;
 	        proxy_set_header Upgrade $http_upgrade;
@@ -55,9 +55,6 @@ NodeJS express API for handling biological sequences
 From the directory of the application
 
 	npm install
-
-
-
 
 
 ## TODO

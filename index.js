@@ -34,7 +34,8 @@ app.set("config", config);
 
 // Launch server
 var server = app.listen(config.port);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, { path: basepath + "/socket.io" } );
+
 // we pass io
 app.set("io", io);
 
