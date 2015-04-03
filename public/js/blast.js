@@ -1,13 +1,13 @@
 /*globals console io $ document */
 
-var socket = io.connect();
-socket.on('output', function(message) { 
-	$("#blast-data").append( message ); 
-});
-
 $(document).ready( function(){
 
 	var basepath = $("blast-form").data("basepath");
+
+	var socket = io.connect( { path: basepath + "/socket.io" } );
+	socket.on('output', function(message) {
+		$("#blast-data").append( message );
+	});
 
 	$.get( basepath + "/api/db", function( data ) {
 
