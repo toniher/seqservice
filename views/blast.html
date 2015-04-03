@@ -28,6 +28,12 @@
 	<div id="blast-data"></div>
 	<script src='https://code.jquery.com/jquery-1.11.1.js'></script>
 	<script src='<%= basepath %>/socket.io/socket.io.js'></script>
+	<script>
+		var socket = io.connect( { path: "<%= basepath %>/socket.io" } );
+		socket.on('output', function(message) {
+				$("#blast-data").append( message );
+		});
+	</script>
 	<script src='<%= basepath %>/js/blast.js'></script>
 	</body>
 </html>
