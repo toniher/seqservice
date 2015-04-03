@@ -9,7 +9,7 @@ $(document).ready( function(){
 		$("#blast-data").append( message );
 	});
 
-	$.get( basepath + "/api/db", function( data ) {
+	$.get( basepath + "/db", function( data ) {
 
 		if ( data ) {
 			if ( data.nucl ) {
@@ -31,7 +31,7 @@ $(document).ready( function(){
 
 	// Getting organisms
 	$("[name=organism]").append("<option value='0'>" + "All" + "</option>" );
-	$.get( basepath + "/api/species", function( data ) {
+	$.get( basepath + "/species", function( data ) {
 		if ( data ) {
 			if (data instanceof Array) {
 				for ( var k in data ) {
