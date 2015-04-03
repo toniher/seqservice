@@ -5,6 +5,11 @@ NodeJS express API for handling biological sequences
 
 ### Server configuration
 
+* Dependencies
+	* NCBI-BLAST
+	* xsltproc
+	* Samtools (optional)
+
 * Assuming we define /api as basepath, and we keep 10030 port in config.json
 
 #### Apache
@@ -24,9 +29,7 @@ NodeJS express API for handling biological sequences
 	}
 	
 	server {
-	
 	   ...
-	
 	
 	    location /api/socket.io {
 	        proxy_pass http://api;
@@ -49,7 +52,6 @@ NodeJS express API for handling biological sequences
 	
 	}
 
-
 ### Application start
 
 From the directory of the application
@@ -58,8 +60,6 @@ From the directory of the application
 
 
 ## TODO
-* Allow multiple indexing
-* Allow other indexing
-	* samtools faidx
-	* python faidx
+* Provide more information in the queries
 * Allow parameter prefix for IDs (to use in CouchDB)
+
