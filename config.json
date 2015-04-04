@@ -25,8 +25,8 @@
 			}
 		},
 		"xsl": {
-			"blastn": "/opt/apps/seqservice/xsl/blastn.xsl",
-			"blastp": "/opt/apps/seqservice/xsl/blastp.xsl"
+			"blastn": "/opt/app/seqservice/xsl/blastn.xsl",
+			"blastp": "/opt/app/seqservice/xsl/blastp.xsl"
 		},
 		"port": "10030",
 		"jsonp": false,
