@@ -31,7 +31,7 @@
 		},
 		"port": "10030",
 		"jsonp": false,
-		"basepath": ""
+		"basepath": "/seqservice"
 	}
 }
 

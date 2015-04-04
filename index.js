@@ -69,7 +69,7 @@ app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 
 
-app.use(lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
+app.use(basepath, lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
 app.use(basepath, express.static(__dirname + '/public')); 
 
 // TODO: This is not fully working. Redundant for now
