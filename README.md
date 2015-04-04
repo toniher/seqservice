@@ -57,13 +57,22 @@ NodeJS express API for handling biological sequences
 From the directory of the application
 
 	npm install
-    node index.js
-    
-    FUN!
+	node index.js
+
+	FUN!
+
+## Docker installation
+
+From this repository:
+
+	sudo docker build -t seqservice .
+	sudo docker run -p 10030:10030 -d seqservice
+	
+	Open your browser at http://localhost:10030/seqservice
 
 
 ## TODO
 * Provide more information in the queries
+* Download databases if needed
 * Allow parameter prefix for IDs (to use in CouchDB)
-* Docker installation
 
