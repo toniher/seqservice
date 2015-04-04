@@ -50,4 +50,4 @@ RUN npm install
 
 #Default port, change if necessary
 EXPOSE 10030 
-CMD forever index.js
+CMD forever -l /var/log/seqservice.log index.js
