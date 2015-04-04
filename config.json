@@ -4,30 +4,29 @@
 			"def": "prot",
 			"list": {
 				"prot": {
-					"drosoph": {
-						"path": "/home/toniher/seqservice/db/drosoph.aa"
-					},
-					"moonlight": {
-						"path": "/home/toniher/seqservice/db/moonlight.fasta"
+					"drosoph_aa": {
+						"path": "/opt/db/drosoph.aa",
+						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.aa.gz"
 					}
 				},
 				"nucl": {
-					"drosoph": {
-						"path": "/home/toniher/seqservice/db/drosoph.nt"
+					"drosoph_nt": {
+						"path": "/opt/db/drosoph.nt",
+						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.nt.gz"
 					}
 				}
 			}
 		},
 		"exec": {
-			"path": "/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin",
+			"path": "/opt/soft/blast/bin",
 			"method": {
-				"blastdbcmd":"/home/toniher/seqservice/soft/ncbi-blast-2.2.30+/bin/blastdbcmd",
-				"samtools": "/home/toniher/seqservice/soft/samtools-1.1/samtools"
+				"blastdbcmd":"/opt/soft/blast/bin/blastdbcmd",
+				"samtools": "/opt/soft/blast/bin/samtools"
 			}
 		},
 		"xsl": {
-			"blastn": "/home/toniher/seqservice/xsl/blastn.xsl",
-			"blastp": "/home/toniher/seqservice/xsl/blastp.xsl"
+			"blastn": "/opt/apps/seqservice/xsl/blastn.xsl",
+			"blastp": "/opt/apps/seqservice/xsl/blastp.xsl"
 		},
 		"port": "10030",
 		"jsonp": false,
