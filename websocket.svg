@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="Nou document 1">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3879"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3876"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Send"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Send"
+       style="overflow:visible;">
+      <path
+         id="path3891"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         transform="scale(0.2) rotate(180) translate(6,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Sstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Sstart"
+       style="overflow:visible">
+      <path
+         id="path3888"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         transform="scale(0.2) translate(6,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="257.17739"
+     inkscape:cy="802.44558"
+     inkscape:document-units="px"
+     inkscape:current-layer="capa1"
+     showgrid="false"
+     inkscape:window-width="1229"
+     inkscape:window-height="756"
+     inkscape:window-x="28"
+     inkscape:window-y="53"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="capa1">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.05116034;stroke-opacity:1"
+       id="rect2985"
+       width="272.82651"
+       height="196.18365"
+       x="65.729599"
+       y="143.80606" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.40490377;stroke-opacity:1"
+       id="rect2985-1"
+       width="279.92859"
+       height="341.55246"
+       x="400.03571"
+       y="106.17223" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-opacity:1"
+       id="rect3007"
+       width="162.85715"
+       height="58.571419"
+       x="125.71429"
+       y="240.93361" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.89217925;stroke-opacity:1"
+       id="rect3007-8"
+       width="106.55322"
+       height="63.177341"
+       x="441.00909"
+       y="235.61342" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.88123107;stroke-opacity:1"
+       id="rect3038"
+       width="227.14285"
+       height="140.89166"
+       x="422.85715"
+       y="176.14789" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.82742375;stroke-opacity:1"
+       id="rect3040"
+       width="152.57469"
+       height="61.42857"
+       x="499.1947"
+       y="339.50504" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="515.71429"
+       y="363.79074"
+       id="text3042"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="515.71429"
+         y="363.79074"
+         id="tspan3046"
+         style="font-size:16px">Process</tspan><tspan
+         sodipodi:role="line"
+         x="515.71429"
+         y="380.80051"
+         id="tspan3102"
+         style="font-size:13px">(e. g. BLAST)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="148.57144"
+       y="265.2193"
+       id="text3048"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3050"
+         x="148.57144"
+         y="265.2193"
+         style="font-size:16px">WebSocket</tspan><tspan
+         sodipodi:role="line"
+         x="148.57144"
+         y="285.2193"
+         id="tspan3052"
+         style="font-size:16px">client</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-opacity:1"
+       id="rect3054"
+       width="218.57143"
+       height="140"
+       x="92.85714"
+       y="170.93361" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="587.14288"
+       y="92.362183"
+       id="text3056"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3058"
+         x="587.14288"
+         y="92.362183"
+         style="font-size:28px">Server</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="67.14286"
+       y="132.36218"
+       id="text3060"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3062"
+         x="67.14286"
+         y="132.36218"
+         style="font-size:28px">Client</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="524.28571"
+       y="200.93361"
+       id="text3064"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3066"
+         x="524.28571"
+         y="200.93361"
+         style="font-size:16px">Express API</tspan><tspan
+         sodipodi:role="line"
+         x="524.28571"
+         y="217.94336"
+         id="tspan3100"
+         style="font-size:13px">(/w Reverse Proxy)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="457.14288"
+       y="255.21935"
+       id="text3068"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3070"
+         x="457.14288"
+         y="255.21935"
+         style="font-size:16px">WebSocket</tspan><tspan
+         sodipodi:role="line"
+         x="457.14288"
+         y="275.21936"
+         id="tspan3072"
+         style="font-size:16px">Server</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.21394849px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:url(#Arrow1Lend)"
+       d="m 265.59397,286.6479 202.10342,1.42857"
+       id="path3074"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.29328942px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-mid:none;marker-end:url(#Arrow1Lend)"
+       d="m 621.42857,363.73166 -2.85714,-114.6924"
+       id="path3082"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.18991578;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1Lstart);marker-mid:none;marker-end:url(#Arrow1Lend)"
+       d="m 246.50692,200.93361 244.74243,0"
+       id="path3086"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.14669764px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-mid:none;marker-end:url(#Arrow1Lend)"
+       d="m 528.64477,288.00313 51.28188,-51.28189"
+       id="path3088"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="98.571434"
+       y="195.21933"
+       id="text3092"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3094"
+         x="98.571434"
+         y="195.21933"
+         style="font-size:16px">Served content</tspan><tspan
+         sodipodi:role="line"
+         x="98.571434"
+         y="212.22908"
+         id="tspan3098"
+         style="font-size:13px">(HTML, CSS, JS, ...)</tspan></text>
+  </g>
+</svg>
