@@ -62,35 +62,36 @@ exports.printBlastHTML = function ( object, res ) {
 
 	var obj = JSON.parse( object );
 
-	var expect = obj.params.expect;
-	var gopen = obj.params.gap_open;
-	var gextend = obj.params.gap_extend;
+	var blastobj = obj["BlastOutput2"]["report"];
+
+	var expect = blastobj.params.expect;
+	var gopen = blastobj.params.gap_open;
+	var gextend = blastobj.params.gap_extend;
+
+	var program = blastobj.program;
 	var str = "";
 
-	var results = obj.results;
-
-
-	for ( var result = 0; result < results.length; ++result ) {
-		var iters = results[result].iters;
-		for ( var iter = 0; iter < iters.length; ++iter ) {
-			var hits = iters[iter].hits;
-			for ( var hit = 0; hit < hits.length; ++hit ) {
-				
-				str = str + "<div class='hit'>";
-				str = str + "<span class='id'>" + hits[hit].id + "</span>";
-				str = str + "<span class='evalue'>" + hits[hit].hsps[0].evalue + "</span>"; // Higher value
-				str = str + "<span class='details'>Details...</span>"; // Details
-				str = str + "<div class='hsps'>" + processHsps( hits[hit].hsps ) + "</div>";
-				str = str + "</div>"
-			}
+	if ( program === 'psiblast' && blastobj.results.iterations ) {
+		
+		var iterationlist = blastobj.results.iterations;
+		for ( var iter = 0; iter < iterationlist.length; iter = iter + 1 ) {
+			
+			str = str + "<div class='iter'>";
+			str = str + "<span class='id'>" + iterationlist[iter].iter_num + "</span>";
+			str = str + processHits( iterationlist[iter].search.hits );
+			str = str + "</div>";
 		}
+
+	} else {
+		console.log( "TAL" );
+		str = str + "<div class='results'>";
+		str = str + processHits( blastobj.results.search.hits );
+		str = str + "</div>";
 	}
 
 	if ( str === "" ) {
 		str = "<p class='not-found'>No hits found.</p>";
 	}
-
-	//{ "_id":"", "type":"blast", "ref":"", "db":"blastdb", "program":"blastn", "seqtype":"prot", "maxiters":"1", "username":"Anonymous", "date":"", "params": { "expect":10, "gap_open":0, "gap_extend":0, "filter":"L;m;" }, "results": [ { "iters":[ { "num":1, "hits":[ { "num":1, "def":"No definition line", "id":"AC155610.2_FGT009", "length": 204, "hsps":[ { "num":1, "bit_score":226.412, "score":122, "evalue":3.07661e-59, "qstart":1, "qend":122, "hstart":7, "hend":128, "query_frame":1, "hit_frame":1, "identity":122, "positive":122, "gaps":0, "length":122, "qseq":"TGTGTGCGTTCGATTCGCTTCTGCTGCAGCTAGGGTTTAGAGGTTTTCTGGGCGCGGAGCGGGAGGCGGCGGCGGCTATGGCTGCGGCGGAGGAGGAGATCGCGGTGAAGGAGCCGCTGGAT", "midline":"||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||", "hseq":"TGTGTGCGTTCGATTCGCTTCTGCTGCAGCTAGGGTTTAGAGGTTTTCTGGGCGCGGAGCGGGAGGCGGCGGCGGCTATGGCTGCGGCGGAGGAGGAGATCGCGGTGAAGGAGCCGCTGGAT" } ] } ] } ], "length":122, "def":"ENTRY" } ] }
 
 	if ( res ){
 		res.set( 'Content-Type', 'text/html' );
@@ -113,29 +114,46 @@ exports.matchInArray = function( groups, tomatch ) {
 	return -1;
 }
 
+function processHits( hits ) {
+
+	var str = "";
+
+	for ( var hit = 0; hit < hits.length; hit = hit + 1 ) {
+		
+		str = str + "<div class='hit'>";
+		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
+		str = str + "<span class='evalue'>" + hits[hit].hsps[0].evalue + "</span>"; // Higher value
+		str = str + "<span class='details'>Details...</span>"; // Details
+		str = str + "<div class='hsps'>" + processHsps( hits[hit].hsps ) + "</div>";
+		str = str + "</div>"
+	}
+
+	return str;
+}
+
+
 
 function processHsps( hsps ) {
-	// TODO: Process HSPS -> Show it somehow
 
 	var content = "";
 
-	for ( var iter = 0; iter < hsps.length; ++iter ) {
+	for ( var iter = 0; iter < hsps.length; iter = iter + 1 ) {
 		var qseq = hsps[iter].qseq;
 		var midline = hsps[iter].midline;
 		var hseq = hsps[iter].hseq;
 		var bit_score = hsps[iter].bit_score;
 		var score = hsps[iter].score;
 		var evalue = hsps[iter].evalue;
-		var qstart = hsps[iter].qstart;
-		var qend = hsps[iter].qend;
-		var hstart = hsps[iter].hstart;
-		var hend = hsps[iter].hend;
+		var qstart = hsps[iter].query_from;
+		var qend = hsps[iter].query_to;
+		var hstart = hsps[iter].hit_from;
+		var hend = hsps[iter].hit_to;
 		var query_frame = hsps[iter].query_frame;
 		var hit_frame = hsps[iter].hit_frame;
 		var identity = hsps[iter].identity;
 		var positive = hsps[iter].positive;
 		var gaps = hsps[iter].gaps;
-		var length = hsps[iter].length;
+		var length = hsps[iter].align_len;
 
 		var arrSeqs = {};
 		arrSeqs = splitSeq( arrSeqs, qseq, midline, hseq, 60 );
@@ -175,12 +193,22 @@ function printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend
 		}
 
 		content+="<div class='align'>";
-		content+="<div class='seq'><span class='frame'>"+query_frame+"</span><span class='start'>"+start1+"</span><p>"+arrSeqs["qseq"][qst]+"</p><span class='end'>"+end1+"</span></div>";
+
+		var content_query_frame = "";
+		var content_hit_frame = "";
+		if ( query_frame ) {
+			content_query_frame = query_frame;
+		}
+		if ( hit_frame ) {
+			content_hit_frame = hit_frame;
+		}
+
+		content+="<div class='seq'><span class='frame'>"+content_query_frame+"</span><span class='start'>"+start1+"</span><p>"+arrSeqs["qseq"][qst]+"</p><span class='end'>"+end1+"</span></div>";
 		content+="<div class='seq mid'><span class='frame'></span><span class='start'></span><p>"+arrSeqs["midline"][qst]+"</p><span class='end'></span></div>";
-		content+="<div class='seq'><span class='frame'>"+hit_frame+"</span><span class='start'>"+start2+"</span><p>"+arrSeqs["hseq"][qst]+"</p><span class='end'>"+end2+"</span></div>";
+		content+="<div class='seq'><span class='frame'>"+content_hit_frame+"</span><span class='start'>"+start2+"</span><p>"+arrSeqs["hseq"][qst]+"</p><span class='end'>"+end2+"</span></div>";
 		content+="</div>";
 
-		count++;
+		count = count + 1;
 	}
 
 	return content;

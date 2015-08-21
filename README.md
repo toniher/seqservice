@@ -7,7 +7,6 @@ NodeJS express API for handling biological sequences
 
 * Dependencies
 	* NCBI-BLAST
-	* xsltproc
 	* Samtools (optional)
 
 * Assuming we define /seqservice as basepath, and we keep 10030 port in config.json

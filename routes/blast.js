@@ -91,18 +91,18 @@ function run_blast( params, req, res, seqidpath ){
 	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
 
 	var program = config.exec.path + "/" + binary;
-	var xsl_blast = config.xsl[binary];
 	var io = req.app.set('io');
 
-	console.log( seq + "-" + program + "-" + DBpath + "-" + xsl_blast );
+	console.log( seq + "-" + program + "-" + DBpath + "-" );
 	
-	run_cmd( [seq, program, DBpath, xsl_blast, opts], function (object) {
+	run_cmd( [seq, program, DBpath, opts], function (object) {
 		
 		// TODO: Handle here error!
 		console.log( object );
-		io.emit("output", functions.printBlastHTML( object ) );
+		//io.emit("output", functions.printBlastHTML( object ) );
 
 		if ( format && format === 'html' ) {
+			console.log("HTML");
 			functions.printBlastHTML( object, res );
 		} else {
 			// If configured JSONP
@@ -123,12 +123,11 @@ function run_cmd ( args, callBack ) {
 	
 	// Elements to pipe
 	var textfile = [ ">ENTRY", args[0] ].join("\n");
-	var blastprog = args[1] + " -db " + args[2] + " -outfmt 5 " + args[4];
-	var xslt = "xsltproc " + args[3] + " - ";
+	var blastprog = args[1] + " -db " + args[2] + " -outfmt 13 " + args[3];
 
 	// We pass thru STDOUT, we avoid temp file
 	// Handled by procstreams
-	$p("echo \"" + textfile + "\"" ).pipe( blastprog ).pipe( xslt )
+	$p("echo \"" + textfile + "\"" ).pipe( blastprog )
 	.data(function(err, stdout, stderr) {
 		if ( err ) {
 			console.log("ERR");
