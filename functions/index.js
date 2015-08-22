@@ -83,7 +83,6 @@ exports.printBlastHTML = function ( object, res ) {
 		}
 
 	} else {
-		console.log( "TAL" );
 		str = str + "<div class='results'>";
 		str = str + processHits( blastobj.results.search.hits );
 		str = str + "</div>";
@@ -92,7 +91,7 @@ exports.printBlastHTML = function ( object, res ) {
 	if ( str === "" ) {
 		str = "<p class='not-found'>No hits found.</p>";
 	}
-
+    
 	if ( res ){
 		res.set( 'Content-Type', 'text/html' );
 		res.send( str );
