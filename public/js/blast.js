@@ -6,7 +6,10 @@ $(document).ready( function(){
 
 	var socket = io.connect( { path: basepath + "/socket.io" } );
 	socket.on('output', function(message) {
-		$("#blast-data").append( message );
+		if ( $("#blast-data").children().length === 0 ) { // If nothing append output
+			// TODO: Handle continuous output
+			$("#blast-data").append( message );
+		}
 	});
 
 	$.get( basepath + "/db", function( data ) {
