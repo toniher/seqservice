@@ -94,16 +94,15 @@ function run_blast( params, req, res, seqidpath ){
 	var io = req.app.set('io');
 
 	console.log( seq + "-" + program + "-" + DBpath + "-" );
-	
+			
 	run_cmd( [seq, program, DBpath, opts], function (object) {
 		
 		// TODO: Handle here error!
 		console.log( object );
-		//io.emit("output", functions.printBlastHTML( object ) );
 
 		if ( format && format === 'html' ) {
-			console.log("HTML");
-			functions.printBlastHTML( object, res );
+			io.emit("output", functions.printBlastHTML( object ) );
+			//functions.printBlastHTML( object, res );
 		} else {
 			// If configured JSONP
 			if ( res.app.set('config').jsonp ) {
@@ -133,7 +132,7 @@ function run_cmd ( args, callBack ) {
 			console.log("ERR");
 			console.log( stderr.toString() );
 		} else {
-			console.log("OUT");
+			// console.log("OUT");
 			resp += stdout.toString();
 			callBack(resp);
 		}
