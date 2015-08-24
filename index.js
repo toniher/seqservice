@@ -41,6 +41,7 @@ app.set("io", io);
 
 var blastdbcmd = require('./routes/blastdbcmd.js');
 var blast = require('./routes/blast.js');
+var align = require('./routes/align.js');
 
 // Landing
 app.get( basepath + '/', function(req, res){
@@ -63,6 +64,9 @@ app.post(basepath + '/db', blastdbcmd.getBlastDBcmd);
 
 // Blast
 app.post(basepath + '/blast', blast.performBlast);
+// Align
+app.post(basepath + '/align', align.performAlign);
+
 
 // Now views
 app.set('views', __dirname + '/views');
