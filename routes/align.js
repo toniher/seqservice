@@ -12,7 +12,7 @@ exports.performAlign = function (req, res) {
 
 	var alnparams = {};
 
-	alnparams.seq = req.body.seq;
+	alnparams.seqs = req.body.seqs;
 	alnparams.align.app = req.body.align.app;
 	alnparams.align.params = req.body.align.params;
 	alnparams.tree.app = req.body.tree.app;
@@ -20,7 +20,28 @@ exports.performAlign = function (req, res) {
 	alnparams.treeview.app = req.body.treview.app;
 	alnparams.treeview.params = req.body.treview.params;
 
-	// Generate FASTA file
+	// Generate FASTA file (consider taxid if available)
+	if ( alnparams.seqs && alnparams.seqs.length > 0 ) {
+
+		var seqs = alnparams.seqs;
+		var fastaText = "";
+		for ( var s=0; s < seqs.length; s = s + 1 ){
+			// Important is seq
+			if ( seqs[s].hasOwnProperty('seq') ) {
+				
+				
+				if ( seqs[s].hasOwnProperty('id') ) {
+
+				}
+				if ( seqs[s].hasOwnProperty('taxid') ) {
+
+				}
+			}
+		}
+	} else {
+		// TODO: No seq code
+	}
+
 
 	// Run alignment from input file
 	
