@@ -13,10 +13,13 @@ exports.performAlign = function (req, res) {
 	var alnparams = {};
 
 	alnparams.seqs = req.body.seqs;
+	alnparams.align = {};
 	alnparams.align.app = req.body.align.app;
 	alnparams.align.params = req.body.align.params;
+	alnparams.tree = {};
 	alnparams.tree.app = req.body.tree.app;
 	alnparams.tree.params = req.body.tree.params;
+	alnparams.treeview = {};
 	alnparams.treeview.app = req.body.treview.app;
 	alnparams.treeview.params = req.body.treview.params;
 
@@ -31,13 +34,66 @@ exports.performAlign = function (req, res) {
 				
 				
 				if ( seqs[s].hasOwnProperty('id') ) {
+					fastaText = fastaText + ">" + seqs[s].id;
 
+					if ( seqs[s].hasOwnProperty('taxid') ) {
+						fastaText = fastaText + " [" + seqs[s].taxid + "]";
+					}
+				} else {
+					// In case no ID
+					fastaText = fastaText + ">seq" + s;
 				}
-				if ( seqs[s].hasOwnProperty('taxid') ) {
 
-				}
+				fastaText = fastaText + "\n" + seqs[s].seq + "\n";
 			}
 		}
+
+		// We have an align application
+		if ( alnparams.align.app ){
+			
+			var pipeapps = [];
+			var alnapp = {};
+			alnapp.app = alnparams.align.app;
+			alnapp.params = alnparams.align.params;
+
+			pipeapps.push( alnapp );
+
+			if ( alnparams.tree.app ){
+
+				var treeapp = {};
+				treeapp.app = alnparams.tree.app;
+				treeapp.params = alnparams.tree.params;
+
+				pipeapps.push( treeapp );
+
+				if ( alnparams.treeview.app ){
+				
+					var treeviewapp = {};
+					treeviewapp.app = alnparams.treeview.app;
+					treeviewapp.params = alnparams.treeview.params;
+
+					pipeapps.push( treeviewapp );
+					runPipe( pipeapps, function( object ) {
+						console.log( object );
+					});
+
+				} else {
+					// No treeview application
+					runPipe( pipeapps, function( object ) {
+						console.log( object );
+					});
+				}
+			} else {
+				// No tree application
+				runPipe( fastaText, pipeapps, function( object ) {
+					console.log( object );
+				});
+			}
+
+		} else {
+			// No align application
+		}
+
 	} else {
 		// TODO: No seq code
 	}
@@ -54,18 +110,22 @@ exports.performAlign = function (req, res) {
 
 };
 
-function run_cmd ( args, callBack ) {
+
+
+
+function runPipe( baseText, apps, callBack ) {
 
 	var resp = "";
-	
-	// Elements to pipe
-	var textfile = [ ">ENTRY", args[0] ].join("\n");
-	var blastprog = args[1] + " -db " + args[2] + " -outfmt 13 " + args[3];
 
-	// We pass thru STDOUT, we avoid temp file
-	// Handled by procstreams
-	$p("echo \"" + textfile + "\"" ).pipe( blastprog )
-	.data(function(err, stdout, stderr) {
+	var commandline = $p("echo \"" + baseText + "\"" );
+
+	for ( var a = 0; a < apps.length[0]; a = a + 1 ) {
+		var command = apps[a].app + " " + ( apps[a].params ).join( " " );
+
+		commandline = commandline.pipe( command );
+	}
+
+	commandline.data( function(err, stdout, stderr) {
 		if ( err ) {
 			console.log("ERR");
 			console.log( stderr.toString() );
@@ -74,7 +134,6 @@ function run_cmd ( args, callBack ) {
 			resp += stdout.toString();
 			callBack(resp);
 		}
-	
 	});
 
 }
