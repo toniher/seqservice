@@ -10,17 +10,20 @@ exports.performAlign = function (req, res) {
 	var config;
 	config = req.app.set('config');
 
+	var methodlist = config.exec.method;
+
 	var alnparams = {};
 
+	// TODO: Proper checking of params here
 	alnparams.seqs = req.body.seqs;
 	alnparams.align = {};
-	alnparams.align.app = req.body.align.app;
+	alnparams.align.app = methodlist[ req.body.align.app ];
 	alnparams.align.params = req.body.align.params;
 	alnparams.tree = {};
-	alnparams.tree.app = req.body.tree.app;
+	alnparams.tree.app = methodlist[ req.body.tree.app ];
 	alnparams.tree.params = req.body.tree.params;
 	alnparams.treeview = {};
-	alnparams.treeview.app = req.body.treview.app;
+	alnparams.treeview.app = methodlist[ req.body.treview.app ];
 	alnparams.treeview.params = req.body.treview.params;
 
 	// Generate FASTA file (consider taxid if available)
