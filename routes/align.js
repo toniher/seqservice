@@ -90,18 +90,21 @@ exports.performAlign = function (req, res) {
 					treeviewapp.params = alnparams.treeview.params;
 
 					pipeapps.push( treeviewapp );
-					runPipe( pipeapps, function( object ) {
+					console.log("TREEVIEW");
+					runPipe( fastaText, pipeapps, function( object ) {
 						console.log( object );
 					});
 
 				} else {
 					// No treeview application
-					runPipe( pipeapps, function( object ) {
+					console.log("TREE");
+					runPipe( fastaText, pipeapps, function( object ) {
 						console.log( object );
 					});
 				}
 			} else {
 				// No tree application
+				console.log("ALN");
 				runPipe( fastaText, pipeapps, function( object ) {
 					console.log( object );
 				});
@@ -135,9 +138,11 @@ function runPipe( baseText, apps, callBack ) {
 	var resp = "";
 
 	var commandline = $p("echo \"" + baseText + "\"" );
+	console.log( "echo \"" + baseText + "\"" );
 
-	for ( var a = 0; a < apps.length[0]; a = a + 1 ) {
-		var command = apps[a].app + " " + ( apps[a].params ).join( " " );
+	for ( var a = 0; a < apps.length; a = a + 1 ) {
+		var command = apps[a].app + " " + apps[a].params;
+		console.log( command );
 
 		commandline = commandline.pipe( command );
 	}
@@ -147,7 +152,6 @@ function runPipe( baseText, apps, callBack ) {
 			console.log("ERR");
 			console.log( stderr.toString() );
 		} else {
-			// console.log("OUT");
 			resp += stdout.toString();
 			callBack(resp);
 		}

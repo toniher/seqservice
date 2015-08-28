@@ -101,6 +101,7 @@ function run_blast( params, req, res, seqidpath ){
 		console.log( object );
 
 		if ( format && format === 'html' ) {
+			// TODO: HTML printing moved to frontend
 			io.emit("output", functions.printBlastHTML( object ) );
 			//functions.printBlastHTML( object, res );
 		} else {
