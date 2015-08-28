@@ -2,17 +2,8 @@
 
 $(document).ready( function(){
 
-	var basepath = $("blast-form").data("basepath");
+	var basepath = $("#blast-form").data("basepath");
 
-	var socket = io.connect( { path: basepath + "/socket.io" } );
-	socket.on('output', function(message) {
-		if ( $("#blast-data").children().length === 0 ) { // If nothing append output
-			// TODO: Handle continuous output
-			// Put button here, questionable
-			$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
-			$("#blast-data").append( message );
-		}
-	});
 
 	$.get( basepath + "/db", function( data ) {
 
@@ -63,6 +54,22 @@ $( "[name=moltype]" ).change(function() {
 $(function() {
 	$('#blast-exec').click(function() {
 
+		var basepath = $("#blast-form").data("basepath");
+		$("#blast-data").empty();
+
+		var socket = io.connect( { path: basepath + "/socket.io" } );
+		socket.on('output', function(message) {
+			if ( $("#blast-data").children(".align-button").length === 0 ) {
+				$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
+			}
+			if ( $("#blast-data").children().length === 0 ) { // If nothing append output
+				// TODO: Handle continuous output
+				$("#blast-data").append( message );
+			} else {
+				console.log( "Huis" );
+			}
+		});
+
 		var exec = $(this).attr("data-blast-exec");
 		var binary = null;
 		var db = null;
@@ -79,7 +86,6 @@ $(function() {
 		
 		organism = parseInt( $( "[name=organism]" ).val(), 10 );
 
-		$("#blast-data").empty();
 		$.post( exec, { seq: $('textarea').val(), binary: binary, db: db, format: format, organism: organism });
 	});
 });
