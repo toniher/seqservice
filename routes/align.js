@@ -15,16 +15,30 @@ exports.performAlign = function (req, res) {
 	var alnparams = {};
 
 	// TODO: Proper checking of params here
+
+	if ( ! req.body.seqs ) {
+		// TODO: No seqs
+	}
+
 	alnparams.seqs = req.body.seqs;
-	alnparams.align = {};
-	alnparams.align.app = methodlist[ req.body.align.app ];
-	alnparams.align.params = req.body.align.params;
-	alnparams.tree = {};
-	alnparams.tree.app = methodlist[ req.body.tree.app ];
-	alnparams.tree.params = req.body.tree.params;
-	alnparams.treeview = {};
-	alnparams.treeview.app = methodlist[ req.body.treview.app ];
-	alnparams.treeview.params = req.body.treview.params;
+
+	if ( req.body.align ) {
+		alnparams.align = {};
+		alnparams.align.app = methodlist[ req.body.align.app ];
+		alnparams.align.params = req.body.align.params;
+	}
+
+	if ( req.body.tree ) {
+		alnparams.tree = {};
+		alnparams.tree.app = methodlist[ req.body.tree.app ];
+		alnparams.tree.params = req.body.tree.params;
+	}
+
+	if ( req.body.treeview ) {
+		alnparams.treeview = {};
+		alnparams.treeview.app = methodlist[ req.body.treview.app ];
+		alnparams.treeview.params = req.body.treview.params;
+	}
 
 	// Generate FASTA file (consider taxid if available)
 	if ( alnparams.seqs && alnparams.seqs.length > 0 ) {
@@ -52,7 +66,7 @@ exports.performAlign = function (req, res) {
 		}
 
 		// We have an align application
-		if ( alnparams.align.app ){
+		if ( alnparams.align && alnparams.align.app ){
 			
 			var pipeapps = [];
 			var alnapp = {};
@@ -61,7 +75,7 @@ exports.performAlign = function (req, res) {
 
 			pipeapps.push( alnapp );
 
-			if ( alnparams.tree.app ){
+			if ( alnparams.tree && alnparams.tree.app ){
 
 				var treeapp = {};
 				treeapp.app = alnparams.tree.app;
@@ -69,7 +83,7 @@ exports.performAlign = function (req, res) {
 
 				pipeapps.push( treeapp );
 
-				if ( alnparams.treeview.app ){
+				if ( alnparams.treeview && alnparams.treeview.app ){
 				
 					var treeviewapp = {};
 					treeviewapp.app = alnparams.treeview.app;
