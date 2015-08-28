@@ -119,8 +119,13 @@ function processHits( hits ) {
 
 	for ( var hit = 0; hit < hits.length; hit = hit + 1 ) {
 		
-		str = str + "<div class='hit'>";
+		str = str + "<div class='hit'><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
+
+		if ( hits[hits].description[0].taxid ) {
+			str = str + "<span class='taxid'>" + hits[hit].description[0].taxid + "</span>";
+		}
+
 		str = str + "<span class='evalue'>" + hits[hit].hsps[0].evalue + "</span>"; // Higher value
 		str = str + "<span class='details'>Details...</span>"; // Details
 		str = str + "<div class='hsps'>" + processHsps( hits[hit].hsps ) + "</div>";
