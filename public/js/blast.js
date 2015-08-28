@@ -8,6 +8,8 @@ $(document).ready( function(){
 	socket.on('output', function(message) {
 		if ( $("#blast-data").children().length === 0 ) { // If nothing append output
 			// TODO: Handle continuous output
+			// Put button here, questionable
+			$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
 			$("#blast-data").append( message );
 		}
 	});
