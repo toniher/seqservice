@@ -122,7 +122,7 @@ function processHits( hits ) {
 		str = str + "<div class='hit'><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
 
-		if ( hits[hits].description[0].taxid ) {
+		if ( hits[hit].description[0].taxid ) {
 			str = str + "<span class='taxid'>" + hits[hit].description[0].taxid + "</span>";
 		}
 
@@ -207,9 +207,9 @@ function printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend
 			content_hit_frame = hit_frame;
 		}
 
-		content+="<div class='seq'><span class='frame'>"+content_query_frame+"</span><span class='start'>"+start1+"</span><p>"+arrSeqs["qseq"][qst]+"</p><span class='end'>"+end1+"</span></div>";
-		content+="<div class='seq mid'><span class='frame'></span><span class='start'></span><p>"+arrSeqs["midline"][qst]+"</p><span class='end'></span></div>";
-		content+="<div class='seq'><span class='frame'>"+content_hit_frame+"</span><span class='start'>"+start2+"</span><p>"+arrSeqs["hseq"][qst]+"</p><span class='end'>"+end2+"</span></div>";
+		content+="<div class='seq seq-query'><span class='frame'>"+content_query_frame+"</span><span class='start'>"+start1+"</span><p class='actual'>"+arrSeqs["qseq"][qst]+"</p><span class='end'>"+end1+"</span></div>";
+		content+="<div class='seq mid'><span class='frame'></span><span class='start'></span><p class='actual'>"+arrSeqs["midline"][qst]+"</p><span class='end'></span></div>";
+		content+="<div class='seq seq-hit'><span class='frame'>"+content_hit_frame+"</span><span class='start'>"+start2+"</span><p class='actual'>"+arrSeqs["hseq"][qst]+"</p><span class='end'>"+end2+"</span></div>";
 		content+="</div>";
 
 		count = count + 1;
