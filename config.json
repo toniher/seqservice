@@ -5,28 +5,26 @@
 			"list": {
 				"prot": {
 					"drosoph_aa": {
-						"path": "/opt/db/drosoph.aa",
+						"path": "/data/db/seqservice/drosoph.aa",
 						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.aa.gz"
 					}
 				},
 				"nucl": {
 					"drosoph_nt": {
-						"path": "/opt/db/drosoph.nt",
+						"path": "/data/db/seqservice/drosoph.nt",
 						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.nt.gz"
 					}
 				}
 			}
 		},
 		"exec": {
-			"path": "/opt/soft/blast/bin",
+			"path": "/home/toniher/bin",
 			"method": {
-				"blastdbcmd":"/opt/soft/blast/bin/blastdbcmd",
-				"samtools": "/opt/soft/blast/bin/samtools"
+				"blastdbcmd":"/home/toniher/bin/blastdbcmd",
+				"samtools": "/data/soft/bin/samtools",
+				"muscle": "/data/soft/bin/muscle",
+				"phyml": "/data/soft/bin/phyml"
 			}
-		},
-		"xsl": {
-			"blastn": "/opt/app/seqservice/xsl/blastn.xsl",
-			"blastp": "/opt/app/seqservice/xsl/blastp.xsl"
 		},
 		"port": "10030",
 		"jsonp": false,
