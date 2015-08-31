@@ -4,6 +4,8 @@ $(document).ready( function(){
 
 	var basepath = $("#blast-form").data("basepath");
 
+	// Writing tree
+
 	var socket = io.connect( { path: basepath + "/socket.io" } );
 	socket.on('align', function(message) {
 		//if ( $("#align-data").find(".results").length === 0 ) { // If nothing append output
@@ -19,6 +21,14 @@ $(document).ready( function(){
 			// TODO: Handle continuous output
 			$("#tree-data").empty();
 			$("#tree-data").append( message );
+
+			// Adding view tree
+			$("#treeview-data").empty();
+			var t = tnt.tree();
+			var theme = tnt_theme()
+				.newick(message)
+					theme(t, document.getElementById('treeview-data'));
+
 		//} else {
 		//	console.log( "Huis" );
 		//}
@@ -32,6 +42,8 @@ $(function() {
 		console.log("ALIGN");
 		var exec = $(this).attr("data-align-exec");
 		var seqs = [];
+
+		// TODO: Possibility to add query sequence as well
 
 		$("#blast-data input.hitcheck:checked").each( function( i ) {
 
@@ -66,7 +78,35 @@ $(function() {
 		var exec = "/seqservice/align"; // TODO: to change and get base
 
 		$("#align-data").empty();
+		$("#tree-data").empty();
+		$("#treeview-data").empty();
+
 		console.log( params );
 		$.post( exec, params );
 	});
 });
+
+var tnt_theme = function () {
+	
+	var newick; // The newick tree is now undefined by default
+	
+	var theme = function (t, div) {
+		t
+			.data (tnt.tree.parse_newick(newick))
+			.layout (tnt.tree.layout.vertical()
+					 .width(650)
+					)
+			.label (tnt.tree.label.text()
+					.height(15)
+				   );
+		t(div);
+	};
+	
+	theme.newick = function (new_newick) {
+		newick = new_newick;
+		return theme;
+	};
+	
+	return theme;
+};
+
