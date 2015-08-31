@@ -1,6 +1,30 @@
 /*globals console io $ document */
 
-console.log("Align loaded");
+$(document).ready( function(){
+
+	var basepath = $("#blast-form").data("basepath");
+
+	var socket = io.connect( { path: basepath + "/socket.io" } );
+	socket.on('align', function(message) {
+		//if ( $("#align-data").find(".results").length === 0 ) { // If nothing append output
+			// TODO: Handle continuous output
+			console.log( message );
+		//} else {
+		//	console.log( "Huis" );
+		//}
+	});
+
+	socket.on('tree', function(message) {
+		// if ( $("#tree-data").find(".results").length === 0 ) { // If nothing append output
+			// TODO: Handle continuous output
+			$("#tree-data").empty();
+			$("#tree-data").append( message );
+		//} else {
+		//	console.log( "Huis" );
+		//}
+	});
+
+});
 
 $(function() {
 	$("#blast-data").on( "click", '#align-exec', function() {
@@ -31,10 +55,10 @@ $(function() {
 
 		var align = {};
 		align.app = "muscle"; // For now only
-		align.params = ""; // String params for now
+		align.params = "-phyi -in -"; // String params for now
 
 		var tree = {};
-		tree.app = "phyml"; // For now only
+		tree.app = "phyml-aa"; // For now only
 		tree.params = ""; // String params for now
 
 		var params = { seqs: seqs, align: align, tree: tree };
