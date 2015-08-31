@@ -64,6 +64,8 @@ function run_blast( params, req, res, seqidpath ){
 	var DBpath = DBcontainer.path;
 	var seq = req.body.seq;
 
+	// TODO: Further processing of seq here (whether FASTA or simple text)
+
 	var format = req.body.format; // Format to return, default JSON or JSONP
 
 	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
@@ -73,25 +75,24 @@ function run_blast( params, req, res, seqidpath ){
 
 	console.log( seq + "-" + program + "-" + DBpath + "-" );
 			
-	run_cmd( [seq, program, DBpath, opts], function (object) {
+	run_cmd( [seq, program, DBpath, opts], function(err, object) {
 		
-		// TODO: Handle here error!
+		// TODO: Handle errors
+
 		console.log( object );
+		// TODO: add seq to object
 
 		if ( format && format === 'html' ) {
-			// TODO: HTML printing moved to frontend
 			io.emit("blast", object );
 			res.send({});
-			//functions.printBlastHTML( object, res );
 		} else {
 			//// If configured JSONP
-			//if ( res.app.set('config').jsonp ) {
-			//	res.jsonp( object );
-			//} else {
-			//	res.set( 'Content-Type', 'application/json' );
-			//	res.send( object );
-			//}
-			res.send( {} );
+			if ( res.app.set('config').jsonp ) {
+				res.jsonp( object );
+			} else {
+				res.set( 'Content-Type', 'application/json' );
+				res.send( object );
+			}
 		}
 	
 	});
@@ -110,12 +111,11 @@ function run_cmd ( args, callBack ) {
 	$p("echo \"" + textfile + "\"" ).pipe( blastprog )
 	.data(function(err, stdout, stderr) {
 		if ( err ) {
-			console.log("ERR");
-			console.log( stderr.toString() );
+			callBack( err, stderr.toString() );
 		} else {
 			// console.log("OUT");
 			resp += stdout.toString();
-			callBack(resp);
+			callBack( null, resp );
 		}
 	
 	});
