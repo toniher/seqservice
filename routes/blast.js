@@ -24,28 +24,6 @@ exports.performBlast = function (req, res) {
 	var organism = parseInt( req.body.organism, 10 );
 
 	if ( organism && ( organism !== 0 || organism === 'NaN' ) ) {
-
-//		mysqlqueries.getListID( organism, function( listID ) {
-
-//			if ( listID.length > 0 ) {
-//				temp.track();
-
-//				// Process the data (note: error handling omitted)
-//				temp.open('tmp', function(err, info) {
-//					if (!err) {
-//						fs.write(info.fd, listID.join("\n"));
-//						fs.close(info.fd, function(err) {
-//							run_blast( blastparams, req, res, info.path );
-//						});
-//					}
-//				});
-
-//			} else {
-//				
-//				// TODO: Here return no value;
-//				run_blast( blastparams, req, res );
-//			}
-//		});
 		
 		// TODO: Here we should allow filtering by taxon ID
 		run_blast( blastparams, req, res );
@@ -102,16 +80,18 @@ function run_blast( params, req, res, seqidpath ){
 
 		if ( format && format === 'html' ) {
 			// TODO: HTML printing moved to frontend
-			io.emit("output", functions.printBlastHTML( object ) );
+			io.emit("blast", object );
+			res.send({});
 			//functions.printBlastHTML( object, res );
 		} else {
-			// If configured JSONP
-			if ( res.app.set('config').jsonp ) {
-				res.jsonp( object );
-			} else {
-				res.set( 'Content-Type', 'application/json' );
-				res.send( object );
-			}
+			//// If configured JSONP
+			//if ( res.app.set('config').jsonp ) {
+			//	res.jsonp( object );
+			//} else {
+			//	res.set( 'Content-Type', 'application/json' );
+			//	res.send( object );
+			//}
+			res.send( {} );
 		}
 	
 	});

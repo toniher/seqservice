@@ -14,6 +14,8 @@ exports.performAlign = function (req, res) {
 
 	var alnparams = {};
 
+	var io = req.app.set('io');
+
 	// TODO: Proper checking of params here
 
 	if ( ! req.body.seqs ) {
@@ -93,6 +95,8 @@ exports.performAlign = function (req, res) {
 					console.log("TREEVIEW");
 					runPipe( fastaText, pipeapps, function( object ) {
 						console.log( object );
+						io.emit("treeview", object );
+						res.send({});
 					});
 
 				} else {
@@ -100,6 +104,8 @@ exports.performAlign = function (req, res) {
 					console.log("TREE");
 					runPipe( fastaText, pipeapps, function( object ) {
 						console.log( object );
+						io.emit("tree", object );
+						res.send({});
 					});
 				}
 			} else {
@@ -107,6 +113,8 @@ exports.performAlign = function (req, res) {
 				console.log("ALN");
 				runPipe( fastaText, pipeapps, function( object ) {
 					console.log( object );
+					io.emit("align", object );
+					res.send({});
 				});
 			}
 
@@ -148,9 +156,10 @@ function runPipe( baseText, apps, callBack ) {
 	}
 
 	commandline.data( function(err, stdout, stderr) {
+
 		if ( err ) {
 			console.log("ERR");
-			console.log( stderr.toString() );
+			console.log( stderr );
 		} else {
 			resp += stdout.toString();
 			callBack(resp);
