@@ -13,6 +13,10 @@
 					"drosoph_nt": {
 						"path": "/data/db/seqservice/drosoph.nt",
 						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.nt.gz"
+					},
+					"16SMicrobial": {
+						"path": "/data/db/seqservice/16SMicrobial",
+						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/16SMicrobial.tar.gz"
 					}
 				}
 			}
@@ -23,7 +27,8 @@
 				"blastdbcmd":"/home/toniher/bin/blastdbcmd",
 				"samtools": "/data/soft/bin/samtools",
 				"muscle": "/data/soft/bin/muscle",
-				"phyml": "/data/soft/bin/phyml"
+				"phyml": "/home/toniher/bin/phyml.sh",
+				"phyml-aa": "/home/toniher/bin/phyml-aa.sh"
 			}
 		},
 		"port": "10030",
