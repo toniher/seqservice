@@ -65,6 +65,7 @@ $(function() {
 
 		});
 
+		// Params
 
 		var align = {};
 		align.app = "muscle"; // For now only
@@ -74,6 +75,24 @@ $(function() {
 		tree.app = "phyml-aa"; // For now only
 
 		tree.params = ""; // String params for now
+
+
+		// Attach seq, make it optional 
+		var blast = $("#blast");
+
+		if ( blast && blast.length > 0 ) {
+
+			var seq = $(blast).data("seq");
+			var program = $(blast).data("program");
+			
+			var seqobj = { id: "Query", seq: seq  };
+			
+			if ( program === "blastn" ) {
+				tree.app = "phyml";
+			}
+			
+			seqs.push( seqobj );
+		}
 
 		var params = { seqs: seqs, align: align, tree: tree };
 

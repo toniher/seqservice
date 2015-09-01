@@ -12,6 +12,9 @@ $(document).ready( function(){
 			if ( $("#blast-data").children(".align-button").length === 0 ) {
 				$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
 			}
+			if ( $("#blast-data").children(".switch-button").length === 0 ) {
+				$("#blast-data").append("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
+			}
 			$("#blast-data").append( printBLAST( message ) );
 		} else {
 			console.log( "Huis" );
@@ -92,6 +95,11 @@ $(function() {
 	});
 });
 
+
+$(document).on('click', "#blast-switch", function() {
+	$("#blast-data #blast").toggle();
+});
+
 // Detect details
 $( document ).on( "click", ".hit > .details", function() {
 
@@ -136,6 +144,8 @@ $(document).on('DOMNodeInserted', function(e) {
 function printBLAST( object ) {
 
 	var obj = JSON.parse( object );
+	
+	var seq = obj['seq'];
 
 	var blastobj = obj["BlastOutput2"]["report"];
 
@@ -144,7 +154,7 @@ function printBLAST( object ) {
 	var gextend = blastobj.params.gap_extend;
 
 	var program = blastobj.program;
-	var str = "";
+	var str = "<div id='blast' data-program='"+program+"' data-seq='"+seq+"'>";
 
 	if ( program === 'psiblast' && blastobj.results.iterations ) {
 		
@@ -169,6 +179,8 @@ function printBLAST( object ) {
 		str = "<p class='not-found'>No hits found.</p>";
 	}
     
+	str = str + "</div>";
+	
 	return str;
 
 }
