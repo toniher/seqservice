@@ -22,6 +22,7 @@ $(document).ready( function(){
 
 		if ( data ) {
 			if ( data.nucl ) {
+				$("#nucl").empty();
 				for ( var k in data.nucl ) {
 					if ( data.nucl[k] ) {
 						$("#nucl").append("<option>" + k + "</option>" );
@@ -29,6 +30,7 @@ $(document).ready( function(){
 				}
 			}
 			if ( data.prot ) {
+				$("#prot").empty();
 				for ( var k in data.prot ) {
 					if ( data.prot[k] ) {
 						$("#prot").append("<option>" + k + "</option>" );

@@ -65,12 +65,14 @@ $(function() {
 
 		});
 
+
 		var align = {};
 		align.app = "muscle"; // For now only
 		align.params = "-phyi -in -"; // String params for now
 
 		var tree = {};
 		tree.app = "phyml-aa"; // For now only
+
 		tree.params = ""; // String params for now
 
 		var params = { seqs: seqs, align: align, tree: tree };
