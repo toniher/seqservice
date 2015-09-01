@@ -75,23 +75,22 @@ function run_blast( params, req, res, seqidpath ){
 
 	console.log( seq + "-" + program + "-" + DBpath + "-" );
 			
-	run_cmd( [seq, program, DBpath, opts], function(err, object) {
+	run_cmd( [seq, program, DBpath, opts], function(err, output) {
 		
 		// TODO: Handle errors
-
-		console.log( object );
-		// TODO: add seq to object
+		object = JSON.parse(output);
+		object.seq = seq;
 
 		if ( format && format === 'html' ) {
-			io.emit("blast", object );
+			io.emit("blast", JSON.stringify(object) );
 			res.send({});
 		} else {
 			//// If configured JSONP
 			if ( res.app.set('config').jsonp ) {
-				res.jsonp( object );
+				res.jsonp( JSON.stringify(object) );
 			} else {
 				res.set( 'Content-Type', 'application/json' );
-				res.send( object );
+				res.send( JSON.stringify(object) );
 			}
 		}
 	
@@ -114,7 +113,7 @@ function run_cmd ( args, callBack ) {
 			callBack( err, stderr.toString() );
 		} else {
 			// console.log("OUT");
-			resp += stdout.toString();
+			resp += stdout.toString();			
 			callBack( null, resp );
 		}
 	
