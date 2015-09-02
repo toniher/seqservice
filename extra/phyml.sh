@@ -1,7 +1,7 @@
 TEMPFILE=`mktemp`
 
 cat > $TEMPFILE
-phyml -i $TEMPFILE
+phyml -i $TEMPFILE &> /dev/null
 
 OUTPUT=$TEMPFILE"_phyml_tree.txt"
 
