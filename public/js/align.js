@@ -20,7 +20,7 @@ $(document).ready( function(){
 		// if ( $("#tree-data").find(".results").length === 0 ) { // If nothing append output
 			// TODO: Handle continuous output
 			$("#tree-data").empty();
-			$("#tree-data").append( message );
+			// $("#tree-data").append( message );
 
 			// Adding view tree
 			$("#treeview-data").empty();
