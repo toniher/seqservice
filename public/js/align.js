@@ -3,36 +3,26 @@
 $(document).ready( function(){
 
 	var basepath = $("#blast-form").data("basepath");
+	var socketio = $("#blast-form").data("socketio");
 
 	// Writing tree
+	if ( socketio ){
+		
+		var socket = io.connect( { path: basepath + "/socket.io" } );
+		//socket.on('align', function(message) {
+		//	//if ( $("#align-data").find(".results").length === 0 ) { // If nothing append output
+		//		// TODO: Handle continuous output
+		//		console.log( message );
+		//	//} else {
+		//	//	console.log( "Huis" );
+		//	//}
+		//});
+		//
+		socket.on('tree', function( message ) {
+			printTree( message );
+		});
 
-	var socket = io.connect( { path: basepath + "/socket.io" } );
-	socket.on('align', function(message) {
-		//if ( $("#align-data").find(".results").length === 0 ) { // If nothing append output
-			// TODO: Handle continuous output
-			console.log( message );
-		//} else {
-		//	console.log( "Huis" );
-		//}
-	});
-
-	socket.on('tree', function(message) {
-		// if ( $("#tree-data").find(".results").length === 0 ) { // If nothing append output
-			// TODO: Handle continuous output
-			$("#tree-data").empty();
-			// $("#tree-data").append( message );
-
-			// Adding view tree
-			$("#treeview-data").empty();
-			var t = tnt.tree();
-			var theme = tnt_theme()
-				.newick(message)
-					theme(t, document.getElementById('treeview-data'));
-
-		//} else {
-		//	console.log( "Huis" );
-		//}
-	});
+	}
 
 });
 
@@ -42,6 +32,9 @@ $(function() {
 		console.log("ALIGN");
 		var exec = $(this).attr("data-align-exec");
 		var seqs = [];
+
+		var socketio = $("#blast-form").data("socketio");
+
 
 		// TODO: Possibility to add query sequence as well
 
@@ -102,10 +95,33 @@ $(function() {
 		$("#tree-data").empty();
 		$("#treeview-data").empty();
 
-		console.log( params );
-		$.post( exec, params );
+		$.post( exec, params ).done( function( data ) {
+
+			if ( ! socketio ){
+				printTree( JSON.stringify( data ) ); //TODO: Fix JSON and so
+			}
+
+		});
+
 	});
 });
+
+function printTree( message ) {
+
+	var input = JSON.parse( message );
+
+	$("#tree-data").empty();
+	// $("#tree-data").append( message );
+
+	// Adding view tree
+	$("#treeview-data").empty();
+
+	var t = tnt.tree();
+	var theme = tnt_theme()
+		.newick(input.tree)
+			theme(t, document.getElementById('treeview-data'));
+
+}
 
 var tnt_theme = function () {
 	

@@ -26,6 +26,23 @@ exports.returnJSON = function( res, object ) {
 
 };
 
+exports.returnSocketIO = function( socketio, io, msg, res, output ) {
+
+	if ( socketio ) {
+		io.emit( msg, output );
+		res.send({});
+	} else {
+		//// If configured JSONP
+		if ( res.app.set('config').jsonp ) {
+			res.jsonp( output );
+		} else {
+			res.set( 'Content-Type', 'application/json' );
+			res.send( output );
+		}
+	}
+
+};
+
 // Here we provoke download the file
 exports.downloadFasta = function( res, stdout, entry ) {
 

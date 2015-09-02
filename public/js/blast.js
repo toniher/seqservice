@@ -3,23 +3,14 @@
 $(document).ready( function(){
 
 	var basepath = $("#blast-form").data("basepath");
+	var socketio = $("#blast-form").data("socketio");
 
-	var socket = io.connect( { path: basepath + "/socket.io" } );
-	socket.on('blast', function(message) {
-		if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
-			// TODO: Handle continuous output
-			$("#blast-data").empty();
-			if ( $("#blast-data").children(".align-button").length === 0 ) {
-				$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
-			}
-			if ( $("#blast-data").children(".switch-button").length === 0 ) {
-				$("#blast-data").append("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
-			}
-			$("#blast-data").append( printBLAST( message ) );
-		} else {
-			console.log( "Huis" );
-		}
-	});
+	if ( socketio ) {
+		var socket = io.connect( { path: basepath + "/socket.io" } );
+		socket.on('blast', function(message) {
+			prepareHTMLBLAST( message );
+		});
+	}
 
 	$.get( basepath + "/db", function( data ) {
 
@@ -73,12 +64,13 @@ $(function() {
 	$('#blast-exec').click(function() {
 
 		var basepath = $("#blast-form").data("basepath");
+		var socketio = $("#blast-form").data("socketio");
+
 		$("#blast-data").empty();
 
 		var exec = $(this).attr("data-blast-exec");
 		var binary = null;
 		var db = null;
-		var format = "html";
 		var organism = 0;
 
 		if ( $( "[name=moltype]" ).val() === 'nucl' ) {
@@ -91,7 +83,13 @@ $(function() {
 		
 		organism = parseInt( $( "[name=organism]" ).val(), 10 );
 
-		$.post( exec, { seq: $('textarea').val(), binary: binary, db: db, format: format, organism: organism });
+		$.post( exec, { seq: $('textarea').val(), binary: binary, db: db, organism: organism }).done( function( data ) {
+
+			if ( ! socketio ){
+				prepareHTMLBLAST( JSON.stringify( data ) ); // TODO, change
+			}
+
+		});
 	});
 });
 
@@ -139,6 +137,21 @@ $(document).on('DOMNodeInserted', function(e) {
 //	characterData: true,
 //	subtree: true
 //});
+
+function prepareHTMLBLAST( message ) {
+
+	if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
+		// TODO: Handle continuous output
+		$("#blast-data").empty();
+		if ( $("#blast-data").children(".align-button").length === 0 ) {
+			$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
+		}
+		if ( $("#blast-data").children(".switch-button").length === 0 ) {
+			$("#blast-data").append("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
+		}
+		$("#blast-data").append( printBLAST( message ) );
+	}
+}
 
 
 function printBLAST( object ) {

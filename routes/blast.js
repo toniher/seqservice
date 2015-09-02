@@ -59,14 +59,14 @@ function run_blast( params, req, res, seqidpath ){
 		opts = opts + " -seqidlist " + seqidpath;
 	}
 
+	var socketio = config.socketio; // Wheter to use this socketio or not;
+
 	console.log("DB: "+db+ " -- "+config.db.list);
 	var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
 	var DBpath = DBcontainer.path;
 	var seq = req.body.seq;
 
 	// TODO: Further processing of seq here (whether FASTA or simple text)
-
-	var format = req.body.format; // Format to return, default JSON or JSONP
 
 	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
 
@@ -78,21 +78,10 @@ function run_blast( params, req, res, seqidpath ){
 	run_cmd( [seq, program, DBpath, opts], function(err, output) {
 		
 		// TODO: Handle errors
-		object = JSON.parse(output);
+		var object = JSON.parse(output);
 		object.seq = seq;
 
-		if ( format && format === 'html' ) {
-			io.emit("blast", JSON.stringify(object) );
-			res.send({});
-		} else {
-			//// If configured JSONP
-			if ( res.app.set('config').jsonp ) {
-				res.jsonp( JSON.stringify(object) );
-			} else {
-				res.set( 'Content-Type', 'application/json' );
-				res.send( JSON.stringify(object) );
-			}
-		}
+		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( object ) ); 
 	
 	});
 }
@@ -113,7 +102,9 @@ function run_cmd ( args, callBack ) {
 			callBack( err, stderr.toString() );
 		} else {
 			// console.log("OUT");
-			resp += stdout.toString();			
+			if ( stdout ) {
+				resp += stdout.toString();
+			}
 			callBack( null, resp );
 		}
 	

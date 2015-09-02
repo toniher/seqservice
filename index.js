@@ -78,7 +78,7 @@ app.use(basepath, express.static(__dirname + '/public'));
 
 // TODO: This is not fully working. Redundant for now
 app.get(basepath + '/blast', function (req, res) {
-	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ) } );
+	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio } );
 });
 
 

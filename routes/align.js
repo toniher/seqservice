@@ -16,6 +16,8 @@ exports.performAlign = function (req, res) {
 
 	var io = req.app.set('io');
 
+	var socketio = config.socketio; // Wheter to use this socketio or not;
+
 	// TODO: Proper checking of params here
 
 	if ( ! req.body.seqs ) {
@@ -93,28 +95,35 @@ exports.performAlign = function (req, res) {
 
 					pipeapps.push( treeviewapp );
 					console.log("TREEVIEW");
-					runPipe( fastaText, pipeapps, function( object ) {
-						console.log( object );
-						io.emit("treeview", object );
-						res.send({});
+					runPipe( fastaText, pipeapps, function( output ) {
+						var object = {};
+						object.treeview = output;
+						console.log( output );
+
+						functions.returnSocketIO( socketio, io, "treeview", res, JSON.stringify( object ) ); 
 					});
 
 				} else {
 					// No treeview application
 					console.log("TREE");
-					runPipe( fastaText, pipeapps, function( object ) {
-						console.log( object );
-						io.emit("tree", object );
-						res.send({});
+					runPipe( fastaText, pipeapps, function( output ) {
+						var object = {};
+						object.tree = output;
+						console.log( output );
+
+						functions.returnSocketIO( socketio, io, "tree", res, JSON.stringify( object ) ); 
 					});
 				}
 			} else {
 				// No tree application
 				console.log("ALN");
-				runPipe( fastaText, pipeapps, function( object ) {
-					console.log( object );
-					io.emit("align", object );
-					res.send({});
+				runPipe( fastaText, pipeapps, function( output ) {
+					var object = {};
+					object.align = output;
+					console.log( output );
+
+					functions.returnSocketIO( socketio, io, "align", res, JSON.stringify( object ) ); 
+
 				});
 			}
 
