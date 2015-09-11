@@ -66,6 +66,14 @@ $(function() {
 		var basepath = $("#blast-form").data("basepath");
 		var socketio = $("#blast-form").data("socketio");
 
+		// More generic seqinput
+		var seqinput = "";
+		if ( $("#seqinput").is("textarea") || $("#seqinput").is("input") ) {
+			seqinput = $("#seqinput").val().trim();
+		} else {
+			seqinput = $("#seqinput").text().trim();
+		}
+		
 		$("#blast-data").empty();
 
 		var exec = $(this).attr("data-blast-exec");
@@ -83,7 +91,7 @@ $(function() {
 		
 		organism = parseInt( $( "[name=organism]" ).val(), 10 );
 
-		$.post( exec, { seq: $('textarea').val(), binary: binary, db: db, organism: organism }).done( function( data ) {
+		$.post( exec, { seq: seqinput, binary: binary, db: db, organism: organism }).done( function( data ) {
 
 			if ( ! socketio ){
 				prepareHTMLBLAST( JSON.stringify( data ) ); // TODO, change
