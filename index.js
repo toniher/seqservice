@@ -3,7 +3,7 @@ var nconfig = require('./config.js');
 var config = nconfig.get("express");
 var errorhandler = require("errorhandler");
 var bodyParser = require('body-parser');
-var compression = require('compression')
+var compression = require('compression');
 
 var lessMiddleware = require('less-middleware');
 
