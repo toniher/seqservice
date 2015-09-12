@@ -111,7 +111,7 @@ $(function() {
 
 
 $(document).on('click', "#blast-switch", function() {
-	$("#blast-data #blast").toggle();
+	$("#blast-data").toggle();
 });
 
 // Detect details
@@ -159,11 +159,11 @@ function prepareHTMLBLAST( message ) {
 	if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
 		// TODO: Handle continuous output
 		$("#blast-data").empty();
-		if ( $("#blast-data").children(".align-button").length === 0 ) {
-			$("#blast-data").append("<div class='align-button'><button id='align-exec'>Align</button></div>");
+		if ( $("#blast-form").find(".align-button").length === 0 ) {
+			$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
 		}
-		if ( $("#blast-data").children(".switch-button").length === 0 ) {
-			$("#blast-data").append("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
+		if ( $("#blast-form").find(".switch-button").length === 0 ) {
+			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}
 		$("#blast-data").append( printBLAST( message ) );
 	}

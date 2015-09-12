@@ -27,9 +27,8 @@ $(document).ready( function(){
 });
 
 $(function() {
-	$("#blast-data").on( "click", '#align-exec', function() {
+	$(document).on( "click", '#align-exec', function() {
 
-		console.log("ALIGN");
 		var exec = $(this).attr("data-align-exec");
 		var seqs = [];
 
@@ -102,6 +101,8 @@ $(function() {
 			}
 
 		});
+		
+		$("#blast-data").hide(); //Hide alignment
 
 	});
 });
