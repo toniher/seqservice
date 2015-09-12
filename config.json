@@ -31,6 +31,9 @@
 				"phyml-aa": "/home/toniher/bin/phyml-aa.sh"
 			}
 		},
+		"external": {
+			"taxonid": "http://prgdb.crg.eu/api/taxon/"
+		},
 		"port": "10030",
 		"jsonp": false,
 		"basepath": "/seqservice"
