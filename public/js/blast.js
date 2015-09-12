@@ -369,22 +369,64 @@ function splitSeq( arrSeqs, qseq, midline, hseq, num ) {
 
 function addTaxonIDinBlast( url ) {
 	
+	var listTaxonID = [];
+	
+	// retrieve IDs
 	$(".results .hit .taxid").each( function( i ) {
 		
 		var placeholder = this;
 		
 		var taxonid = $(placeholder).text();
 		
+		listTaxonID.push( taxonid );
+		
+	});
+	
+	var listTaxonIDu = [];
+	$.each( listTaxonID, function(i, el){
+		if($.inArray(el, listTaxonIDu) === -1) listTaxonIDu.push(el);
+	});
+	
+	var mapTaxonID = {};
+	var counter = listTaxonIDu.length;
+		
+	// Retrieve from API names //TODO: Make async
+	$.each( listTaxonIDu, function(i, taxonid){
+
 		var queryurl = url + taxonid;
 		
-		$.get( queryurl ).done( function( data ) {
-
-			if ( data["scientific_name"] ) {
-
-				$(placeholder).after("<span class='taxname'>"+data["scientific_name"]+"</span>");
-			}
-
+		$.ajax({
+			type: 'GET',
+			 url: queryurl,
+			 async: false,
+			 jsonp: 'callback',
+			 dataType: 'jsonp',
+			 success: function( data ) {
+				if ( data["scientific_name"] ) {
+					mapTaxonID[ taxonid ] = data["scientific_name"]
+				}
+				counter = counter - 1;
+				if ( counter == 0 ) fillTaxonNames( mapTaxonID );
+			 }
 		});
+		
+	});
+	
+}
+
+function fillTaxonNames( mapTaxonID ) {
+	
+	// Fill content
+	$(".results .hit .taxid").each( function( i ) {
+		
+		var placeholder = this;
+		
+		var taxonid = $(placeholder).text();
+		
+		if ( mapTaxonID[taxonid] ) {
+			$(placeholder).after("<span class='taxname'>"+mapTaxonID[taxonid]+"</span>");
+
+		}
 		
 	});
 	
