@@ -4,11 +4,15 @@ $(document).ready( function(){
 
 	var basepath = $("#blast-form").data("basepath");
 	var socketio = $("#blast-form").data("socketio");
+	var taxonidurl = $("#blast-form").data("external-taxonid");
 
 	if ( socketio ) {
 		var socket = io.connect( { path: basepath + "/socket.io" } );
 		socket.on('blast', function(message) {
 			prepareHTMLBLAST( message );
+			if ( taxonidurl ) {
+				addTaxonIDinBlast( taxonidurl );
+			}
 		});
 	}
 
@@ -65,6 +69,7 @@ $(function() {
 
 		var basepath = $("#blast-form").data("basepath");
 		var socketio = $("#blast-form").data("socketio");
+		var taxonidurl = $("#blast-form").data("external-taxonid");
 
 		// More generic seqinput
 		var seqinput = "";
@@ -94,7 +99,10 @@ $(function() {
 		$.post( exec, { seq: seqinput, binary: binary, db: db, organism: organism }).done( function( data ) {
 
 			if ( ! socketio ){
-				prepareHTMLBLAST( JSON.stringify( data ) ); // TODO, change
+				prepareHTMLBLAST( JSON.stringify( data ) );
+				if ( taxonidurl ) {
+					addTaxonIDinBlast( taxonidurl );
+				}
 			}
 
 		});
@@ -359,3 +367,25 @@ function splitSeq( arrSeqs, qseq, midline, hseq, num ) {
 	return arrSeqs;
 }
 
+function addTaxonIDinBlast( url ) {
+	
+	$(".results .hit .taxid").each( function( i ) {
+		
+		var placeholder = this;
+		
+		var taxonid = $(placeholder).text();
+		
+		var queryurl = url + taxonid;
+		
+		$.get( queryurl ).done( function( data ) {
+
+			if ( data["scientific_name"] ) {
+
+				$(placeholder).after("<span class='taxname'>"+data["scientific_name"]+"</span>");
+			}
+
+		});
+		
+	});
+	
+}
