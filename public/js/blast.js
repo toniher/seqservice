@@ -165,15 +165,31 @@ function prepareHTMLBLAST( message ) {
 		if ( $("#blast-form").find(".switch-button").length === 0 ) {
 			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}
-		$("#blast-data").append( printBLAST( message ) );
+		$("#blast-data").append( printBLASTall( message ) );
 	}
 }
 
+function printBLASTall( message ) {
 
-function printBLAST( object ) {
+	var str = "";
+	var obj = JSON.parse( message );
 
-	var obj = JSON.parse( object );
-	
+	console.log( obj );
+
+	if ( obj instanceof Array ) {
+		for ( var o = 0; o < obj.length; o = o + 1 ) {
+			str = str + printBLAST( obj[o] );
+		}
+	} else {
+		str = printBLAST( obj );
+	}
+
+	return str;
+}
+
+
+function printBLAST( obj ) {
+
 	var seq = obj['seq'];
 
 	var blastobj = obj["BlastOutput2"]["report"];

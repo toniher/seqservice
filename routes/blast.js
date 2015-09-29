@@ -3,6 +3,7 @@ var temp = require('temp'),
     fs   = require('fs');
 
 var $p = require('procstreams');
+var fasta = require('biojs-io-fasta');
 
 // We should include other Blast Programs here
 exports.performBlast = function (req, res) {
@@ -73,13 +74,20 @@ function run_blast( params, req, res, seqidpath ){
 	var program = config.exec.path + "/" + binary;
 	var io = req.app.set('io');
 
-	console.log( seq + "-" + program + "-" + DBpath + "-" );
+	//console.log( seq + "-" + program + "-" + DBpath + "-" );
 			
 	run_cmd( [seq, program, DBpath, opts], function(err, output) {
 		
-		// TODO: Handle errors
-		var object = JSON.parse(output);
-		object.seq = seq;
+		var object = {};
+
+		if ( ( output.match(/BlastOutput2/g)||[]).length > 1 ) {
+			output = processMultiOutput( output );
+			object = JSON.parse(output);
+			object = addMultiSeqs( object, seq );
+		} else {
+			object = JSON.parse(output);
+			object.seq = seq;
+		}
 
 		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( object ) ); 
 	
@@ -92,6 +100,7 @@ function run_cmd ( args, callBack ) {
 	
 	// Elements to pipe
 	var textfile = [ processTextInput( args[0] ) ].join("\n");
+
 	var blastprog = args[1] + " -db " + args[2] + " -outfmt 13 " + args[3];
 
 	// We pass thru STDOUT, we avoid temp file
@@ -101,7 +110,6 @@ function run_cmd ( args, callBack ) {
 		if ( err ) {
 			callBack( err, stderr.toString() );
 		} else {
-			// console.log("OUT");
 			if ( stdout ) {
 				resp += stdout.toString();
 			}
@@ -122,6 +130,43 @@ function processTextInput( text ) {
 
 	return text;
 }
+
+function processMultiOutput( output ) {
+
+	output = output.replace( /\s*\{\s*\"BlastOutput2\"/g, ", { \"BlastOutput2\"" );
+
+	output = output.trim();
+
+	output = output.replace( /^\s*\,\s*\{/, "{" );
+	output = "[" + output + "]";
+
+	return output;
+}
+
+function addMultiSeqs( object, seqs ) {
+
+	var listSeqs = fasta.parse( seqs );
+
+	for ( var f = 0; f < object.length; f = f + 1 ) {
+
+		if ( listSeqs[f] ) {
+
+			if ( listSeqs[f].hasOwnProperty("seq") ) {
+				object[f].seq = listSeqs[f].seq;
+			}
+			if ( listSeqs[f].hasOwnProperty("id") ) {
+				object[f].id = listSeqs[f].id;
+			}
+			if ( listSeqs[f].hasOwnProperty("name") ) {
+				object[f].name = listSeqs[f].name;
+			}
+
+		}
+	}
+
+	return object;
+}
+
 
 if (!String.prototype.startsWith) {
 	String.prototype.startsWith = function(searchString, position) {

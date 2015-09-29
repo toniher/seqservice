@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "async": "1.x",
+    "biojs-io-fasta": "^0.1.12",
     "body-parser": "1.x",
     "compression": "1.x",
     "ejs": "1.x",
