@@ -91,7 +91,7 @@ function run_cmd ( args, callBack ) {
 	var resp = "";
 	
 	// Elements to pipe
-	var textfile = [ ">ENTRY", args[0] ].join("\n");
+	var textfile = [ processTextInput( args[0] ) ].join("\n");
 	var blastprog = args[1] + " -db " + args[2] + " -outfmt 13 " + args[3];
 
 	// We pass thru STDOUT, we avoid temp file
@@ -111,5 +111,24 @@ function run_cmd ( args, callBack ) {
 	});
 
 }
+
+function processTextInput( text ) {
+
+	text = text.trim();
+
+	if ( ! text.startsWith( ">" ) ) {
+		text = ">ENTRY" + text;
+	}
+
+	return text;
+}
+
+if (!String.prototype.startsWith) {
+	String.prototype.startsWith = function(searchString, position) {
+		position = position || 0;
+		return this.indexOf(searchString, position) === position;
+	};
+}
+
 
 
