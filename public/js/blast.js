@@ -174,8 +174,6 @@ function printBLASTall( message ) {
 	var str = "";
 	var obj = JSON.parse( message );
 
-	console.log( obj );
-
 	if ( obj instanceof Array ) {
 		for ( var o = 0; o < obj.length; o = o + 1 ) {
 			str = str + printBLAST( obj[o] );
