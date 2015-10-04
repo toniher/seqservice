@@ -86,7 +86,12 @@ function run_blast( params, req, res, seqidpath ){
 			object = addMultiSeqs( object, seq );
 		} else {
 			object = JSON.parse(output);
-			object.seq = seq;
+			if ( ! seq.startsWith( ">" ) ) {
+				object.seq = seq;
+			} else {
+				object = addUniSeq( object, seq );
+				console.log( object );
+			}
 		}
 
 		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( object ) ); 
@@ -162,6 +167,27 @@ function addMultiSeqs( object, seqs ) {
 			}
 
 		}
+	}
+
+	return object;
+}
+
+function addUniSeq( object, seq ) {
+
+	var oneSeq = fasta.parse( seq );
+
+	if ( oneSeq.length > 0 ) {
+	
+		if ( oneSeq[0].hasOwnProperty("seq") ) {
+			object.seq = oneSeq[0].seq;
+		}
+		if ( oneSeq[0].hasOwnProperty("id") ) {
+			object.id = oneSeq[0].id;
+		}
+		if ( oneSeq[0].hasOwnProperty("name") ) {
+			object.name = oneSeq[0].name;
+		}
+	
 	}
 
 	return object;
