@@ -176,20 +176,22 @@ function printBLASTall( message ) {
 
 	if ( obj instanceof Array ) {
 		for ( var o = 0; o < obj.length; o = o + 1 ) {
-			str = str + printBLAST( obj[o] );
+			str = str + printBLAST( obj[o], o );
 		}
 	} else {
-		str = printBLAST( obj );
+		str = printBLAST( obj, 0 );
 	}
 
 	return str;
 }
 
 
-function printBLAST( obj ) {
+function printBLAST( obj, num ) {
 
 	var seq = obj['seq'];
-
+	var id = obj['id'];
+	var name = obj['name'];
+		
 	var blastobj = obj["BlastOutput2"]["report"];
 
 	var expect = blastobj.params.expect;
@@ -197,7 +199,7 @@ function printBLAST( obj ) {
 	var gextend = blastobj.params.gap_extend;
 
 	var program = blastobj.program;
-	var str = "<div id='blast' data-program='"+program+"' data-seq='"+seq+"'>";
+	var str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
 
 	if ( program === 'psiblast' && blastobj.results.iterations ) {
 		
