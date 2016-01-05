@@ -172,14 +172,20 @@ function prepareHTMLBLAST( message ) {
 function printBLASTall( message ) {
 
 	var str = "";
-	var obj = JSON.parse( message );
-
-	if ( obj instanceof Array ) {
-		for ( var o = 0; o < obj.length; o = o + 1 ) {
-			str = str + printBLAST( obj[o], o );
+	
+	var pre = JSON.parse( message );
+	
+	if ( pre.hasOwnProperty("BlastOutput2") ) {
+		
+		var obj = pre["BlastOutput2"];
+	
+		if ( obj instanceof Array ) {
+			for ( var o = 0; o < obj.length; o = o + 1 ) {
+				str = str + printBLAST( obj[o], o );
+			}
+		} else {
+			str = printBLAST( obj, 0 );
 		}
-	} else {
-		str = printBLAST( obj, 0 );
 	}
 
 	return str;
@@ -192,7 +198,7 @@ function printBLAST( obj, num ) {
 	var id = obj['id'];
 	var name = obj['name'];
 		
-	var blastobj = obj["BlastOutput2"]["report"];
+	var blastobj = obj["report"];
 
 	var expect = blastobj.params.expect;
 	var gopen = blastobj.params.gap_open;

@@ -80,7 +80,7 @@ function run_blast( params, req, res, seqidpath ){
 		
 		var object = {};
 
-		if ( ( output.match(/BlastOutput2/g)||[]).length > 1 ) {
+		if ( ( output.match(/report/g)||[]).length > 1 ) {
 			output = processMultiOutput( output );
 			object = JSON.parse(output);
 			object = addMultiSeqs( object, seq );
@@ -106,7 +106,7 @@ function run_cmd ( args, callBack ) {
 	// Elements to pipe
 	var textfile = [ processTextInput( args[0] ) ].join("\n");
 
-	var blastprog = args[1] + " -db " + args[2] + " -outfmt 13 " + args[3];
+	var blastprog = args[1] + " -db " + args[2] + " -outfmt 15 " + args[3];
 
 	// We pass thru STDOUT, we avoid temp file
 	// Handled by procstreams
@@ -138,12 +138,12 @@ function processTextInput( text ) {
 
 function processMultiOutput( output ) {
 
-	output = output.replace( /\s*\{\s*\"BlastOutput2\"/g, ", { \"BlastOutput2\"" );
-
-	output = output.trim();
-
-	output = output.replace( /^\s*\,\s*\{/, "{" );
-	output = "[" + output + "]";
+	//output = output.replace( /\s*\{\s*\"BlastOutput2\"/g, ", { \"BlastOutput2\"" );
+	//
+	//output = output.trim();
+	//
+	//output = output.replace( /^\s*\,\s*\{/, "{" );
+	//output = "[" + output + "]";
 
 	return output;
 }
@@ -152,26 +152,37 @@ function addMultiSeqs( object, seqs ) {
 
 	var listSeqs = fasta.parse( seqs );
 
-	for ( var f = 0; f < object.length; f = f + 1 ) {
+	if ( object.hasOwnProperty("BlastOutput2") ) {
 
-		if ( listSeqs[f] ) {
-
-			if ( listSeqs[f].hasOwnProperty("seq") ) {
-				object[f].seq = listSeqs[f].seq;
+		var outputReports = object["BlastOutput2"];
+		
+		if ( outputReports instanceof Array ) { //If array
+			
+			for ( var f = 0; f < outputReports.length; f = f + 1 ) {
+		
+				if ( listSeqs[f] ) {
+		
+					if ( listSeqs[f].hasOwnProperty("seq") ) {
+						object["BlastOutput2"][f].seq = listSeqs[f].seq;
+					}
+					if ( listSeqs[f].hasOwnProperty("id") ) {
+						object["BlastOutput2"][f].id = listSeqs[f].id;
+					}
+					if ( listSeqs[f].hasOwnProperty("name") ) {
+						object["BlastOutput2"][f].name = listSeqs[f].name;
+					}
+		
+				}
 			}
-			if ( listSeqs[f].hasOwnProperty("id") ) {
-				object[f].id = listSeqs[f].id;
-			}
-			if ( listSeqs[f].hasOwnProperty("name") ) {
-				object[f].name = listSeqs[f].name;
-			}
-
+			
 		}
+		
 	}
-
+	
 	return object;
 }
 
+// TODO: Merge with Multiseqs
 function addUniSeq( object, seq ) {
 
 	var oneSeq = fasta.parse( seq );
