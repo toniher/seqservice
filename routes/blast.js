@@ -130,7 +130,7 @@ function processTextInput( text ) {
 	text = text.trim();
 
 	if ( ! text.startsWith( ">" ) ) {
-		text = ">ENTRY" + text;
+		text = ">ENTRY\n" + text;
 	}
 
 	return text;
