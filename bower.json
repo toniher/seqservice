@@ -3,5 +3,16 @@
   "version": "0.0.2",
   "dependencies": {
 	"pouchdb": "5.x"
-  }
+  },
+  "install" : {
+    "path" : {
+      "css": "public/vendor/css",
+      "js": "public/vendor/js"
+    },
+    "sources" : { 
+	"pouchdb": [
+		"bower-components/pouchdb/dist/pouchdb.min.js"		
+	]
+	}
+    }
 }

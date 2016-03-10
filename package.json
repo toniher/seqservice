@@ -26,6 +26,10 @@
     "socket.io": "1.3.x",
     "temp": "0.8.x"
   },
+  "devDependencies": {
+    "bower": "*",
+    "bower-installer": "*"
+  },
   "author": "Toni Hermoso",
   "license": "GPL-3.0"
 }
