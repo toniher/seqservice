@@ -1,0 +1,7 @@
+{
+  "name": "seqservice",
+  "version": "0.0.2",
+  "dependencies": {
+	"pouchdb": "5.x"
+  }
+}
