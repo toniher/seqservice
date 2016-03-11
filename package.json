@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toniher/seqservice"
+  },
   "keywords": [
     "bioinformatics",
     "fasta",
@@ -20,6 +24,7 @@
     "errorhandler": "1.x",
     "express": "4.x",
     "less-middleware": "2.x",
+    "multer": "^1.1.0",
     "nconf": "0.6.x",
     "procstreams": "0.3",
     "request": "2.x",

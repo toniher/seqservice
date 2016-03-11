@@ -7,6 +7,8 @@ var compression = require('compression');
 
 var lessMiddleware = require('less-middleware');
 
+var multer  = require('multer');
+
 var app = express();
 
 var basepath = "";
@@ -30,6 +32,10 @@ app.use(compression({
   threshold: 512
 }))
 
+// TODO: Define custom upload directory
+var upload = multer({ dest: 'uploads/' });
+
+
 app.set("config", config);
 
 // Launch server
@@ -47,6 +53,10 @@ var loadfile = require('./routes/load.js');
 // Landing
 app.get( basepath + '/', function(req, res){
 	res.render('index.html');
+});
+// Landing Upload
+app.get( basepath + '/upload', function(req, res){
+	res.render('upload.html');
 });
 
 // List of databases
@@ -69,7 +79,7 @@ app.post(basepath + '/blast', blast.performBlast);
 app.post(basepath + '/align', align.performAlign);
 
 // Load File
-app.post(basepath + '/load', loadfile.getFile);
+app.post(basepath + '/load', upload.single('report'), loadfile.getFile);
 
 
 // Now views
