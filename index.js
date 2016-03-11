@@ -32,9 +32,10 @@ app.use(compression({
   threshold: 512
 }))
 
-// TODO: Define custom upload directory
-var upload = multer({ dest: 'uploads/' });
-
+// TODO: Define custom upload directory and limits
+var upload = multer({ dest: 'uploads/',
+	limits: {fileSize: 100000000, files:1}
+});
 
 app.set("config", config);
 
@@ -54,10 +55,7 @@ var loadfile = require('./routes/load.js');
 app.get( basepath + '/', function(req, res){
 	res.render('index.html');
 });
-// Landing Upload
-app.get( basepath + '/upload', function(req, res){
-	res.render('upload.html');
-});
+
 
 // List of databases
 app.get(basepath + '/db', blastdbcmd.getDBlist);
@@ -95,6 +93,10 @@ app.get(basepath + '/blast', function (req, res) {
 	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid } );
 });
 
+// Landing Upload
+app.get( basepath + '/upload', function(req, res){
+	res.render('upload.html', { basepath: basepath } );
+});
 
 function getKeys ( list ) {
 

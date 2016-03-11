@@ -2,15 +2,41 @@
 <html>
 	<head>
 		<title>Report Upload</title>
+	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	</head>
 	<body>
-	<form id="uploadform" action="/load" method="POST" enctype="multipart/form-data">
+	<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
 	  <input type="file" name="report"> 
 	  <input type="submit" value="Upload report">
 	  <span id="status"></span>
 	</form>
 	<!-- Placeholders for data -->
 	<div id="blast-data"></div>
+<script>
+$('#uploadform').on('click', "input[type=submit]", function( e ) {
+
+	e.preventDefault();
+
+	var fd = new FormData();
+	fd.append( 'report', $( "input[name=report]" )[0].files[0] );
+
+	console.log( fd );
+
+    $.ajax({
+		url: "<%= basepath %>/load",
+		dataType: 'text',
+		cache: false,
+		contentType: false,
+		processData: false,
+		data: fd,                         
+		type: 'post',
+		success: function(response){
+			console.log(response);
+		}
+     });
+});
+</script>
 	</body>
 </html>
 

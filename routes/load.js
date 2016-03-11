@@ -8,4 +8,8 @@ exports.getFile = function (req, res) {
 	var config;
 	config = req.app.set('config');
 
+	var out = {};
+	out.file = req.file;
+
+	functions.returnJSON( res, out );
 };
