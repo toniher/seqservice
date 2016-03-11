@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Report Upload</title>
+	<link rel="stylesheet" href="<%= basepath %>/blast.css">
 	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	</head>
@@ -13,6 +14,7 @@
 	</form>
 	<!-- Placeholders for data -->
 	<div id="blast-data"></div>
+	<script src='<%= basepath %>/js/blast.js'></script>
 <script>
 $('#uploadform').on('click', "input[type=submit]", function( e ) {
 
@@ -32,7 +34,7 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
 		data: fd,                         
 		type: 'post',
 		success: function(response){
-			console.log(response);
+			$("#blast-data").append( printBLASTall( response ) );
 		}
      });
 });

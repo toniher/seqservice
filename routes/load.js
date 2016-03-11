@@ -11,5 +11,13 @@ exports.getFile = function (req, res) {
 	var out = {};
 	out.file = req.file;
 
-	functions.returnJSON( res, out );
+	fs.readFile( out.file.path , 'utf8', function (err,data) {
+	  if (err) {
+		out.err = err;
+		functions.returnJSON( res, out );
+	  }
+	  functions.returnJSON( res, data );
+	});
+
+	
 };
