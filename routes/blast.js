@@ -2,6 +2,9 @@ var functions = require('../functions/index.js');
 var temp = require('temp'),
     fs   = require('fs');
 
+require('babel-polyfill');
+var hash = require('json-hash');
+
 var $p = require('procstreams');
 var fasta = require('biojs-io-fasta');
 
@@ -94,7 +97,13 @@ function run_blast( params, req, res, seqidpath ){
 			}
 		}
 
-		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( object ) ); 
+		var digest = hash.digest( object );
+		var newObj = {};
+		newObj.id = digest;
+		newObj.type = "blast";
+		newObj.data = object;
+
+		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( newObj ) ); 
 	
 	});
 }

@@ -173,19 +173,26 @@ function printBLASTall( message ) {
 
 	var str = "";
 	
-	var pre = JSON.parse( message );
-	
-	if ( pre.hasOwnProperty("BlastOutput2") ) {
+	var obj = JSON.parse( message );
+
+	if ( obj.hasOwnProperty("data") ) {
+
+		// All objects should have data part
+		var pre = JSON.parse( message ).data;
 		
-		var obj = pre["BlastOutput2"];
-	
-		if ( obj instanceof Array ) {
-			for ( var o = 0; o < obj.length; o = o + 1 ) {
-				str = str + printBLAST( obj[o], o );
+		if ( pre.hasOwnProperty("BlastOutput2") ) {
+			
+			var obj = pre["BlastOutput2"];
+		
+			if ( obj instanceof Array ) {
+				for ( var o = 0; o < obj.length; o = o + 1 ) {
+					str = str + printBLAST( obj[o], o );
+				}
+			} else {
+				str = printBLAST( obj, 0 );
 			}
-		} else {
-			str = printBLAST( obj, 0 );
 		}
+
 	}
 
 	return str;

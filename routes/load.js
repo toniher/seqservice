@@ -2,6 +2,9 @@ var functions = require('../functions/index.js');
 var temp = require('temp'),
     fs   = require('fs');
 
+require('babel-polyfill');
+var hash = require('json-hash');
+
 // Retrieve a File
 exports.getFile = function (req, res) {
 
@@ -16,7 +19,15 @@ exports.getFile = function (req, res) {
 		out.err = err;
 		functions.returnJSON( res, out );
 	  }
-	  functions.returnJSON( res, data );
+
+	  var dataObj = JSON.parse( data );
+	  var digest = hash.digest( dataObj );
+	  var newObj = {};
+	  newObj.id = digest;
+	  newObj.type = "blast";
+	  newObj.data = dataObj;
+
+	  functions.returnJSON( res, JSON.stringify( newObj ) );
 	});
 
 	
