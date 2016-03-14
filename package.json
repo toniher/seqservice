@@ -26,6 +26,7 @@
     "express": "4.x",
     "json-hash": "^1.1.0",
     "less-middleware": "2.x",
+    "moment": "^2.12.0",
     "multer": "^1.1.0",
     "nconf": "0.6.x",
     "procstreams": "0.3",

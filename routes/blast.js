@@ -4,6 +4,7 @@ var temp = require('temp'),
 
 require('babel-polyfill');
 var hash = require('json-hash');
+var moment = require('moment');
 
 var $p = require('procstreams');
 var fasta = require('biojs-io-fasta');
@@ -102,6 +103,7 @@ function run_blast( params, req, res, seqidpath ){
 		newObj.id = digest;
 		newObj.type = "blast";
 		newObj.data = object;
+		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 
 		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( newObj ) ); 
 	

@@ -4,6 +4,7 @@ var temp = require('temp'),
 
 require('babel-polyfill');
 var hash = require('json-hash');
+var moment = require('moment');
 
 // Retrieve a File
 exports.getFile = function (req, res) {
@@ -26,7 +27,8 @@ exports.getFile = function (req, res) {
 	  newObj.id = digest;
 	  newObj.type = "blast";
 	  newObj.data = dataObj;
-
+  
+	  newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 	  functions.returnJSON( res, JSON.stringify( newObj ) );
 	});
 
