@@ -175,27 +175,39 @@ function printBLASTall( message ) {
 	
 	var obj = JSON.parse( message );
 
-	if ( obj.hasOwnProperty("data") ) {
+	pouchdb_report( "reports", obj, function( db, obj, err ) {
 
-		// All objects should have data part
-		var pre = JSON.parse( message ).data;
-		
-		if ( pre.hasOwnProperty("BlastOutput2") ) {
-			
-			var obj = pre["BlastOutput2"];
-		
-			if ( obj instanceof Array ) {
-				for ( var o = 0; o < obj.length; o = o + 1 ) {
-					str = str + printBLAST( obj[o], o );
-				}
-			} else {
-				str = printBLAST( obj, 0 );
-			}
+		if ( err ) {
+			console.log( err );
+			return str;
 		}
 
-	}
+		// TODO: Here insert in DB
 
-	return str;
+		if ( obj.hasOwnProperty("data") ) {
+	
+			// All objects should have data part
+			var pre = JSON.parse( message ).data;
+			
+			if ( pre.hasOwnProperty("BlastOutput2") ) {
+				
+				obj = pre["BlastOutput2"];
+			
+				if ( obj instanceof Array ) {
+					for ( var o = 0; o < obj.length; o = o + 1 ) {
+						str = str + printBLAST( obj[o], o );
+					}
+				} else {
+					str = printBLAST( obj, 0 );
+				}
+			}
+	
+		}
+	
+		return str;
+	});
+
+
 }
 
 

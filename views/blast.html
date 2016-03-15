@@ -3,7 +3,6 @@
 	<head>
 		<title>BLAST</title>
 		<link rel="stylesheet" href="<%= basepath %>/blast.css">
-		<link rel="stylesheet" href="http://emepyc.github.io/tnt/v0/tnt.css" type="text/css" />
 	</head>
 	<body>
 	<div id="blast-form" data-basepath="<%= basepath %>" data-socketio="<%= socketio %>" data-external-taxonid="<%= taxonid %>">
@@ -33,8 +32,7 @@
 	<div id="treeview-data"></div>
 	<script src='https://code.jquery.com/jquery-1.11.1.js'></script><%if (socketio) { %>
 	<script src='<%= basepath %>/socket.io/socket.io.js'></script><% } %>
-	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="http://emepyc.github.io/tnt/v0/tnt.min.js"></script>
+	<script src='<%= basepath %>/vendor/js/pouchdb/pouchdb.min.js'></script>
 	<script src='<%= basepath %>/js/blast.js'></script>
 	<script src='<%= basepath %>/js/align.js'></script>
 	</body>
