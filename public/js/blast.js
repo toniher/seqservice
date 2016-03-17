@@ -173,8 +173,6 @@ function prepareHTMLBLAST( message ) {
 }
 
 function printBLASTall( message, target ) {
-
-	var str = "";
 	
 	var obj = JSON.parse( message );
 	
@@ -196,6 +194,8 @@ function printBLASTall( message, target ) {
 						
 						// Move async
 						var iter = 0;
+						var str = "";
+
 						async.eachSeries(blastObj, function(blastIter, callback) {
 							
 							str = str + printBLAST( blastIter, iter );
