@@ -15,6 +15,7 @@
 	<!-- Placeholders for data -->
 	<div id="blast-data"></div>
 	<script src='<%= basepath %>/vendor/js/pouchdb/pouchdb.min.js'></script>
+	<script src='<%= basepath %>/vendor/js/async/async.min.js'></script>
 	<script src='<%= basepath %>/js/pouchdb.js'></script>
 	<script src='<%= basepath %>/js/blast.js'></script>
 <script>
@@ -36,7 +37,9 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
 		data: fd,                         
 		type: 'post',
 		success: function(response){
-			$("#blast-data").append( printBLASTall( response ) );
+			printBLASTall( response, function( txt ) {
+				$("#blast-data").append( txt ); 
+			});
 		}
      });
 });

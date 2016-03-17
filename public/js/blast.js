@@ -165,48 +165,61 @@ function prepareHTMLBLAST( message ) {
 		if ( $("#blast-form").find(".switch-button").length === 0 ) {
 			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}
-		$("#blast-data").append( printBLASTall( message ) );
+		
+		printBLASTall( message, function( txt ) {
+			$("#blast-data").append( txt ); 
+		});
 	}
 }
 
-function printBLASTall( message ) {
+function printBLASTall( message, target ) {
 
 	var str = "";
 	
 	var obj = JSON.parse( message );
-
+	
 	pouchdb_report( "reports", obj, function( db, obj, err ) {
 
-		if ( err ) {
-			console.log( err );
-			return str;
-		}
+		if ( ! err ) {
 
-		// TODO: Here insert in DB
-
-		if ( obj.hasOwnProperty("data") ) {
+			// TODO: Here insert in DB
 	
-			// All objects should have data part
-			var pre = JSON.parse( message ).data;
-			
-			if ( pre.hasOwnProperty("BlastOutput2") ) {
+			if ( obj.hasOwnProperty("data") ) {
+		
+				// All objects should have data part
 				
-				obj = pre["BlastOutput2"];
-			
-				if ( obj instanceof Array ) {
-					for ( var o = 0; o < obj.length; o = o + 1 ) {
-						str = str + printBLAST( obj[o], o );
+				if ( obj["data"].hasOwnProperty("BlastOutput2") ) {
+					
+					blastObj = obj["data"]["BlastOutput2"];
+									
+					if ( blastObj instanceof Array ) {
+						
+						// Move async
+						var iter = 0;
+						async.eachSeries(blastObj, function(blastIter, callback) {
+							
+							str = str + printBLAST( blastIter, iter );
+							iter = iter + 1;
+							callback();
+						}, function(err){
+							if ( err ) {
+								console.log("error printing blast");
+							}
+							
+							target( str );
+						});
+						
+						
+					} else {
+						str = printBLAST( blastObj, 0 );
+						target( str );
 					}
-				} else {
-					str = printBLAST( obj, 0 );
 				}
+		
 			}
 	
 		}
-	
-		return str;
 	});
-
 
 }
 
