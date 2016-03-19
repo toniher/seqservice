@@ -3,7 +3,8 @@
   "version": "0.0.2",
   "dependencies": {
 	"pouchdb": "5.x",
-	"async": "1.x"
+	"async": "1.x",
+	"jquery": "1.12.x"
   },
 	"install" : {
 	"path" : {
@@ -16,6 +17,9 @@
 		],
 		"async": [
 			"bower-components/async/dist/async.min.js"
+		],
+		"jquery": [
+			"bower-components/jquery/dist/jquery.min.js"
 		]
 		}
 	}

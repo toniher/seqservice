@@ -3,8 +3,6 @@
 	<head>
 		<title>Report Upload</title>
 	<link rel="stylesheet" href="<%= basepath %>/blast.css">
-	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	</head>
 	<body>
 	<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
@@ -14,6 +12,7 @@
 	</form>
 	<!-- Placeholders for data -->
 	<div id="blast-data"></div>
+	<script src='<%= basepath %>/vendor/js/jquery/jquery.min.js'></script>
 	<script src='<%= basepath %>/vendor/js/pouchdb/pouchdb.min.js'></script>
 	<script src='<%= basepath %>/vendor/js/async/async.min.js'></script>
 	<script src='<%= basepath %>/js/pouchdb.js'></script>
