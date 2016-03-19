@@ -24,7 +24,7 @@ exports.getFile = function (req, res) {
 	  var dataObj = JSON.parse( data );
 	  var digest = hash.digest( dataObj );
 	  var newObj = {};
-	  newObj.id = digest;
+	  newObj._id = digest;
 	  newObj.type = "blast";
 	  newObj.data = dataObj;
   

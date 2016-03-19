@@ -100,7 +100,7 @@ function run_blast( params, req, res, seqidpath ){
 
 		var digest = hash.digest( object );
 		var newObj = {};
-		newObj.id = digest;
+		newObj._id = digest;
 		newObj.type = "blast";
 		newObj.data = object;
 		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');

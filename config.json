@@ -39,8 +39,10 @@
 		"basepath": "/seqservice",
 		"socketio": true,
 		"session" : {
-			"active" : false,
-			"db" : { }
+			"active" : true,
+			"db" : {
+				"type": "pouchdb"
+			}
 		}
 	}
 }
