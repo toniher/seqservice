@@ -23,3 +23,10 @@ function pouchdb_report( dbname, obj, cb ) {
 	}); 
 	
 }
+
+function pouchdb_listdocs( dbname, cb ) {
+
+	var data = null;
+
+	cb( data );
+}

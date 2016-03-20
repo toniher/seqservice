@@ -11,6 +11,7 @@
 	  <span id="status"></span>
 	</form>
 	<!-- Placeholders for data -->
+	<div id="list-data"></div>
 	<div id="blast-data"></div>
 	<script src='<%= basepath %>/vendor/js/jquery/jquery.min.js'></script>
 	<script src='<%= basepath %>/vendor/js/pouchdb/pouchdb.min.js'></script>
@@ -18,6 +19,14 @@
 	<script src='<%= basepath %>/js/pouchdb.js'></script>
 	<script src='<%= basepath %>/js/blast.js'></script>
 <script>
+$( document ).ready( function( ){
+	
+	pouchdb_listdocs( "reports", function( data ){
+		console.log( data );
+	});
+	
+});
+
 $('#uploadform').on('click', "input[type=submit]", function( e ) {
 
 	e.preventDefault();
