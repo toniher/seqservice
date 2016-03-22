@@ -20,9 +20,28 @@
 	<script src='<%= basepath %>/js/blast.js'></script>
 <script>
 $( document ).ready( function( ){
-	
-	pouchdb_listdocs( "reports", function( data ){
+
+	//new PouchDB('reports').destroy().then(function () {
+	//  // database destroyed
+	//}).catch(function (err) {
+	//  // error occurred
+	//})
+
+
+	pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
 		console.log( data );
+		if ( data && data.total_rows > 0 ) {
+			if ( data.rows ) {
+				var str = "<ul id='storedBlast'>";
+				for ( var r = 0; r < data.rows.length; r = r + 1 ) {
+					var entry = data.rows[r];
+					str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
+				}
+				str = str + "</ul>";
+				$( "#list-data" ).empty();
+				$( "#list-data" ).append( str );
+			}
+		}
 	});
 	
 });
@@ -45,12 +64,31 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
 		data: fd,                         
 		type: 'post',
 		success: function(response){
-			printBLASTall( response, function( txt ) {
+			printBLASTall( response, 1, function( txt ) {
 				$("#blast-data").append( txt ); 
 			});
 		}
      });
 });
+
+$("#list-data").on('click', "#storedBlast .storedDoc", function( e ) {
+
+	e.preventDefault();
+	var docId = $(this).data( "id" );
+
+	if ( docId ) {
+		pouchdb_retrieve( "reports", docId, function( err, response ) {
+			if ( ! err ) {
+				printBLASTall( response, null, function( txt ) {
+					$("#blast-data").empty();
+					$("#blast-data").append( txt ); 
+				});
+			}
+		});
+	}
+
+});
+
 </script>
 	</body>
 </html>

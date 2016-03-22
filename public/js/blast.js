@@ -166,16 +166,21 @@ function prepareHTMLBLAST( message ) {
 			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}
 		
-		printBLASTall( message, function( txt ) {
+		printBLASTall( message, 1, function( txt ) {
 			$("#blast-data").append( txt ); 
 		});
 	}
 }
 
-function printBLASTall( message, target ) {
+function printBLASTall( message, parse, target ) {
 	
-	var obj = JSON.parse( message );
-	
+	var obj;
+	if ( parse ) {
+		obj = JSON.parse( message );
+	} else {
+		obj = message;
+	}
+
 	pouchdb_report( "reports", obj, function( db, obj, err ) {
 
 		if ( ! err ) {
