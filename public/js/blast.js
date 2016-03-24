@@ -53,6 +53,34 @@ $(document).ready( function(){
 			}
 		}
 	});
+	
+
+	// If upload form
+	
+	//new PouchDB('reports').destroy().then(function () {
+	//  // database destroyed
+	//}).catch(function (err) {
+	//  // error occurred
+	//})
+
+	if ( $('#uploadform').length > 0 ) {
+
+		pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
+			console.log( data );
+			if ( data && data.total_rows > 0 ) {
+				if ( data.rows ) {
+					var str = "<ul id='storedBlast'>";
+					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
+						var entry = data.rows[r];
+						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
+					}
+					str = str + "</ul>";
+					$( "#list-data" ).empty();
+					$( "#list-data" ).append( str );
+				}
+			}
+		});
+	}
 
 });
 
@@ -166,7 +194,9 @@ function prepareHTMLBLAST( message ) {
 			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}
 		
-		printBLASTall( message, 1, function( txt ) {
+		printBLASTall( message, 1, function( txt, extra ) {
+			// Handle extra iter
+			console.log( extra );
 			$("#blast-data").append( txt ); 
 		});
 	}
@@ -180,12 +210,12 @@ function printBLASTall( message, parse, target ) {
 	} else {
 		obj = message;
 	}
-
+	
+	var extra = {};
+	
 	pouchdb_report( "reports", obj, function( db, obj, err ) {
 
 		if ( ! err ) {
-
-			// TODO: Here insert in DB
 	
 			if ( obj.hasOwnProperty("data") ) {
 		
@@ -210,8 +240,9 @@ function printBLASTall( message, parse, target ) {
 							if ( err ) {
 								console.log("error printing blast");
 							}
+							extra.iter = iter;
 							
-							target( str );
+							target( str, extra );
 						});
 						
 						
@@ -234,7 +265,7 @@ function printBLAST( obj, num ) {
 	var seq = obj['seq'];
 	var id = obj['id'];
 	var name = obj['name'];
-		
+			
 	var blastobj = obj["report"];
 
 	var expect = blastobj.params.expect;
@@ -249,7 +280,7 @@ function printBLAST( obj, num ) {
 		var iterationlist = blastobj.results.iterations;
 		for ( var iter = 0; iter < iterationlist.length; iter = iter + 1 ) {
 			
-			str = str + "<div class='iter'>";
+			str = str + "<div class='iter' data-iter='"+iterationlist[iter].iter_num+"'>";
 			str = str + "<span class='id'>" + iterationlist[iter].iter_num + "</span>";
 			str = str + "<div class='results'>";
 			str = str + processHits( iterationlist[iter].search.hits );
@@ -490,3 +521,48 @@ function fillTaxonNames( mapTaxonID ) {
 	});
 	
 }
+
+$('#uploadform').on('click', "input[type=submit]", function( e ) {
+
+	e.preventDefault();
+
+	var fd = new FormData();
+	fd.append( 'report', $( "input[name=report]" )[0].files[0] );
+
+	console.log( fd );
+
+    $.ajax({
+		url: "<%= basepath %>/load",
+		dataType: 'text',
+		cache: false,
+		contentType: false,
+		processData: false,
+		data: fd,                         
+		type: 'post',
+		success: function(response){
+			printBLASTall( response, 1, function( txt, extra ) {
+				console.log( extra );
+				$("#blast-data").append( txt ); 
+			});
+		}
+     });
+});
+
+$("#list-data").on('click', "#storedBlast .storedDoc", function( e ) {
+
+	e.preventDefault();
+	var docId = $(this).data( "id" );
+
+	if ( docId ) {
+		pouchdb_retrieve( "reports", docId, function( err, response ) {
+			if ( ! err ) {
+				printBLASTall( response, null, function( txt, extra ) {
+					console.log( extra );
+					$("#blast-data").empty();
+					$("#blast-data").append( txt ); 
+				});
+			}
+		});
+	}
+
+});
