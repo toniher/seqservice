@@ -1,18 +1,18 @@
-$(document).click('.getGO', function() {
+$(document).on( "click", '.go-exec', function() {
 
-	$(".getGOresults").empty();
+	$(".getGO-results").empty();
 	var limit = 10;
 	var listProts = [];
 
 	var iter = 0;
-	$('.hitid.selected').each( function( i ) {
+	$('.hitcheck:checked').each( function( i ) {
 		
 		if ( iter >= 10 ) {
 			return false;
 		} else {
 			
 			iter = iter + 1;
-			var content = $(this).text();
+			var content = $(this).parent().find(".id").first().text();
 			var proc = getIDheader( content );
 			if ( proc ) {
 				listProts.push( proc );
@@ -23,6 +23,7 @@ $(document).click('.getGO', function() {
 	});
 	
 	// TODO: Fix URLs
+	console.log( listProts );
 
 	if ( listProts.length > 0 ) {
 		var strProts = listProts.join("-");

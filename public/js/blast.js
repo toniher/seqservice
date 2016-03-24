@@ -75,8 +75,8 @@ $(document).ready( function(){
 						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
 					}
 					str = str + "</ul>";
-					$( "#list-data" ).empty();
-					$( "#list-data" ).append( str );
+					$( "#panel" ).empty();
+					$( "#panel" ).append( str );
 				}
 			}
 		});
@@ -190,6 +190,11 @@ function prepareHTMLBLAST( message ) {
 		if ( $("#blast-form").find(".align-button").length === 0 ) {
 			$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
 		}
+		
+		if ( $("#blast-form").find(".go-button").length === 0 ) {
+			$("#blast-exec").after("<div class='go-button'><button id='go-exec'>Check GO</button></div>");
+		}
+		
 		if ( $("#blast-form").find(".switch-button").length === 0 ) {
 			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}
@@ -548,7 +553,7 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
      });
 });
 
-$("#list-data").on('click', "#storedBlast .storedDoc", function( e ) {
+$("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
 
 	e.preventDefault();
 	var docId = $(this).data( "id" );
