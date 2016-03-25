@@ -87,8 +87,42 @@ exports.matchInArray = function( groups, tomatch ) {
 	return -1;
 }
 
-exports.printForm = function( service ) {
+exports.printForm = function( name, service ) {
 	
-	return "Test";
+	var html = "";
+	
+	if ( service.hasOwnProperty('params') && service.hasOwnProperty('default') ) {
+	
+		for ( var param in service.params ) {
+
+			var paramvals = service.params[param];
+			
+			if ( Array.isArray( paramvals ) ) {
+				html = html + "<select name='"+name+"-"+param+"'>";
+				
+				for ( var val=0; val < paramvals.length; val = val + 1 ) {
+					
+					var defval = "";
+					if ( service["default"][param] && paramvals[val] == service["default"][param] ) {
+						defval = " selected=selected";
+					}
+										
+					html = html + "<option"+defval+">"+paramvals[val]+"</option>"
+				}
+				
+				html = html + "</select>";
+				
+			} else {
+					if ( service["default"][param] ) {
+						defval = " default="+service["default"][param];
+					}
+					
+					html = html + "<input type='text' name='"+name+"-"+param+"' "+defval+">";
+			}
+		
+		}
+	}
+	
+	return html;
 }
 
