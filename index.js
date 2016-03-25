@@ -5,6 +5,9 @@ var errorhandler = require("errorhandler");
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
+var functions = require('./functions/index.js');
+
+
 var lessMiddleware = require('less-middleware');
 
 var multer  = require('multer');
@@ -90,7 +93,7 @@ app.use(basepath, express.static(__dirname + '/public'));
 
 // TODO: This is not fully working. Redundant for now
 app.get(basepath + '/blast', function (req, res) {
-	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid } );
+	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid, bypass: functions.printForm( "bypass" ) } );
 });
 
 // Landing Upload

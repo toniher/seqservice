@@ -87,4 +87,8 @@ exports.matchInArray = function( groups, tomatch ) {
 	return -1;
 }
 
+exports.printForm = function( service ) {
+	
+	return "Test";
+}
 

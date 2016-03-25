@@ -24,6 +24,15 @@
 				<option><%= element %></option>
 			  <% }) %>
 			</select>
+			<input type="checkbox" name="psiblast">
+			<select name=psiiter">
+				<option></option>
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>				
+			</select>
 			<button id="blast-exec" data-exec="<%= exec %>">Submit</button>
 		</div>
 		<div class="tab" id="blast-upload-form">
@@ -33,11 +42,21 @@
 			  <span id="status"></span>
 			</form>
 		</div>
+		<div class="tab" id="go-form">
+			<button id="go-exec">Get GO</button>
+		</div>
+		<div class="tab" id="bypass-form">
+			<fieldset id="bypass-params">
+				<%= bypass %>
+			</fieldset>
+			<button id="bypass-exec">Submit Bypass</button>
+		</div>
 	</div>
 	<!-- Panel -->
 	<div id="panel"></div>
 
 	<!-- Placeholders for data -->
+	<div id="go-data"></div>
 	<div id="blast-data"></div>
 	<div id="align-data"></div>
 	<div id="tree-data"></div>
@@ -49,5 +68,7 @@
 	<script src='<%= basepath %>/js/pouchdb.js'></script>
 	<script src='<%= basepath %>/js/blast.js'></script>
 	<script src='<%= basepath %>/js/align.js'></script>
+	<script src='<%= basepath %>/js/extern/goapi.js'></script>
+	<script src='<%= basepath %>/js/extern/bypass.js'></script>
 	</body>
 </html>

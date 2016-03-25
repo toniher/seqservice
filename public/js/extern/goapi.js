@@ -1,6 +1,6 @@
-$(document).on( "click", '.go-exec', function() {
+$(document).on( "click", '#go-exec', function() {
 
-	$(".getGO-results").empty();
+	$("#go-data").empty();
 	var limit = 10;
 	var listProts = [];
 
@@ -42,7 +42,7 @@ $(document).on( "click", '.go-exec', function() {
 
 							// TODO: Turn properly async
 							for ( var n = 0; n < data[group].length; n = n + 1 ) {
-								$(".getGOresults").append( "<p class='go'><strong>"+group+"</strong>: <a href='http://amigo.geneontology.org/amigo/term/" + data[group][n]["acc"] + "' target='_blank'>" + data[group][n]["acc"] +"</a> - <em>" + data[group][n]["name"] + "</em></p>" );
+								$("#go-data").append( "<p class='go'><strong>"+group+"</strong>: <a href='http://amigo.geneontology.org/amigo/term/" + data[group][n]["acc"] + "' target='_blank'>" + data[group][n]["acc"] +"</a> - <em>" + data[group][n]["name"] + "</em></p>" );
 							}
 						}
 						

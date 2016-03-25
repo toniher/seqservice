@@ -191,10 +191,6 @@ function prepareHTMLBLAST( message ) {
 			$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
 		}
 		
-		if ( $("#blast-form").find(".go-button").length === 0 ) {
-			$("#blast-exec").after("<div class='go-button'><button id='go-exec'>Check GO</button></div>");
-		}
-		
 		if ( $("#blast-form").find(".switch-button").length === 0 ) {
 			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		}

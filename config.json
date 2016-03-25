@@ -34,6 +34,27 @@
 		"external": {
 			"taxonid": "http://prgdb.crg.eu/api/taxon/"
 		},
+		"services": {
+			"bypass": {
+				"type": "exec",
+				"path": "/path/to/bypasswrapper",
+				"params": {
+					"param1": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+					"param2": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+					"param3": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+					"param4": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+					"param5": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+				},
+				"default": {
+					"param1": 4,
+					"param2": 0,
+					"param3": 0,
+					"param4": 5,
+					"param5": 1
+				}
+				
+			}	
+		},
 		"port": "10030",
 		"jsonp": false,
 		"basepath": "/seqservice",
