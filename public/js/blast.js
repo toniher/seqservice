@@ -203,6 +203,12 @@ function prepareHTMLBLAST( message ) {
 	}
 }
 
+function addDOMdata( selector, id, val ) {
+
+	$(selector).data( id, val );
+
+}
+
 function printBLASTall( message, parse, target ) {
 	
 	var obj;
@@ -217,6 +223,11 @@ function printBLASTall( message, parse, target ) {
 	pouchdb_report( "reports", obj, function( db, obj, err ) {
 
 		if ( ! err ) {
+			
+			if ( obj._id ) {
+				// Set data
+				addDOMdata( "#blast-data", "id", obj._id );
+			}
 	
 			if ( obj.hasOwnProperty("data") ) {
 		
