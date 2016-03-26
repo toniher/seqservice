@@ -98,7 +98,7 @@ exports.printForm = function( name, service ) {
 			var paramvals = service.params[param];
 			
 			if ( Array.isArray( paramvals ) ) {
-				html = html + "<select name='"+name+"-"+param+"'>";
+				html = html + "<select class='"+name+"-param' name='"+param+"'>";
 				
 				for ( var val=0; val < paramvals.length; val = val + 1 ) {
 					
@@ -117,7 +117,7 @@ exports.printForm = function( name, service ) {
 						defval = " default="+service["default"][param];
 					}
 					
-					html = html + "<input type='text' name='"+name+"-"+param+"' "+defval+">";
+					html = html + "<input class='"+name+"-param' type='text' name='"+param+"' "+defval+">";
 			}
 		
 		}

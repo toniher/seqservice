@@ -4,9 +4,9 @@
 		<title>BLAST</title>
 		<link rel="stylesheet" href="<%= basepath %>/blast.css">
 	</head>
-	<body>
+	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>">
 	<div id="tabs">
-		<div class="tab" id="blast-form" data-basepath="<%= basepath %>" data-socketio="<%= socketio %>" data-external-taxonid="<%= taxonid %>">
+		<div class="tab" id="blast-form" data-external-taxonid="<%= taxonid %>">
 			<label>Sequence:</label>
 			<textarea name='seq' id="seqinput"></textarea>
 			<br>
@@ -47,9 +47,9 @@
 		</div>
 		<div class="tab" id="bypass-form">
 			<fieldset id="bypass-params">
-				<%= bypass %>
+				<%- bypass %>
 			</fieldset>
-			<button id="bypass-exec">Submit Bypass</button>
+			<button data-id='bypass' class="service-exec">Submit Bypass</button>
 		</div>
 	</div>
 	<!-- Panel -->
@@ -69,6 +69,6 @@
 	<script src='<%= basepath %>/js/blast.js'></script>
 	<script src='<%= basepath %>/js/align.js'></script>
 	<script src='<%= basepath %>/js/extern/goapi.js'></script>
-	<script src='<%= basepath %>/js/extern/bypass.js'></script>
+	<script src='<%= basepath %>/js/extern/service.js'></script>
 	</body>
 </html>

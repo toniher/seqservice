@@ -2,8 +2,8 @@
 
 $(document).ready( function(){
 
-	var basepath = $("#blast-form").data("basepath");
-	var socketio = $("#blast-form").data("socketio");
+	var basepath = $("body").data("basepath");
+	var socketio = $("body").data("socketio");
 	var taxonidurl = $("#blast-form").data("external-taxonid");
 
 	if ( socketio ) {
@@ -95,8 +95,8 @@ $( "[name=moltype]" ).change(function() {
 $(function() {
 	$('#blast-exec').click(function() {
 
-		var basepath = $("#blast-form").data("basepath");
-		var socketio = $("#blast-form").data("socketio");
+		var basepath = $("body").data("basepath");
+		var socketio = $("body").data("socketio");
 		var taxonidurl = $("#blast-form").data("external-taxonid");
 
 		// More generic seqinput

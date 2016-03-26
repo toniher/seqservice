@@ -53,6 +53,8 @@ var blastdbcmd = require('./routes/blastdbcmd.js');
 var blast = require('./routes/blast.js');
 var align = require('./routes/align.js');
 var loadfile = require('./routes/load.js');
+var service = require('./routes/service.js');
+
 
 // Landing
 app.get( basepath + '/', function(req, res){
@@ -82,6 +84,8 @@ app.post(basepath + '/align', align.performAlign);
 // Load File
 app.post(basepath + '/load', upload.single('report'), loadfile.getFile);
 
+// Send to service. Bypass
+app.post(basepath + '/service', service.performExec);
 
 // Now views
 app.set('views', __dirname + '/views');
@@ -93,7 +97,7 @@ app.use(basepath, express.static(__dirname + '/public'));
 
 // TODO: This is not fully working. Redundant for now
 app.get(basepath + '/blast', function (req, res) {
-	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid, bypass: functions.printForm( "bypass" ) } );
+	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid, bypass: functions.printForm( "bypass", config.services.bypass ) } );
 });
 
 // Landing Upload
