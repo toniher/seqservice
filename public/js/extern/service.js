@@ -11,6 +11,7 @@ $(document).on('click', ".service-exec", function() {
 		var paramclass = service + "-param";
 		
 		var params = {};
+		progparams = {};
 		
 		$( "." + paramclass ).each( function( i ) {
 			var name = $(this).attr( "name" );
@@ -18,21 +19,42 @@ $(document).on('click', ".service-exec", function() {
 			var val = $(this).val();
 			
 			if ( name ) {
-				params[ name ] = val;
+				progparams[ name ] = val;
 			}
 			
 		});
 		
 		// Last param - actual service
-		params._id = service;
+		params.type = service;
 		
-		console.log( params );
+		// Get object id
+		var objectid = $("#blast-data").data("id");
 		
-		$.post( basepath+"/service", { params: params  }).done( function( data ) {
+		// Generate ID for Bypass
+		
+		if ( objectid ) {
 
-			console.log( data );
+			pouchdb_retrieve( "reports", objectid, function( err, obj ) {
+				
+				if ( ! err ) {
+					
+					params.ref = objectid;
+					params.params = JSON.stringify( progparams )
+					params.input = JSON.stringify( obj.data ); // Otherwise we lose types
+					
+					$.post( basepath+"/service", { params: params }).done( function( data ) {
+			
+						console.log( data );
+						// Data here and save
+			
+					});
+				}
+			});
 
-		});
+		}
+		
+		
+
 	
 	}
 
