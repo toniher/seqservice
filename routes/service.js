@@ -2,6 +2,10 @@ var functions = require('../functions/index.js');
 var temp = require('temp'),
     fs   = require('fs');
 
+require('babel-polyfill');
+var hash = require('json-hash');
+var moment = require('moment');
+
 var $p = require('procstreams');
 
 // Main function for handling alignments
@@ -61,7 +65,18 @@ exports.performExec = function (req, res) {
 									runPipe( null, [{ "app": progconf.path, "params": strParams }], function( stderr, data ) {
 										
 										if ( !stderr || stderr == "" ) {
-											console.log( data );
+
+											var obj = JSON.parse( data );
+											var digest = hash.digest( obj );
+											var newObj = {};
+											newObj._id = digest;
+											newObj.ref = ref;
+											newObj.type = type;
+											newObj.data = obj;
+											newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
+											
+											functions.returnSocketIO( socketio, io, type, res, JSON.stringify( newObj ) ); 
+											
 										}
 										
 									});
@@ -77,7 +92,16 @@ exports.performExec = function (req, res) {
 						runPipe( input, [{ "app": progconf.path, "params": strParams }], function( stderr, data ) {
 
 							if ( !stderr || stderr == "" ) {
-								console.log( data );
+								var obj = JSON.parse( data );
+								var digest = hash.digest( obj );
+								var newObj = {};
+								newObj._id = digest;
+								newObj.ref = ref;
+								newObj.type = type;
+								newObj.data = obj;
+								newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
+								
+								functions.returnSocketIO( socketio, io, type, res, JSON.stringify( newObj ) ); 
 							}
 						});
 						
