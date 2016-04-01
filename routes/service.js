@@ -75,7 +75,7 @@ exports.performExec = function (req, res) {
 											newObj.data = obj;
 											newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 											
-											functions.returnSocketIO( socketio, io, type, res, JSON.stringify( newObj ) ); 
+											functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
 											
 										}
 										
@@ -101,7 +101,7 @@ exports.performExec = function (req, res) {
 								newObj.data = obj;
 								newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 								
-								functions.returnSocketIO( socketio, io, type, res, JSON.stringify( newObj ) ); 
+								functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
 							}
 						});
 						
