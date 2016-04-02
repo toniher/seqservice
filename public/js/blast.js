@@ -148,6 +148,15 @@ $( document ).on( "click", ".hit > .details", function() {
 	var hsps = $(this).parent().children(".hsps").get(0);
 
 	$(hsps).fadeToggle('fast');
+	
+	// fuzzdetails
+	var fuzz = $(this).parent().children(".fuzdetails");
+
+	if ( fuzz.length > 0 ) {
+
+		$(fuzz.get(0)).fadeToggle('fast');
+	}
+	
 
 });
 
@@ -272,7 +281,7 @@ function printBLASTall( message, parse, target ) {
 }
 
 
-function printBLAST( obj, num ) {
+function printBLAST( obj, num, reorder ) {
 
 	var seq = obj['seq'];
 	var id = obj['id'];
@@ -283,26 +292,57 @@ function printBLAST( obj, num ) {
 	var expect = blastobj.params.expect;
 	var gopen = blastobj.params.gap_open;
 	var gextend = blastobj.params.gap_extend;
+	
+	// Process reorder
+	var reord = null;
+	
+	if ( reorder ) {
+
+		if ( typeof reorder[num] !== 'undefined' ) {
+			reord = reorder[num];
+		}
+	}
+	
 
 	var program = blastobj.program;
 	var str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
 
+	// Considering reorders
+	var reordHits = null;
+	
 	if ( program === 'psiblast' && blastobj.results.iterations ) {
 		
 		var iterationlist = blastobj.results.iterations;
 		for ( var iter = 0; iter < iterationlist.length; iter = iter + 1 ) {
 			
+			if ( reord ) {
+			
+				if ( reord.iterations && typeof reord.iterations[iter] !== 'undefined' && reord.iterations[iter].hits ) {
+					reordHits = reord.iterations[iter].hits;
+				}
+		
+			}
+			
 			str = str + "<div class='iter' data-iter='"+iterationlist[iter].iter_num+"'>";
 			str = str + "<span class='id'>" + iterationlist[iter].iter_num + "</span>";
 			str = str + "<div class='results'>";
-			str = str + processHits( iterationlist[iter].search.hits );
+			str = str + processHits( iterationlist[iter].search.hits, reordHits );
 			str = str + "</div>";
 			str = str + "</div>";
 		}
 
 	} else {
+		
+		if ( reord ) {
+			
+			if ( reord.iterations && typeof reord.iterations[0] !== 'undefined' && reord.iterations[0].hits ) {
+				reordHits = reord.iterations[0].hits;
+			}
+		
+		}
+		
 		str = str + "<div class='results'>";
-		str = str + processHits( blastobj.results.search.hits );
+		str = str + processHits( blastobj.results.search.hits, reordHits );
 		str = str + "</div>";
 	}
 
@@ -311,18 +351,32 @@ function printBLAST( obj, num ) {
 	}
     
 	str = str + "</div>";
-	
+		
 	return str;
 
 }
 
-function processHits( hits ) {
-
+function processHits( hits, reordList ) {
+	
 	var str = "";
-
+	
 	for ( var hit = 0; hit < hits.length; hit = hit + 1 ) {
 		
-		str = str + "<div class='hit'><input type='checkbox' class='hitcheck' />";
+		var reordInfo = null;
+		
+		if ( reordList && reordList[ hit ] ) {
+			reordInfo = getReorderInfo( reordList[ hit ] );
+		}
+		
+		var num = hit + 1;
+				
+		str = str + "<div class='hit' data-num='"+num+"'";
+		// New position
+		if ( reordInfo && reordInfo.hasOwnProperty("new") ) {
+			str = str + " data-new='" + reordInfo["new"] +"'";
+		}
+		
+		str = str + "><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
 
 		if ( hits[hit].description[0].taxid ) {
@@ -330,7 +384,24 @@ function processHits( hits ) {
 		}
 
 		str = str + "<span class='evalue'>" + hits[hit].hsps[0].evalue + "</span>"; // Higher value
+		
+		
+		if ( reordInfo  && reordInfo.hasOwnProperty("new") ) {
+			str = str + "<span class='fuzzy'>"+reordInfo.Fuz+"</span>";
+
+		}
+		
 		str = str + "<span class='details'>Details...</span>"; // Details
+		
+		if ( reordInfo  && reordInfo.hasOwnProperty("new") ) {
+
+			str = str + "<div class='fuzdetails'>";
+			str = str + "<span class='fuzzy'>"+reordInfo.Dis+"</span>"
+			str = str + "<span class='fuzzy'>"+reordInfo.Flx+"</span>"
+			str = str + "<span class='fuzzy'>"+reordInfo.KD+"</span>"
+			str = str + "</div>";
+		}
+		
 		str = str + "<div class='hsps'>" + processHsps( hits[hit].hsps ) + "</div>";
 		str = str + "</div>"
 	}
@@ -532,6 +603,18 @@ function fillTaxonNames( mapTaxonID ) {
 		
 	});
 	
+}
+
+function getReorderInfo( info ) {
+	
+	var hash = {};
+	
+	if ( info ) {
+		hash = info;
+	}
+	
+	return hash;
+
 }
 
 $('#uploadform').on('click', "input[type=submit]", function( e ) {

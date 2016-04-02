@@ -87,6 +87,9 @@ function prepareHTMLService( message ) {
 		printBypass( obj, 0, function( txt, extra ) {
 			// Handle extra iter
 			console.log( extra );
+			$("#blast-data").empty();
+			$("#blast-data").append( txt ); 
+
 		});
 	
 	}
@@ -104,7 +107,79 @@ function printBypass( message, parse, target ) {
 	
 	console.log( obj );
 	
-	// print -> Retrieve BLAST and retrieve Bypass
+	var extra = {};
+	
+	pouchdb_report( "reports", obj, function( db, obj, err ) {
+
+		if ( ! err ) {
+			
+			if ( obj._id ) {
+				// Set data
+				addDOMdata( "#blast-data", "id", obj._id );
+			}
+	
+			if ( obj.hasOwnProperty("data") ) {
+				
+				var reorder = obj["data"]["results"];
+				
+				if ( obj.hasOwnProperty("ref") ) {
+					
+					ref = obj.ref;
+					
+					// Retrieve ref
+					pouchdb_retrieve( "reports", ref, function( err, doc ) {
+						
+						if ( ! err ) {
+							if ( doc.hasOwnProperty("data") ) {
+								
+								// All objects should have data part
+				
+								if ( doc["data"].hasOwnProperty("BlastOutput2") ) {
+									
+									blastObj = doc["data"]["BlastOutput2"];
+													
+									if ( blastObj instanceof Array ) {
+										
+										// Move async
+										var iter = 0;
+										var str = "";
+								
+										async.eachSeries(blastObj, function(blastIter, callback) {
+											
+											str = str + printBLAST( blastIter, iter, reorder );
+											iter = iter + 1;
+											callback();
+										}, function(err){
+											if ( err ) {
+												console.log("error printing blast");
+											}
+											extra.iter = iter;
+											
+											target( str, extra );
+										});
+										
+										
+									} else {
+										str = printBLAST( blastObj, 0, reorder );
+										target( str );
+									}
+								}
+								
+								
+							}
+						}
+						
+						
+					});
+
+				}
+		
+
+		
+			}
+	
+		}
+	});
 	
 }
 
