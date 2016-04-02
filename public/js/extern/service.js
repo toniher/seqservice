@@ -90,6 +90,17 @@ function prepareHTMLService( message ) {
 			$("#blast-data").empty();
 			$("#blast-data").append( txt ); 
 
+			if ( $("#blast-data .iter").length > 0 ) {
+				$( "#blast-data .iter" ).each( function( i ) {
+					var iter = i + 1;
+					
+					tinysort( "#blast-data .iter:nth-of-type("+iter+") .results > .hit", { data:'new'} );
+				});
+			} else {
+				tinysort( "#blast-data .results > .hit", { data:'new'} );
+			}
+			
+			
 		});
 	
 	}

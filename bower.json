@@ -4,7 +4,8 @@
   "dependencies": {
 	"pouchdb": "5.x",
 	"async": "1.x",
-	"jquery": "1.12.x"
+	"jquery": "1.12.x",
+	"tinysort": "2.x"
   },
 	"install" : {
 	"path" : {
@@ -20,6 +21,9 @@
 		],
 		"jquery": [
 			"bower-components/jquery/dist/jquery.min.js"
+		],
+		"tinysort": [
+			"bower-components/tinysort/dist/tinysort.min.js"
 		]
 		}
 	}

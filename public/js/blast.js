@@ -370,12 +370,28 @@ function processHits( hits, reordList ) {
 		
 		var num = hit + 1;
 				
-		str = str + "<div class='hit' data-num='"+num+"'";
+		str = str + "<div data-num="+num;
+		
+		var classStr = "hit";
 		// New position
 		if ( reordInfo && reordInfo.hasOwnProperty("new") ) {
-			str = str + " data-new='" + reordInfo["new"] +"'";
+			
+			var newNum =  reordInfo["new"];
+			
+			str = str + " data-new=" + newNum;
+						
+			if ( parseInt( newNum)  < parseInt( num ) ) {
+				classStr = classStr + " fuzUp";
+			} else {
+				if ( parseInt( num ) < parseInt( newNum ) ) {
+					classStr = classStr + " fuzzDown";
+				}
+			}
+						
 		}
 		
+		str = str + " class='"+classStr+"'";
+				
 		str = str + "><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
 
@@ -624,7 +640,6 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
 	var fd = new FormData();
 	fd.append( 'report', $( "input[name=report]" )[0].files[0] );
 
-	console.log( fd );
 
     $.ajax({
 		url: "<%= basepath %>/load",

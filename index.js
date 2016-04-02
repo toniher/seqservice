@@ -24,8 +24,9 @@ if (config.jsonp) {
 	app.set("jsonp callback", true);
 }
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// Limit 50 mb
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 // Config
 app.use(errorhandler({ dumpExceptions: true, showStack: true }));
