@@ -5,7 +5,8 @@
 	"pouchdb": "5.x",
 	"async": "1.x",
 	"jquery": "1.12.x",
-	"tinysort": "2.x"
+	"tinysort": "2.x",
+	"bootstrap": "3.x"
   },
 	"install" : {
 	"path" : {
@@ -24,6 +25,11 @@
 		],
 		"tinysort": [
 			"bower-components/tinysort/dist/tinysort.min.js"
+		],
+		"bootstrap": [
+			"bower-components/bootstrap/dist/js/bootstrap.min.js",
+			"bower-components/bootstrap/dist/css/bootstrap.min.css",
+			"bower-components/bootstrap/dist/css/bootstrap-theme.min.css"
 		]
 		}
 	}
