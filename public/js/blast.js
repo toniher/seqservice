@@ -69,7 +69,7 @@ $(document).ready( function(){
 			console.log( data );
 			if ( data && data.total_rows > 0 ) {
 				if ( data.rows ) {
-					var str = "<ul id='storedBlast'>";
+					var str = "<ul id='storedBlast' class='list-inline'>";
 					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
 						var entry = data.rows[r];
 						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";

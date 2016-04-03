@@ -2,67 +2,79 @@
 <html>
 	<head>
 		<title>BLAST</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 	    <link rel="stylesheet" href="<%= basepath %>/vendor/css/bootstrap/bootstrap.min.css"></link>
 	    <link rel="stylesheet" href="<%= basepath %>/vendor/css/bootstrap/bootstrap-theme.min.css"></link>
 		<link rel="stylesheet" href="<%= basepath %>/blast.css">
 	</head>
 	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>">
-	<div id="tabs">
-		<div class="tab" id="blast-form" data-external-taxonid="<%= taxonid %>">
-			<label>Sequence:</label>
-			<textarea name='seq' id="seqinput"></textarea>
-			<br>
-			<select name='moltype'>
-				<option>nucl</option>
-				<option>prot</option>
-			</select>
-			<select class="dbselect" id="nucl" name="nucllist">
-			  <% nucllist.forEach(function(element){ %>
-				<option><%= element %></option>
-			  <% }) %>
-			</select>
-			<select class="dbselect" id="prot" name="protlist">
-			  <% protlist.forEach(function(element){ %>
-				<option><%= element %></option>
-			  <% }) %>
-			</select>
-			<input type="checkbox" name="psiblast">
-			<select name=psiiter">
-				<option></option>
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>				
-			</select>
-			<button id="blast-exec" data-exec="<%= exec %>">Submit</button>
+	<div id="wrapper">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+		  <li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
+		  <li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
+		  <li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
+		  <li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
+		</ul>
+		<div id="tabs" class="tab-content">
+			<div class="tab-pane active" id="blast-form" data-external-taxonid="<%= taxonid %>">
+				<label>Sequence:</label>
+				<textarea name='seq' id="seqinput"></textarea>
+				<br>
+				<select name='moltype'>
+					<option>nucl</option>
+					<option>prot</option>
+				</select>
+				<select class="dbselect" id="nucl" name="nucllist">
+				  <% nucllist.forEach(function(element){ %>
+					<option><%= element %></option>
+				  <% }) %>
+				</select>
+				<select class="dbselect" id="prot" name="protlist">
+				  <% protlist.forEach(function(element){ %>
+					<option><%= element %></option>
+				  <% }) %>
+				</select>
+				<input type="checkbox" name="psiblast">
+				<select name=psiiter">
+					<option></option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>				
+				</select>
+				<button id="blast-exec" data-exec="<%= exec %>">Submit</button>
+			</div>
+			<div class="tab-pane" id="blast-upload-form">
+				<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
+				  <input type="file" name="report"> 
+				  <input type="submit" value="Upload report">
+				  <span id="status"></span>
+				</form>
+			</div>
+			<div class="tab-pane" id="go-form">
+				<button id="go-exec">Get GO</button>
+			</div>
+			<div class="tab-pane" id="bypass-form">
+				<fieldset id="bypass-params">
+					<%- bypass %>
+				</fieldset>
+				<button data-id='bypass' class="service-exec">Submit Bypass</button>
+			</div>
 		</div>
-		<div class="tab" id="blast-upload-form">
-			<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
-			  <input type="file" name="report"> 
-			  <input type="submit" value="Upload report">
-			  <span id="status"></span>
-			</form>
-		</div>
-		<div class="tab" id="go-form">
-			<button id="go-exec">Get GO</button>
-		</div>
-		<div class="tab" id="bypass-form">
-			<fieldset id="bypass-params">
-				<%- bypass %>
-			</fieldset>
-			<button data-id='bypass' class="service-exec">Submit Bypass</button>
-		</div>
+		<!-- Panel -->
+		<div id="panel"></div>
+	
+		<!-- Placeholders for data -->
+		<div id="go-data"></div>
+		<div id="blast-data"></div>
+		<div id="align-data"></div>
+		<div id="tree-data"></div>
+		<div id="treeview-data"></div>
 	</div>
-	<!-- Panel -->
-	<div id="panel"></div>
-
-	<!-- Placeholders for data -->
-	<div id="go-data"></div>
-	<div id="blast-data"></div>
-	<div id="align-data"></div>
-	<div id="tree-data"></div>
-	<div id="treeview-data"></div>
 	<script src='<%= basepath %>/vendor/js/jquery/jquery.min.js'></script>
 	<script src='<%= basepath %>/socket.io/socket.io.js'></script>
 	<script src='<%= basepath %>/vendor/js/async/async.min.js'></script>
