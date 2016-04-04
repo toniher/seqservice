@@ -1,14 +1,54 @@
-.dbselect {
-	display: none;
-}
+#wrapper {
+	margin: 1em;
+	
+	.row {
+		margin: 1em;
+		
+		.tab-pane {
+			margin: 1em 0 0 0;
+			
+			.form-inline {
+				button, input[type=submit] {
+					margin-left: 1em;
+				}
+			}
+		}
+		
+		#panel {
+			outline: 1px solid #ddd;
+			padding: 2em;
+		}
+	}
+	
+	#blast-params {
+		margin-top: 1em;
+	}
+	
+	.dbselect {
+		display: none;
+	}
+	
+	.psiiter {
+		display: none;
+	}
 
-#nucl { display: inline-block; }
+	#nucl { display: inline-block; }
+
+}
 
 #blast-data {
 
 	.blast {
 		margin: 1em;
 		
+	}
+	
+	.fuzUp {
+		outline: 1px solid green;
+	}
+	
+	.fuzDown {
+		outline: 1px solid red;
 	}
 
 	.hit {

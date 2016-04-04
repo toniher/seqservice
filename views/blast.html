@@ -11,69 +11,81 @@
 	</head>
 	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>">
 	<div id="wrapper">
+		<div class="row">
 		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" role="tablist">
-		  <li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
-		  <li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
-		  <li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
-		  <li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
-		</ul>
-		<div id="tabs" class="tab-content">
-			<div class="tab-pane active" id="blast-form" data-external-taxonid="<%= taxonid %>">
+			<ul class="nav nav-tabs" role="tablist">
+			  <li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
+			  <li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
+			  <li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
+			  <li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
+			</ul>
+			<div id="tabs" class="tab-content">
+			<div class="tab-pane active form-group" id="blast-form" data-external-taxonid="<%= taxonid %>">
 				<label>Sequence:</label>
-				<textarea name='seq' id="seqinput"></textarea>
-				<br>
-				<select name='moltype'>
-					<option>nucl</option>
-					<option>prot</option>
-				</select>
-				<select class="dbselect" id="nucl" name="nucllist">
-				  <% nucllist.forEach(function(element){ %>
-					<option><%= element %></option>
-				  <% }) %>
-				</select>
-				<select class="dbselect" id="prot" name="protlist">
-				  <% protlist.forEach(function(element){ %>
-					<option><%= element %></option>
-				  <% }) %>
-				</select>
-				<input type="checkbox" name="psiblast">
-				<select name=psiiter">
-					<option></option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>				
-				</select>
-				<button id="blast-exec" data-exec="<%= exec %>">Submit</button>
+				<textarea class="form-control" rows="5" name='seq' id="seqinput"></textarea>
+				<div class="form-inline pull-left" id="blast-params">
+					<label for="moltype">Type</label>
+					<select class="form-control" name='moltype'>
+						<option>nucl</option>
+						<option>prot</option>
+					</select>
+					<select class="dbselect form-control" id="nucl" name="nucllist">
+					  <% nucllist.forEach(function(element){ %>
+						<option><%= element %></option>
+					  <% }) %>
+					</select>
+					<select class="dbselect form-control" id="prot" name="protlist">
+					  <% protlist.forEach(function(element){ %>
+						<option><%= element %></option>
+					  <% }) %>
+					</select>
+				</div>
+				<div class="form-inline pull-right" id="blast-params">
+					<label for type="psicheck">PSIBLAST</label>
+					<input class="psicheck form-control" type="checkbox" name="psiblast">
+					<select class="psiiter form-control" name=psiiter">
+						<option></option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>				
+					</select>
+					<button class="btn btn-primary" id="blast-exec" data-exec="<%= exec %>">Submit</button>
+				</div>
 			</div>
-			<div class="tab-pane" id="blast-upload-form">
+			<div class="tab-pane form-group form-inline" id="blast-upload-form">
 				<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
-				  <input type="file" name="report"> 
-				  <input type="submit" value="Upload report">
+				  <input class="form-control" type="file" name="report"> 
+				  <input type="submit" class="btn btn-primary form-control" value="Upload report">
 				  <span id="status"></span>
 				</form>
 			</div>
-			<div class="tab-pane" id="go-form">
-				<button id="go-exec">Get GO</button>
+			<div class="tab-pane form-group" id="go-form">
+				<button class="btn btn-primary" id="go-exec">Get GO</button>
 			</div>
-			<div class="tab-pane" id="bypass-form">
+			<div class="tab-pane form-group" id="bypass-form">
 				<fieldset id="bypass-params">
 					<%- bypass %>
 				</fieldset>
-				<button data-id='bypass' class="service-exec">Submit Bypass</button>
+				<button data-id='bypass' class="service-exec btn btn-primary">Submit Bypass</button>
 			</div>
 		</div>
-		<!-- Panel -->
-		<div id="panel"></div>
 	
-		<!-- Placeholders for data -->
-		<div id="go-data"></div>
-		<div id="blast-data"></div>
-		<div id="align-data"></div>
-		<div id="tree-data"></div>
-		<div id="treeview-data"></div>
+		</div>
+		<!-- Panel -->
+		<div class="row">
+			<div id="panel"></div>
+		</div>
+
+		<div class="row">	
+			<!-- Placeholders for data -->
+			<div id="go-data"></div>
+			<div id="blast-data"></div>
+			<div id="align-data"></div>
+			<div id="tree-data"></div>
+			<div id="treeview-data"></div>
+		</div>
 	</div>
 	<script src='<%= basepath %>/vendor/js/jquery/jquery.min.js'></script>
 	<script src='<%= basepath %>/socket.io/socket.io.js'></script>
