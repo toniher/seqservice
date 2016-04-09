@@ -26,6 +26,10 @@ exports.performBlast = function (req, res) {
 	blastparams.db = DBcontainer.path; // Get path
 	blastparams.exe = config.exec.blastdbcmd;
 
+	blastparams.psicheck = req.body.psicheck;
+	blastparams.psiiter = req.body.psiiter;
+
+	
 	var organism = parseInt( req.body.organism, 10 );
 
 	if ( organism && ( organism !== 0 || organism === 'NaN' ) ) {
@@ -56,6 +60,14 @@ function run_blast( params, req, res, seqidpath ){
 		db = req.body.db;
 	}
 
+	if ( params.psicheck && binary == "blastp" ) {
+		binary = "psiblast";
+		
+		if ( params.psiiter && ( params.psiiter == ( parseInt( params.psiiter, 10 ) ) ) ) {
+			opts = opts + "-num_iterations " + params.psiiter;
+		}
+	}
+
 	if (req.body.evalue) {
 		opts = opts + " -evalue " + req.body.evalue;
 	}
@@ -66,12 +78,10 @@ function run_blast( params, req, res, seqidpath ){
 
 	var socketio = config.socketio; // Wheter to use this socketio or not;
 
-	console.log("DB: "+db+ " -- "+config.db.list);
 	var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
 	var DBpath = DBcontainer.path;
 	var seq = req.body.seq;
 
-	// TODO: Further processing of seq here (whether FASTA or simple text)
 
 	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
 

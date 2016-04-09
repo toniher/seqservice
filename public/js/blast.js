@@ -207,13 +207,13 @@ function prepareHTMLBLAST( message ) {
 	if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
 		// TODO: Handle continuous output
 		$("#blast-data").empty();
-		if ( $("#blast-form").find(".align-button").length === 0 ) {
-			$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
-		}
+		//if ( $("#blast-form").find(".align-button").length === 0 ) {
+		//	$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
+		//}
 		
-		if ( $("#blast-form").find(".switch-button").length === 0 ) {
-			$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
-		}
+		//if ( $("#blast-form").find(".switch-button").length === 0 ) {
+		//	$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
+		//}
 		
 		printBLASTall( message, 1, function( txt, extra ) {
 			// Handle extra iter

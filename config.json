@@ -22,13 +22,10 @@
 			}
 		},
 		"exec": {
-			"path": "/home/toniher/bin",
+			"path": "/data/soft/bin",
 			"method": {
-				"blastdbcmd":"/home/toniher/bin/blastdbcmd",
-				"samtools": "/data/soft/bin/samtools",
-				"muscle": "/data/soft/bin/muscle",
-				"phyml": "/home/toniher/bin/phyml.sh",
-				"phyml-aa": "/home/toniher/bin/phyml-aa.sh"
+				"blastdbcmd":"/data/soft/bin/blastdbcmd",
+				"samtools": "/data/soft/bin/samtools"
 			}
 		},
 		"external": {
@@ -39,7 +36,7 @@
 				"type": "exec",
 				"input": "file",
 				"input_param": "input",
-				"path": "/home/toniher/bin/bypass",
+				"path": "/data/soft/bin/bypass",
 				"params": {
 					"param1": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
 					"param2": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
