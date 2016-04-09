@@ -10,17 +10,21 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install xsltproc && \
 
 # Blast and samtools
 RUN mkdir -p /data/soft
+RUN mkdir -p /data/soft/bin
+
 WORKDIR /data/soft
 
 RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.30/ncbi-blast-2.2.30+-x64-linux.tar.gz && \
 	tar zxf ncbi-blast-2.2.30+-x64-linux.tar.gz && \
 	ln -s ncbi-blast-2.2.30+ blast && \
+	cd bin && ln -s ../blast/bin/* . && cd .. && \
 	rm -rf *tar.gz
 
-RUN wget -q https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2 && \
-	tar jxf samtools-1.2.tar.bz2 && \
-	cd samtools-1.2 && \
+RUN wget -q https://github.com/samtools/samtools/releases/download/1.3/samtools-1.3.tar.bz2 && \
+	tar jxf samtools-1.3.tar.bz2 && \
+	cd samtools-1.3 && \
 	make prefix=/data/soft/samtools install && cd .. \
+	cd bin && ln -s ../samtools/bin/* . && cd .. && \
 	rm -rf *tar.bz2
 
 # TEMPORARY. IN FUTURE HANDLED by App
