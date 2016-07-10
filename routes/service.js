@@ -62,7 +62,7 @@ exports.performExec = function (req, res) {
 									// Process all execparams
 									strParams = joinParams( execparams );
 																		
-									runPipe( null, [{ "app": progconf.path, "params": strParams }], function( stderr, data ) {
+									runPipe( null, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
 										
 										if ( !stderr || stderr == "" ) {
 
@@ -89,7 +89,7 @@ exports.performExec = function (req, res) {
 						
 						strParams = joinParams( execparams );
 					
-						runPipe( input, [{ "app": progconf.path, "params": strParams }], function( stderr, data ) {
+						runPipe( input, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
 
 							if ( !stderr || stderr == "" ) {
 								var obj = JSON.parse( data );
@@ -139,7 +139,7 @@ function runPipe( baseText, apps, callBack ) {
 	// Default
 	var commandline = $p("true");
 	
-	if ( baseText && ( baseText != "" ) ) {
+	if ( baseText && ( baseText !== "" ) ) {
 		commandline = $p("echo \"" + baseText + "\"" );
 	}
 	
@@ -153,7 +153,7 @@ function runPipe( baseText, apps, callBack ) {
 	commandline.data( function(err, stdout, stderr) {
 		
 		resp += stdout.toString();
-		callBack( stderr, resp);
+		callBack( err, stderr, resp);
 		
 	});
 
