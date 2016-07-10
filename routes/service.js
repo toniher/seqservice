@@ -61,11 +61,20 @@ exports.performExec = function (req, res) {
 
 									// Process all execparams
 									strParams = joinParams( execparams );
-																		
-									runPipe( null, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
-										
-										if ( !stderr || stderr == "" ) {
+									
+									var spawn = require('child_process').spawn;
+									
+									// Run node with the child.js file as an argument
+									var child = spawn( 'node', [ './pipe.js', null, JSON.stringify( [{ "app": progconf.path, "params": strParams }] ) ] );
 
+									// Listen for stdout data
+									child.stderr.on('data', function (data) {
+										console.error("DATA "+data);
+									});
+									
+									// Listen for stdout data
+									child.stdout.on('data', function (data) {
+										
 											var obj = JSON.parse( data );
 											var digest = hash.digest( obj );
 											var newObj = {};
@@ -76,10 +85,26 @@ exports.performExec = function (req, res) {
 											newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 											
 											functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
-											
-										}
-										
 									});
+									
+									//runPipe( null, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
+									//	
+									//	if ( !stderr || stderr == "" ) {
+									//
+									//		var obj = JSON.parse( data );
+									//		var digest = hash.digest( obj );
+									//		var newObj = {};
+									//		newObj._id = digest;
+									//		newObj.ref = ref;
+									//		newObj.type = type;
+									//		newObj.data = obj;
+									//		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
+									//		
+									//		functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
+									//		
+									//	}
+									//	
+									//});
 									
 								});
 							}
@@ -88,10 +113,18 @@ exports.performExec = function (req, res) {
 					} else {
 						
 						strParams = joinParams( execparams );
-					
-						runPipe( input, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
+						
+						var child = spawn( 'node', [ './pipe.js', input, JSON.stringify( [{ "app": progconf.path, "params": strParams }] ) ] );
 
-							if ( !stderr || stderr == "" ) {
+
+						// Listen for stdout data
+						child.stderr.on('data', function (data) {
+							console.error("DATA "+data);
+						});
+		
+						// Listen for stdout data
+						child.stdout.on('data', function (data) {
+							
 								var obj = JSON.parse( data );
 								var digest = hash.digest( obj );
 								var newObj = {};
@@ -102,8 +135,23 @@ exports.performExec = function (req, res) {
 								newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 								
 								functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
-							}
 						});
+					
+						//runPipe( input, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
+						//
+						//	if ( !stderr || stderr == "" ) {
+						//		var obj = JSON.parse( data );
+						//		var digest = hash.digest( obj );
+						//		var newObj = {};
+						//		newObj._id = digest;
+						//		newObj.ref = ref;
+						//		newObj.type = type;
+						//		newObj.data = obj;
+						//		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
+						//		
+						//		functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
+						//	}
+						//});
 						
 					}
 				}

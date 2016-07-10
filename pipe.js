@@ -4,24 +4,33 @@ var args = process.argv.slice(2);
 
 
 if ( args.length > 0 ) {
-	
-	var baseText = args.shift();
-	var apps = args.shift();
-	
-	runPipe( baseText, JSON.parse( apps ), function( err, stderr, resp ){
 		
-		if ( resp ) {
-			console.log( resp );
-		}
-
-		if ( err ) {
-			console.error( err );
+	var baseText = args.shift();
+	var appstr = args.shift();
+	
+	if ( appstr ) {
+	
+		var apps = JSON.parse( appstr );
+		
+		if ( apps.length > 0 ) {
+		
+			runPipe( baseText, apps, function( err, stderr, resp ){
+				
+				if ( resp ) {
+					console.log( resp );
+				}
+		
+				if ( err ) {
+					console.error( err );
+				}
+			
+				if ( stderr ) {
+					console.error( stderr );
+				}
+			});
 		}
 	
-		if ( stderr ) {
-			console.error( stderr );
-		}
-	});
+	}
 	
 }
 
@@ -31,7 +40,6 @@ function runPipe( baseText, apps, callBack ) {
 
 	// Default
 	var commandline = $p("true");
-	console.log( baseText );
 	
 	if ( baseText && ( baseText !== "" ) ) {
 		commandline = $p("echo \"" + baseText + "\"" );
@@ -43,8 +51,6 @@ function runPipe( baseText, apps, callBack ) {
 		commandline = commandline.pipe( command );
 	}
 	
-	console.log( commandline );
-
 	commandline.data( function(err, stdout, stderr) {
 		
 		resp += stdout.toString();
