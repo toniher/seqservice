@@ -6,7 +6,9 @@ require('babel-polyfill');
 var hash = require('json-hash');
 var moment = require('moment');
 
-var $p = require('procstreams');
+var spawn = require('child_process').spawn;
+
+// var $p = require('procstreams');
 
 // Main function for handling alignments
 exports.performExec = function (req, res) {
@@ -61,16 +63,16 @@ exports.performExec = function (req, res) {
 
 									// Process all execparams
 									strParams = joinParams( execparams );
-									
-									var spawn = require('child_process').spawn;
-									
+																		
 									// Run node with the child.js file as an argument
 									var child = spawn( 'node', [ './pipe.js', null, JSON.stringify( [{ "app": progconf.path, "params": strParams }] ) ] );
 
-									// Listen for stdout data
+									// TODO: Handle error stuff
 									child.stderr.on('data', function (data) {
 										console.error("DATA "+data);
 									});
+																		
+									// TODO: Handle in general with close, etc.
 									
 									// Listen for stdout data
 									child.stdout.on('data', function (data) {
@@ -87,25 +89,6 @@ exports.performExec = function (req, res) {
 											functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
 									});
 									
-									//runPipe( null, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
-									//	
-									//	if ( !stderr || stderr == "" ) {
-									//
-									//		var obj = JSON.parse( data );
-									//		var digest = hash.digest( obj );
-									//		var newObj = {};
-									//		newObj._id = digest;
-									//		newObj.ref = ref;
-									//		newObj.type = type;
-									//		newObj.data = obj;
-									//		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
-									//		
-									//		functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
-									//		
-									//	}
-									//	
-									//});
-									
 								});
 							}
 						});
@@ -117,10 +100,12 @@ exports.performExec = function (req, res) {
 						var child = spawn( 'node', [ './pipe.js', input, JSON.stringify( [{ "app": progconf.path, "params": strParams }] ) ] );
 
 
-						// Listen for stdout data
+						//  TODO: Handle error stuff
 						child.stderr.on('data', function (data) {
 							console.error("DATA "+data);
 						});
+		
+						// TODO: Handle in general with close, etc.
 		
 						// Listen for stdout data
 						child.stdout.on('data', function (data) {
@@ -136,22 +121,6 @@ exports.performExec = function (req, res) {
 								
 								functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
 						});
-					
-						//runPipe( input, [{ "app": progconf.path, "params": strParams }], function( err, stderr, data ) {
-						//
-						//	if ( !stderr || stderr == "" ) {
-						//		var obj = JSON.parse( data );
-						//		var digest = hash.digest( obj );
-						//		var newObj = {};
-						//		newObj._id = digest;
-						//		newObj.ref = ref;
-						//		newObj.type = type;
-						//		newObj.data = obj;
-						//		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
-						//		
-						//		functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
-						//	}
-						//});
 						
 					}
 				}
@@ -178,31 +147,4 @@ function joinParams( params ) {
 	
 	return arr.join( " " );
 	
-}
-
-function runPipe( baseText, apps, callBack ) {
-
-	var resp = "";
-
-	// Default
-	var commandline = $p("true");
-	
-	if ( baseText && ( baseText !== "" ) ) {
-		commandline = $p("echo \"" + baseText + "\"" );
-	}
-	
-	for ( var a = 0; a < apps.length; a = a + 1 ) {
-		var command = apps[a].app + " " + apps[a].params;
-		console.log( command );
-
-		commandline = commandline.pipe( command );
-	}
-
-	commandline.data( function(err, stdout, stderr) {
-		
-		resp += stdout.toString();
-		callBack( err, stderr, resp);
-		
-	});
-
 }

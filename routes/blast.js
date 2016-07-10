@@ -6,7 +6,9 @@ require('babel-polyfill');
 var hash = require('json-hash');
 var moment = require('moment');
 
-var $p = require('procstreams');
+var spawn = require('child_process').spawn;
+
+// var $p = require('procstreams');
 var fasta = require('biojs-io-fasta');
 
 // We should include other Blast Programs here
@@ -89,11 +91,37 @@ function run_blast( params, req, res, seqidpath ){
 	var io = req.app.set('io');
 
 	//console.log( seq + "-" + program + "-" + DBpath + "-" );
-			
-	run_cmd( [seq, program, DBpath, opts], function(err, output) {
-		
-		var object = {};
 
+	execparams = {
+		"db" : DBpath,
+		"outfmt" : 15
+	};
+	
+	strParams = joinParams( execparams, "-" );
+	
+	var child = spawn( 'node', [ './pipe.js', [ processTextInput( seq ) ].join("\n"), JSON.stringify( [{ "app": program, "params": strParams + opts }] ) ] );
+
+	// Listen for stdout data
+	child.stderr.on('data', function (data) {
+		console.error("DATA "+data);
+	});
+	
+	var output = "";
+
+	// Listen for stdout data
+	child.stdout.on('data', function ( data ) {
+				
+		if (typeof data !== 'string' || !( data  instanceof String) ) {
+			data = data.toString();
+		}
+		
+		output += data;
+	});
+	
+	child.on('close', function ( code ) {
+
+		var object = {};
+		
 		if ( ( output.match(/report/g)||[]).length > 1 ) {
 			output = processMultiOutput( output );
 			object = JSON.parse(output);
@@ -107,44 +135,44 @@ function run_blast( params, req, res, seqidpath ){
 				console.log( object );
 			}
 		}
-
+		
 		var digest = hash.digest( object );
 		var newObj = {};
 		newObj._id = digest;
 		newObj.type = "blast";
 		newObj.data = object;
 		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
-
+		
 		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( newObj ) ); 
 	
 	});
 }
 
-function run_cmd ( args, callBack ) {
-
-	var resp = "";
-	
-	// Elements to pipe
-	var textfile = [ processTextInput( args[0] ) ].join("\n");
-
-	var blastprog = args[1] + " -db " + args[2] + " -outfmt 15 " + args[3];
-
-	// We pass thru STDOUT, we avoid temp file
-	// Handled by procstreams
-	$p("echo \"" + textfile + "\"" ).pipe( blastprog )
-	.data(function(err, stdout, stderr) {
-		if ( err ) {
-			callBack( err, stderr.toString() );
-		} else {
-			if ( stdout ) {
-				resp += stdout.toString();
-			}
-			callBack( null, resp );
-		}
-	
-	});
-
-}
+//function run_cmd ( args, callBack ) {
+//
+//	var resp = "";
+//	
+//	// Elements to pipe
+//	var textfile = [ processTextInput( args[0] ) ].join("\n");
+//
+//	var blastprog = args[1] + " -db " + args[2] + " -outfmt 15 " + args[3];
+//
+//	// We pass thru STDOUT, we avoid temp file
+//	// Handled by procstreams
+//	$p("echo \"" + textfile + "\"" ).pipe( blastprog )
+//	.data(function(err, stdout, stderr) {
+//		if ( err ) {
+//			callBack( err, stderr.toString() );
+//		} else {
+//			if ( stdout ) {
+//				resp += stdout.toString();
+//			}
+//			callBack( null, resp );
+//		}
+//	
+//	});
+//
+//}
 
 function processTextInput( text ) {
 
@@ -231,6 +259,26 @@ if (!String.prototype.startsWith) {
 		position = position || 0;
 		return this.indexOf(searchString, position) === position;
 	};
+}
+
+
+function joinParams( params, sep ) {
+
+	var arr = [];
+	
+	if ( ! sep ) {
+			sep = "--";
+	}
+	
+	for ( var param in params ) {
+
+		if ( params.hasOwnProperty( param ) ) {
+			arr.push( sep + param + " " + params[ param ] );
+		}
+	}
+	
+	return arr.join( " " );
+	
 }
 
 
