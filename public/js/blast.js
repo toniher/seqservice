@@ -233,19 +233,11 @@ function prepareHTMLBLAST( response ) {
 		
 		if ( response ) {
 
-			if ( response.hasOwnProperty("data") ) {
+			printBLASTall( response, 1, function( txt, extra ) {
+				// console.log( extra );
 
-				var data = response.data;
-				//if ( data.hasOwnProperty("seq") ) {
-				//	$("#seqinput").val( data.seq );
-				//}
-
-				printBLASTall( response, 1, function( txt, extra ) {
-					// console.log( extra );
-
-					$("#blast-data").append( txt ); 
-				});
-			}
+				$("#blast-data").append( txt ); 
+			});
 		}
 	}
 }
