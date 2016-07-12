@@ -124,6 +124,10 @@ app.get(basepath + '/blast', function (req, res) {
 		}
 	}
 
+	if ( config.session && config.session.active ) {
+		render_config.session = true;
+	}
+
 	res.render('blast.html', render_config  );
 });
 

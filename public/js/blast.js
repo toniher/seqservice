@@ -63,7 +63,7 @@ $(document).ready( function(){
 	//  // error occurred
 	//})
 
-	if ( $('#uploadform').length > 0 ) {
+	if ( $('#panel').length > 0 ) {
 
 		pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
 			console.log( data );

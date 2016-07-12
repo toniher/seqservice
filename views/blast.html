@@ -11,12 +11,14 @@
 	</head>
 	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>">
 	<div id="wrapper">
-			
+		
+		<%if (locals.session) { %>
 		<!-- Panel -->
 		<div class="row">
 			<div id="panel"></div>
 		</div>
-					
+		<% } %>
+
 		<!-- Nav tabs -->
 		<div class="row">
 
