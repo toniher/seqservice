@@ -179,6 +179,8 @@ $(document).on('click', "#panelBlast #cleanDocs", function() {
 		// database destroyed
 		// Clean panel
 		$( "#panel" ).empty();
+		$( "#panel" ).hide();
+
 	}).catch(function (err) {
 		// error occurred
 	});
