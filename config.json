@@ -26,7 +26,8 @@
 			"method": {
 				"blastdbcmd":"/data/soft/bin/blastdbcmd",
 				"samtools": "/data/soft/bin/samtools"
-			}
+			},
+			"psiblast": true
 		},
 		"external": {
 			"taxonid": "http://prgdb.crg.eu/api/taxon/"

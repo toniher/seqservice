@@ -24,7 +24,7 @@
 				<li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
 				<li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
 				<li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
-			  	<%if (bypass.length > 0) { %>
+			  	<%if (locals.bypass) { %>
 					<li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
 				<% } %>
 			</ul>
@@ -50,16 +50,18 @@
 					</select>
 				</div>
 				<div class="form-inline pull-right" id="blast-params">
-					<label for type="psicheck">PSIBLAST</label>
-					<input class="psicheck form-control" type="checkbox" name="psiblast">
-					<select class="psiiter form-control" name=psiiter">
-						<option></option>
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>				
-					</select>
+					<%if (locals.psiblast) { %>
+						<label for type="psicheck">PSIBLAST</label>
+						<input class="psicheck form-control" type="checkbox" name="psiblast">
+						<select class="psiiter form-control" name=psiiter">
+							<option></option>
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+						</select>
+					<% } %>
 					<button class="btn btn-primary" id="blast-exec" data-exec="<%= exec %>">Submit</button>
 				</div>
 			</div>
@@ -73,7 +75,7 @@
 			<div class="tab-pane form-group" id="go-form">
 				<button class="btn btn-primary" id="go-exec">Get GO</button>
 			</div>
-			<%if (bypass.length > 0) { %>
+			<%if (locals.bypass) { %>
 				<div class="tab-pane form-group" id="bypass-form">
 					<fieldset id="bypass-params">
 						<%- bypass %>

@@ -106,6 +106,10 @@ app.get(basepath + '/blast', function (req, res) {
 	render_config = {};
 	render_config = { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid }
 	
+	if ( exec && exec.psiblast ) {
+		render_config.psiblast = true;
+	}
+
 	if ( config.services ) {
 		if ( config.services.bypass ) {
 			render_config.bypass = functions.printForm( "bypass", config.services.bypass );
