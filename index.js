@@ -110,6 +110,14 @@ app.get(basepath + '/blast', function (req, res) {
 		render_config.psiblast = true;
 	}
 
+	if ( config.exec && config.exec.blastupload ) {
+		render_config.blast-upload = true;
+	}
+
+	if ( config.exec && config.exec.goanalysis ) {
+		render_config.go = true;
+	}
+
 	if ( config.services ) {
 		if ( config.services.bypass ) {
 			render_config.bypass = functions.printForm( "bypass", config.services.bypass );

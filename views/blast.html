@@ -22,8 +22,12 @@
 
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
-				<li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
-				<li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
+				<%if (locals.upload) { %>
+					<li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
+				<% } %>
+				<%if (locals.go) { %>
+					<li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
+				<% } %>
 			  	<%if (locals.bypass) { %>
 					<li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
 				<% } %>
@@ -65,16 +69,20 @@
 					<button class="btn btn-primary" id="blast-exec" data-exec="<%= exec %>">Submit</button>
 				</div>
 			</div>
-			<div class="tab-pane form-group form-inline" id="blast-upload-form">
-				<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
-				  <input class="form-control" type="file" name="report"> 
-				  <input type="submit" class="btn btn-primary form-control" value="Upload report">
-				  <span id="status"></span>
-				</form>
-			</div>
-			<div class="tab-pane form-group" id="go-form">
-				<button class="btn btn-primary" id="go-exec">Get GO</button>
-			</div>
+			<%if (locals.upload) { %>
+				<div class="tab-pane form-group form-inline" id="blast-upload-form">
+					<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
+					  <input class="form-control" type="file" name="report"> 
+					  <input type="submit" class="btn btn-primary form-control" value="Upload report">
+					  <span id="status"></span>
+					</form>
+				</div>
+			<% } %>
+			<%if (locals.go) { %>
+				<div class="tab-pane form-group" id="go-form">
+					<button class="btn btn-primary" id="go-exec">Get GO</button>
+				</div>
+			<% } %>
 			<%if (locals.bypass) { %>
 				<div class="tab-pane form-group" id="bypass-form">
 					<fieldset id="bypass-params">
