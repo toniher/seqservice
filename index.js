@@ -111,7 +111,7 @@ app.get(basepath + '/blast', function (req, res) {
 	}
 
 	if ( config.exec && config.exec.blastupload ) {
-		render_config.blast-upload = true;
+		render_config.blastupload = true;
 	}
 
 	if ( config.exec && config.exec.goanalysis ) {

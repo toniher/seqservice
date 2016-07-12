@@ -28,7 +28,7 @@
 				"samtools": "/data/soft/bin/samtools"
 			},
 			"psiblast": true,
-			"blast-upload": true,
+			"blastupload": true,
 			"go": true
 		},
 		"external": {

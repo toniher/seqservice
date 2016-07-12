@@ -22,7 +22,7 @@
 
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
-				<%if (locals.upload) { %>
+				<%if (locals.blastupload) { %>
 					<li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
 				<% } %>
 				<%if (locals.go) { %>
@@ -69,7 +69,7 @@
 					<button class="btn btn-primary" id="blast-exec" data-exec="<%= exec %>">Submit</button>
 				</div>
 			</div>
-			<%if (locals.upload) { %>
+			<%if (locals.blastupload) { %>
 				<div class="tab-pane form-group form-inline" id="blast-upload-form">
 					<form id="uploadform" action="<%= basepath %>/load" method="POST" enctype="multipart/form-data">
 					  <input class="form-control" type="file" name="report"> 
