@@ -66,7 +66,7 @@ $(document).ready( function(){
 	if ( $('#panel').length > 0 ) {
 
 		pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
-			console.log( data );
+			// console.log( data );
 			if ( data && data.total_rows > 0 ) {
 				if ( data.rows ) {
 					var str = "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean History</a></div>";
@@ -218,7 +218,7 @@ $(document).on('DOMNodeInserted', function(e) {
 //	subtree: true
 //});
 
-function prepareHTMLBLAST( message ) {
+function prepareHTMLBLAST( response ) {
 
 	if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
 		// TODO: Handle continuous output
@@ -231,11 +231,22 @@ function prepareHTMLBLAST( message ) {
 		//	$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
 		//}
 		
-		printBLASTall( message, 1, function( txt, extra ) {
-			// Handle extra iter
-			console.log( extra );
-			$("#blast-data").append( txt ); 
-		});
+		if ( response ) {
+
+			if ( response.hasOwnProperty("data") ) {
+
+				var data = response.data;
+				if ( data.hasOwnProperty("seq") ) {
+					$("#seqinput").val( data.seq );
+				}
+
+				printBLASTall( response, 1, function( txt, extra ) {
+					// console.log( extra );
+
+					$("#blast-data").append( txt ); 
+				});
+			}
+		}
 	}
 }
 
@@ -677,10 +688,24 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
 		data: fd,                         
 		type: 'post',
 		success: function(response){
-			printBLASTall( response, 1, function( txt, extra ) {
-				console.log( extra );
-				$("#blast-data").append( txt ); 
-			});
+
+			if ( response ) {
+
+				if ( response.hasOwnProperty("data") ) {
+
+					var data = response.data;
+					if ( data.hasOwnProperty("seq") ) {
+						$("#seqinput").val( data.seq );
+					}
+
+					printBLASTall( response, 1, function( txt, extra ) {
+						// console.log( extra );
+	
+						$("#blast-data").empty();
+						$("#blast-data").append( txt ); 
+					});
+				}
+			}
 		}
      });
 });
@@ -693,11 +718,24 @@ $("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
 	if ( docId ) {
 		pouchdb_retrieve( "reports", docId, function( err, response ) {
 			if ( ! err ) {
-				printBLASTall( response, null, function( txt, extra ) {
-					console.log( extra );
-					$("#blast-data").empty();
-					$("#blast-data").append( txt ); 
-				});
+
+				if ( response ) {
+
+					if ( response.hasOwnProperty("data") ) {
+
+						var data = response.data;
+						if ( data.hasOwnProperty("seq") ) {
+							$("#seqinput").val( data.seq );
+						}
+
+						printBLASTall( response, null, function( txt, extra ) {
+							// console.log( extra );
+		
+							$("#blast-data").empty();
+							$("#blast-data").append( txt ); 
+						});
+					}
+				}
 			}
 		});
 	}
