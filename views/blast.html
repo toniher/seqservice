@@ -21,10 +21,12 @@
 		<div class="row">
 
 			<ul class="nav nav-tabs" role="tablist">
-			  <li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
-			  <li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
-			  <li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
-			  <li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
+				<li class="active"><a href="#blast-form" role="tab" data-toggle="tab">Search</a></li>
+				<li><a href="#blast-upload-form" role="tab" data-toggle="tab">Upload</a></li>
+				<li><a href="#go-form" role="tab" data-toggle="tab">GO</a></li>
+			  	<%if (bypass.length > 0) { %>
+					<li><a href="#bypass-form" role="tab" data-toggle="tab">Bypass</a></li>
+				<% } %>
 			</ul>
 			<div id="tabs" class="tab-content">
 			<div class="tab-pane active form-group" id="blast-form" data-external-taxonid="<%= taxonid %>">
@@ -71,12 +73,14 @@
 			<div class="tab-pane form-group" id="go-form">
 				<button class="btn btn-primary" id="go-exec">Get GO</button>
 			</div>
-			<div class="tab-pane form-group" id="bypass-form">
-				<fieldset id="bypass-params">
-					<%- bypass %>
-				</fieldset>
-				<button data-id='bypass' class="service-exec btn btn-primary">Submit Bypass</button>
-			</div>
+			<%if (bypass.length > 0) { %>
+				<div class="tab-pane form-group" id="bypass-form">
+					<fieldset id="bypass-params">
+						<%- bypass %>
+					</fieldset>
+					<button data-id='bypass' class="service-exec btn btn-primary">Submit Bypass</button>
+				</div>
+			<% } %>
 		</div>
 	
 		</div>
