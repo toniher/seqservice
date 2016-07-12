@@ -69,14 +69,14 @@ $(document).ready( function(){
 			console.log( data );
 			if ( data && data.total_rows > 0 ) {
 				if ( data.rows ) {
-					var str = "<h5>BLAST</h5>";
+					var str = "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean History</a></div>";
+					str = str + "<h5>BLAST</h5>";
 					str = str + "<ul id='storedBlast' class='list-inline'>";
 					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
 						var entry = data.rows[r];
 						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
 					}
 					str = str + "</ul>";
-					str = str + "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean</a></div>";
 					$( "#panel" ).empty();
 					$( "#panel" ).append( str );
 				}
@@ -175,9 +175,11 @@ $( document ).on( "click", ".hit > .details", function() {
 $(document).on('click', "#panelBlast #cleanDocs", function() {
 
 	new PouchDB('reports').destroy().then(function () {
-	//  // database destroyed
+		// database destroyed
+		// Clean panel
+		$( "#panel" ).empty();
 	}).catch(function (err) {
-	//  // error occurred
+		// error occurred
 	});
 });
 
