@@ -79,6 +79,7 @@ $(document).ready( function(){
 					str = str + "</ul>";
 					$( "#panel" ).empty();
 					$( "#panel" ).append( str );
+					$( "#panel" ).show();
 				}
 			}
 		});
