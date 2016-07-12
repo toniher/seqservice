@@ -76,6 +76,7 @@ $(document).ready( function(){
 						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
 					}
 					str = str + "</ul>";
+					str = str + "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean</a></div>";
 					$( "#panel" ).empty();
 					$( "#panel" ).append( str );
 				}
@@ -170,6 +171,16 @@ $( document ).on( "click", ".hit > .details", function() {
 	
 
 });
+
+$(document).on('click', "#panelBlast #cleanDocs", function() {
+
+	new PouchDB('reports').destroy().then(function () {
+	//  // database destroyed
+	}).catch(function (err) {
+	//  // error occurred
+	});
+});
+
 
 // Detect hit appears
 $(document).on('DOMNodeInserted', function(e) {
