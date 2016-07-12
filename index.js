@@ -102,7 +102,17 @@ app.use(basepath, express.static(__dirname + '/public'));
 
 // TODO: This is not fully working. Redundant for now
 app.get(basepath + '/blast', function (req, res) {
-	res.render('blast.html', { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid, bypass: functions.printForm( "bypass", config.services.bypass ) } );
+
+	render_config = {};
+	render_config = { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid }
+	
+	if ( config.services ) {
+		if ( config.services.bypass ) {
+			render_config.bypass = functions.printForm( "bypass", config.services.bypass );
+		}
+	}
+
+	res.render('blast.html', render_config  );
 });
 
 // Landing Upload
