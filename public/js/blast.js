@@ -236,9 +236,9 @@ function prepareHTMLBLAST( response ) {
 			if ( response.hasOwnProperty("data") ) {
 
 				var data = response.data;
-				if ( data.hasOwnProperty("seq") ) {
-					$("#seqinput").val( data.seq );
-				}
+				//if ( data.hasOwnProperty("seq") ) {
+				//	$("#seqinput").val( data.seq );
+				//}
 
 				printBLASTall( response, 1, function( txt, extra ) {
 					// console.log( extra );
