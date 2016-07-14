@@ -90,8 +90,13 @@ $(document).ready( function(){
 $( "[name=moltype]" ).change(function() {
 
 	var valid = "#" + $(this).val();
+	var method = "#blast-" + $(this).val();
 	$( ".dbselect" ).hide();
+	$( ".methodselect" ).hide();
+
+	/** TODO: Not satisfying change **/
 	$( valid ).show();
+	$( method ).css("display", "inline-block");
 
 });
 
@@ -106,7 +111,9 @@ $(".psicheck").on( "click", function() {
 });
 
 $(function() {
-	$('#blast-exec').click(function() {
+	$('#blast-exec').on( 'click', function() {
+
+		var exec = $(this).data("exec");
 
 		var basepath = $("body").data("basepath");
 		var socketio = $("body").data("socketio");
@@ -122,16 +129,25 @@ $(function() {
 		
 		$("#blast-data").empty();
 
-		var exec = $(this).attr("data-blast-exec");
 		var binary = null;
 		var db = null;
 		var organism = 0;
 
 		if ( $( "[name=moltype]" ).val() === 'nucl' ) {
 			binary = "blastn";
+
+			if ( $( "[name=blast-nucl]" ).length > 0 ) {
+				binary = $( "[name=blast-nucl]" ).val();
+			}
+
 			db = $( "[name=nucllist]" ).val();
 		} else {
 			binary = "blastp";
+
+			if ( $( "[name=blast-prot]" ).length > 0 ) {
+				binary = $( "[name=blast-prot]" ).val();
+			}
+
 			db = $( "[name=protlist]" ).val();
 		}
 		

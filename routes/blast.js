@@ -98,12 +98,12 @@ function run_blast( params, req, res, seqidpath ){
 	};
 	
 	strParams = joinParams( execparams, "-" );
-	
+
 	var child = spawn( 'node', [ './pipe.js', [ processTextInput( seq ) ].join("\n"), JSON.stringify( [{ "app": program, "params": strParams + opts }] ) ] );
 
 	// Listen for stdout data
 	child.stderr.on('data', function (data) {
-		console.error("DATA "+data);
+		console.error("ERR: "+data);
 	});
 	
 	var output = "";

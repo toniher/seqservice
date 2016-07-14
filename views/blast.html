@@ -44,6 +44,14 @@
 						<option>nucl</option>
 						<option>prot</option>
 					</select>
+					<div class='methodselect form-inline' id='blast-nucl'>
+						<input type="radio" name="blast-nucl" value="blastn" checked="checked">BLASTN
+						<input type="radio" name="blast-nucl" value="tblastn">TBLASTN
+					</div>
+					<div class='methodselect form-inline' id='blast-prot'>
+						<input type="radio" name="blast-prot" value="blastp" checked="checked">BLASTP
+						<input type="radio" name="blast-prot" value="blastx">BLASTX
+					</div>
 					<select class="dbselect form-control" id="nucl" name="nucllist">
 					  <% nucllist.forEach(function(element){ %>
 						<option><%= element %></option>
