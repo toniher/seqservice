@@ -103,7 +103,10 @@ function run_blast( params, req, res, seqidpath ){
 
 	// Listen for stdout data
 	child.stderr.on('data', function (data) {
-		console.error("ERR: "+data);
+                if (typeof data !== 'string' || !( data  instanceof String) ) {
+                        data = data.toString();
+                }	
+		console.error("ERR: " + data );
 	});
 	
 	var output = "";

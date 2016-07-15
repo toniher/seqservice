@@ -137,7 +137,7 @@ $(function() {
 			binary = "blastn";
 
 			if ( $( "[name=blast-nucl]" ).length > 0 ) {
-				binary = $( "[name=blast-nucl]" ).val();
+				binary = $( "[name=blast-nucl]:checked" ).val();
 			}
 
 			db = $( "[name=nucllist]" ).val();
@@ -145,7 +145,7 @@ $(function() {
 			binary = "blastp";
 
 			if ( $( "[name=blast-prot]" ).length > 0 ) {
-				binary = $( "[name=blast-prot]" ).val();
+				binary = $( "[name=blast-prot]:checked" ).val();
 			}
 
 			db = $( "[name=protlist]" ).val();
