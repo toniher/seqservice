@@ -695,74 +695,111 @@ function panelListing( ) {
 	}
 }
 
-$('#uploadform').on('click', "input[type=submit]", function( e ) {
+$(function() {
 
-	e.preventDefault();
-
-	var fd = new FormData();
-	fd.append( 'report', $( "input[name=report]" )[0].files[0] );
-
-
-    $.ajax({
-		url: "<%= basepath %>/load",
-		dataType: 'text',
-		cache: false,
-		contentType: false,
-		processData: false,
-		data: fd,                         
-		type: 'post',
-		success: function(response){
-
-			if ( response ) {
-
-				if ( response.hasOwnProperty("data") ) {
-
-					var data = response.data;
-					if ( data.hasOwnProperty("seq") ) {
-						$("#seqinput").val( data.seq );
-					}
-
-					printBLASTall( response, 1, function( txt, extra ) {
-						// console.log( extra );
+	$('#uploadform').on('click', "input[type=submit]", function( e ) {
 	
-						$("#blast-data").empty();
-						$("#blast-data").append( txt );
-						panelListing();
-					});
-				}
-			}
-		}
-     });
-});
-
-$("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
-
-	e.preventDefault();
-	var docId = $(this).data( "id" );
-
-	if ( docId ) {
-		pouchdb_retrieve( "reports", docId, function( err, response ) {
-			if ( ! err ) {
-
+		e.preventDefault();
+	
+		var fd = new FormData();
+		fd.append( 'report', $( "input[name=report]" )[0].files[0] );
+	
+	
+		$.ajax({
+			url: "<%= basepath %>/load",
+			dataType: 'text',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: fd,                         
+			type: 'post',
+			success: function(response){
+	
 				if ( response ) {
-
+	
 					if ( response.hasOwnProperty("data") ) {
-
+	
 						var data = response.data;
 						if ( data.hasOwnProperty("seq") ) {
 							$("#seqinput").val( data.seq );
 						}
-
-						printBLASTall( response, null, function( txt, extra ) {
+	
+						printBLASTall( response, 1, function( txt, extra ) {
 							// console.log( extra );
 		
 							$("#blast-data").empty();
-							$("#blast-data").append( txt ); 
+							$("#blast-data").append( txt );
+							panelListing();
 						});
 					}
 				}
 			}
+		 });
+	});
+	
+	$("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
+	
+		e.preventDefault();
+		var docId = $(this).data( "id" );
+	
+		if ( docId ) {
+			pouchdb_retrieve( "reports", docId, function( err, response ) {
+				if ( ! err ) {
+	
+					if ( response ) {
+	
+						if ( response.hasOwnProperty("data") ) {
+	
+							var data = response.data;
+							if ( data.hasOwnProperty("seq") ) {
+								$("#seqinput").val( data.seq );
+							}
+	
+							printBLASTall( response, null, function( txt, extra ) {
+								// console.log( extra );
+			
+								$("#blast-data").empty();
+								$("#blast-data").append( txt ); 
+							});
+						}
+					}
+				}
+			});
+		}
+	
+	});
+	
+	// Detect changes on textarea
+	var oldVal = "";
+	$("#seqinput").on("change keyup paste", function() {
+		var currentVal = $(this).val();
+		if(currentVal == oldVal) {
+			return; //check to prevent multiple simultaneous triggers
+		}
+	
+		oldVal = currentVal;
+		//action to be performed on textarea changed
+		// TODO: Detect if Protein or Nucleic Acid
+		
+		detectMolType( currentVal, function( type ) {
+			
+			if ( type === 'prot' ) {
+				console.log("PROT entry");
+				// TODO: enable prot stuff
+			}
+			
 		});
+		
+	});
+	
+	function detectMolType( val, cb ) {
+		
+		val = val.replace(/\s/g,'');
+		if ( /[WQERYIPSDFHKLVM]/.test(val.toUpperCase()) ) {
+			cb("prot")
+		} else {
+			cb( null );
+		}
 	}
 
 });
