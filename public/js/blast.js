@@ -63,27 +63,7 @@ $(document).ready( function(){
 	//  // error occurred
 	//})
 
-	if ( $('#panel').length > 0 ) {
-
-		pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
-			// console.log( data );
-			if ( data && data.total_rows > 0 ) {
-				if ( data.rows ) {
-					var str = "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean History</a></div>";
-					str = str + "<h5>BLAST</h5>";
-					str = str + "<ul id='storedBlast' class='list-inline'>";
-					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
-						var entry = data.rows[r];
-						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
-					}
-					str = str + "</ul>";
-					$( "#panel" ).empty();
-					$( "#panel" ).append( str );
-					$( "#panel" ).show();
-				}
-			}
-		});
-	}
+	panelListing();
 
 });
 
@@ -252,7 +232,9 @@ function prepareHTMLBLAST( response ) {
 			printBLASTall( response, 1, function( txt, extra ) {
 				// console.log( extra );
 
-				$("#blast-data").append( txt ); 
+				$("#blast-data").append( txt );
+				panelListing();
+				
 			});
 		}
 	}
@@ -679,6 +661,31 @@ function getReorderInfo( info ) {
 
 }
 
+function panelListing( ) {
+	
+	if ( $('#panel').length > 0 ) {
+
+		pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
+			// console.log( data );
+			if ( data && data.total_rows > 0 ) {
+				if ( data.rows ) {
+					var str = "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean History</a></div>";
+					str = str + "<h5>BLAST</h5>";
+					str = str + "<ul id='storedBlast' class='list-inline'>";
+					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
+						var entry = data.rows[r];
+						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
+					}
+					str = str + "</ul>";
+					$( "#panel" ).empty();
+					$( "#panel" ).append( str );
+					$( "#panel" ).show();
+				}
+			}
+		});
+	}
+}
+
 $('#uploadform').on('click', "input[type=submit]", function( e ) {
 
 	e.preventDefault();
@@ -710,7 +717,8 @@ $('#uploadform').on('click', "input[type=submit]", function( e ) {
 						// console.log( extra );
 	
 						$("#blast-data").empty();
-						$("#blast-data").append( txt ); 
+						$("#blast-data").append( txt );
+						panelListing();
 					});
 				}
 			}
