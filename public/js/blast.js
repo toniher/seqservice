@@ -333,8 +333,9 @@ function printBLAST( obj, num, reorder ) {
 	
 
 	var program = blastobj.program;
-	var str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
-
+	var head_str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
+	var str = "";
+	
 	// Considering reorders
 	var reordHits = null;
 	
@@ -353,9 +354,16 @@ function printBLAST( obj, num, reorder ) {
 			
 			str = str + "<div class='iter' data-iter='"+iterationlist[iter].iter_num+"'>";
 			str = str + "<span class='id'>" + iterationlist[iter].iter_num + "</span>";
-			str = str + "<div class='results'>";
-			str = str + processHits( iterationlist[iter].search.hits, reordHits );
-			str = str + "</div>";
+			
+			if ( iterationlist[iter].search && iterationlist[iter].search.hits && iterationlist[iter].search.hits.length > 0 ) {
+			
+				str = str + "<div class='results'>";
+				str = str + processHits( iterationlist[iter].search.hits, reordHits );
+				str = str + "</div>";
+			} else {
+				str = "<p class='not-found'>No hits found.</p>";
+			}
+			
 			str = str + "</div>";
 		}
 
@@ -369,16 +377,17 @@ function printBLAST( obj, num, reorder ) {
 		
 		}
 		
-		str = str + "<div class='results'>";
-		str = str + processHits( blastobj.results.search.hits, reordHits );
-		str = str + "</div>";
-	}
+		if ( blastobj.results && blastobj.results.search && blastobj.results.search.hits, blastobj.results.search.hits.length > 0 ) {
+			str = str + "<div class='results'>";
+			str = str + processHits( blastobj.results.search.hits, reordHits );
+			str = str + "</div>";		
+		} else {
+			str = "<p class='not-found'>No hits found.</p>";
+		}
 
-	if ( str === "" ) {
-		str = "<p class='not-found'>No hits found.</p>";
 	}
     
-	str = str + "</div>";
+	str = head_str + str + "</div>";
 		
 	return str;
 
