@@ -52,14 +52,19 @@ function run_blast( params, req, res, seqidpath ){
 
 	opts = "";
 	
+	// TODO. Better handling params
+	var blast_params = {};
+	
 	var binary = "blastn";
 	if (req.body.binary) {
 		binary = req.body.binary;
+		blast_params.binary = binary;
 	}
 
 	db = config.db.def;
 	if (req.body.db) {
 		db = req.body.db;
+		blast_params.db = db;
 	}
 
 	if ( params.psicheck && binary == "blastp" ) {
@@ -67,11 +72,13 @@ function run_blast( params, req, res, seqidpath ){
 		
 		if ( params.psiiter && ( params.psiiter == ( parseInt( params.psiiter, 10 ) ) ) ) {
 			opts = opts + "-num_iterations " + params.psiiter;
+			blast_params.psiiter = params.psiiter;
 		}
 	}
 
 	if (req.body.evalue) {
 		opts = opts + " -evalue " + req.body.evalue;
+		blast_params.evalue = req.body.evalue;
 	}
 
 	if ( seqidpath ) {
@@ -139,6 +146,8 @@ function run_blast( params, req, res, seqidpath ){
 			}
 		}
 		
+		object.blast_params = blast_params;
+		
 		var digest = hash.digest( object );
 		var newObj = {};
 		newObj._id = digest;
@@ -150,32 +159,6 @@ function run_blast( params, req, res, seqidpath ){
 	
 	});
 }
-
-//function run_cmd ( args, callBack ) {
-//
-//	var resp = "";
-//	
-//	// Elements to pipe
-//	var textfile = [ processTextInput( args[0] ) ].join("\n");
-//
-//	var blastprog = args[1] + " -db " + args[2] + " -outfmt 15 " + args[3];
-//
-//	// We pass thru STDOUT, we avoid temp file
-//	// Handled by procstreams
-//	$p("echo \"" + textfile + "\"" ).pipe( blastprog )
-//	.data(function(err, stdout, stderr) {
-//		if ( err ) {
-//			callBack( err, stderr.toString() );
-//		} else {
-//			if ( stdout ) {
-//				resp += stdout.toString();
-//			}
-//			callBack( null, resp );
-//		}
-//	
-//	});
-//
-//}
 
 function processTextInput( text ) {
 
