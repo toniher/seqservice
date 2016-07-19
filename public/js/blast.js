@@ -112,8 +112,9 @@ $(function() {
 		var binary = null;
 		var db = null;
 		var organism = 0;
+		var moltype = $( "[name=moltype]" ).val();
 
-		if ( $( "[name=moltype]" ).val() === 'nucl' ) {
+		if ( moltype === 'nucl' ) {
 			binary = "blastn";
 
 			if ( $( "[name=blast-nucl]" ).length > 0 ) {
@@ -122,6 +123,9 @@ $(function() {
 
 			db = $( "[name=nucllist]" ).val();
 		} else {
+			
+			moltype = "prot";
+			
 			binary = "blastp";
 
 			if ( $( "[name=blast-prot]" ).length > 0 ) {
@@ -133,7 +137,7 @@ $(function() {
 		
 		organism = parseInt( $( "[name=organism]" ).val(), 10 );
 
-		$.post( exec, { seq: seqinput, binary: binary, db: db, organism: organism }).done( function( data ) {
+		$.post( exec, { seq: seqinput, binary: binary, db: db, dbtype: moltype, organism: organism }).done( function( data ) {
 
 			if ( ! socketio ){
 				prepareHTMLBLAST( JSON.stringify( data ) );

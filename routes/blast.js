@@ -49,42 +49,44 @@ function run_blast( params, req, res, seqidpath ){
 
 	var config, opts, db, fullpath;
 	config = req.app.set('config');
-
-	opts = "";
 	
 	// TODO. Better handling params
 	var blast_params = {};
 	
 	var binary = "blastn";
+	var dbtype = "nucl";
+	
 	if (req.body.binary) {
 		binary = req.body.binary;
-		blast_params.binary = binary;
+	}
+	
+	if (req.body.dbtype) {
+		dbtype = req.body.dbtype;
 	}
 
 	db = config.db.def;
 	if (req.body.db) {
 		db = req.body.db;
-		blast_params.db = db;
 	}
 
 	if ( params.psicheck && binary == "blastp" ) {
 		binary = "psiblast";
 		
 		if ( params.psiiter && ( params.psiiter == ( parseInt( params.psiiter, 10 ) ) ) ) {
-			opts = opts + "-num_iterations " + params.psiiter;
 			blast_params.psiiter = params.psiiter;
 		}
 	}
 
 	if (req.body.evalue) {
-		opts = opts + " -evalue " + req.body.evalue;
 		blast_params.evalue = req.body.evalue;
 	}
 
 	if ( seqidpath ) {
-		opts = opts + " -seqidlist " + seqidpath;
+		blast_params.seqidlist = seqidpath;
 	}
 
+	blast_params.outfmt = 15;
+	
 	var socketio = config.socketio; // Wheter to use this socketio or not;
 
 	var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
@@ -99,14 +101,17 @@ function run_blast( params, req, res, seqidpath ){
 
 	//console.log( seq + "-" + program + "-" + DBpath + "-" );
 
-	execparams = {
-		"db" : DBpath,
-		"outfmt" : 15
-	};
+	var execparams = Object.assign({}, blast_params);
+	
+	blast_params.db = db;
+	blast_params.binary = binary;
+	blast_params.dbtype = dbtype;
+
+	execparams.db = DBpath;
 	
 	strParams = joinParams( execparams, "-" );
 
-	var child = spawn( 'node', [ './pipe.js', [ processTextInput( seq ) ].join("\n"), JSON.stringify( [{ "app": program, "params": strParams + opts }] ) ] );
+	var child = spawn( 'node', [ './pipe.js', [ processTextInput( seq ) ].join("\n"), JSON.stringify( [{ "app": program, "params": strParams }] ) ] );
 
 	// Listen for stdout data
 	child.stderr.on('data', function (data) {
@@ -146,7 +151,7 @@ function run_blast( params, req, res, seqidpath ){
 			}
 		}
 		
-		object.blast_params = blast_params;
+		object.params = blast_params;
 		
 		var digest = hash.digest( object );
 		var newObj = {};
