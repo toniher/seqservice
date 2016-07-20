@@ -69,7 +69,7 @@ exports.performExec = function (req, res) {
 
 									// TODO: Handle error stuff
 									child.stderr.on('data', function (data) {
-										console.error("DATA "+data);
+										console.error("DATA "+data.toString());
 									});
 																		
 									// TODO: Handle in general with close, etc.
@@ -102,7 +102,7 @@ exports.performExec = function (req, res) {
 
 						//  TODO: Handle error stuff
 						child.stderr.on('data', function (data) {
-							console.error("DATA "+data);
+							console.error("DATA "+data.toString());
 						});
 		
 						// TODO: Handle in general with close, etc.
