@@ -262,7 +262,7 @@ $(document).on('click', ".down-hit-seqs", function() {
 			cache: false,
 			contentType: false,
 			processData: false,
-			data: params,                         
+			data: JSON.stringify( params ),                         
 			type: 'post',
 			success: function(response){
 	
