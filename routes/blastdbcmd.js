@@ -148,88 +148,95 @@ exports.getBlastDBcmd = function(req, res) {
 		}
 	}
 
-	var targetDB = functions.getPath( db, config.db.list ); // Get path from array
-	var fullpath = targetDB.path; // Get path
-
-	// Let's discover dbtype
-	if ( ! dbtype ) {
-		dbtype = functions.getDbtype( db, config.db.list );
-	}
-
-	// TODO: Check file exists!
-	if ( ! fullpath ) {
-		outcome.msg = "DB " + db + " does not exist.";
+	if ( ! db ) {
+		outcome.msg = "DB not defined.";
 		functions.returnJSON( res, outcome );
 	} else {
 
-		// TODO: for samtools ->
-		// ONE: samtools faidx base seq
-		// MANY: xargs samtools faidx base < list
-		// PENDING RANGE and LENGTH
-
+		var targetDB = functions.getPath( db, config.db.list ); // Get path from array
+		var fullpath = targetDB.path; // Get path
+	
+		// Let's discover dbtype
 		if ( ! dbtype ) {
-			dbtype = config.db.def;
+			dbtype = functions.getDbtype( db, config.db.list );
 		}
-
-		var cmd;
-
-		if ( ! entry_batch ) {
-
-			if ( entry.indexOf('+') !== -1  || Array.isArray( entry ) ) {
-
-				var listID = [];
-
-				if ( ! Array.isArray( entry ) ) {
-					listID = entry.split("+");
+	
+		// TODO: Check file exists!
+		if ( ! fullpath ) {
+			outcome.msg = "DB " + db + " does not exist.";
+			functions.returnJSON( res, outcome );
+		} else {
+	
+			// TODO: for samtools ->
+			// ONE: samtools faidx base seq
+			// MANY: xargs samtools faidx base < list
+			// PENDING RANGE and LENGTH
+	
+			if ( ! dbtype ) {
+				dbtype = config.db.def;
+			}
+	
+			var cmd;
+	
+			if ( ! entry_batch ) {
+	
+				if ( entry.indexOf('+') !== -1  || Array.isArray( entry ) ) {
+	
+					var listID = [];
+	
+					if ( ! Array.isArray( entry ) ) {
+						listID = entry.split("+");
+					} else {
+						listID = entry;
+					}
+	
+					if ( listID.length > 0 ) {
+						temp.track();
+	
+						// Process the data (note: error handling omitted)
+						temp.open('tmp', function(err, info) {
+							if (!err) {
+								fs.write(info.fd, listID.join("\n"));
+								fs.close(info.fd, function(err) {
+									// Entry batch generated automatically
+									if ( method === 'samtools ') {
+										cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + info.path;
+									} else {
+										cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
+									}
+									
+									execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
+								});
+							}
+						});
+					}
 				} else {
-					listID = entry;
-				}
-
-				if ( listID.length > 0 ) {
-					temp.track();
-
-					// Process the data (note: error handling omitted)
-					temp.open('tmp', function(err, info) {
-						if (!err) {
-							fs.write(info.fd, listID.join("\n"));
-							fs.close(info.fd, function(err) {
-								// Entry batch generated automatically
-								if ( method === 'samtools ') {
-									cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + info.path;
-								} else {
-									cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
-								}
-								
-								execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
-							});
+				
+					if ( method === 'samtools' ) {
+						if ( range === "1-") {
+							range = "";
+						} else {
+							range = ":" + range;
 						}
-					});
+						cmd = blastdbcmd + " faidx "+ fullpath + " " + entry+range ;
+					} else {
+						cmd = blastdbcmd+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
+					}
+					
+					execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
 				}
 			} else {
-			
-				if ( method === 'samtools' ) {
-					if ( range === "1-") {
-						range = "";
-					} else {
-						range = ":" + range;
-					}
-					cmd = blastdbcmd + " faidx "+ fullpath + " " + entry+range ;
+				// Entry batch passed as param
+				if ( method === 'samtools ') {
+					cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + entry_batch;
 				} else {
-					cmd = blastdbcmd+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
+					cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
 				}
 				
-				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
+				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 			}
-		} else {
-			// Entry batch passed as param
-			if ( method === 'samtools ') {
-				cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + entry_batch;
-			} else {
-				cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
-			}
-			
-			execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 		}
+
 	}
 };
 

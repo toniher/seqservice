@@ -255,6 +255,8 @@ $(document).on('click', ".down-hit-seqs", function() {
 
 		params.fmt = 2;
 
+		console.log( params );
+
 		$.ajax({
 			url: basepath+"/db",
 			cache: false,
