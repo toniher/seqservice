@@ -71,13 +71,13 @@ exports.getBlastDBcmd = function(req, res) {
 	var outfmt = "%f";
 	var fmt = 1;
 	if ( req.body.fmt ) {
-		fmt = req.body.fmt;
+		fmt = parseInt( req.body.fmt, 10 );
 	}
 	if ( req.params.fmt ) {
-		fmt = req.params.fmt;
+		fmt = parseInt( req.params.fmt, 10 );
 	}
 
-	if ( fmt === "2" ) {
+	if ( fmt === 2 ) {
 		download = true;
 	}
 	
