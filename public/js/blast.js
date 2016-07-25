@@ -218,6 +218,18 @@ $(document).on('DOMNodeInserted', function(e) {
 //	subtree: true
 //});
 
+$(document).on('click', ".down-hit-seqs", function() {
+
+
+	var parent = $(this).parent();
+
+	var hitcheck = $(parent).find("input.hitcheck").filter(":checked");
+
+	console.log( hitcheck );
+
+
+});
+
 function prepareHTMLBLAST( response ) {
 
 	if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
@@ -318,7 +330,7 @@ function printBLAST( obj, num, reorder ) {
 	var seq = obj['seq'];
 	var id = obj['id'];
 	var name = obj['name'];
-			
+	//console.log( obj );
 	var blastobj = obj["report"];
 
 	var expect = blastobj.params.expect;
@@ -338,6 +350,7 @@ function printBLAST( obj, num, reorder ) {
 
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
+	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Download hit sequences</button></div>";
 	var str = "";
 	
 	// Considering reorders
@@ -391,7 +404,7 @@ function printBLAST( obj, num, reorder ) {
 
 	}
     
-	str = head_str + str + "</div>";
+	str = head_str + action_str + str + "</div>";
 		
 	return str;
 
