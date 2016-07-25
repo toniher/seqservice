@@ -72,7 +72,24 @@ exports.getPath = function( term, object ) {
 		}
 	}
 	
-	return '';
+	return null;
+};
+
+exports.getDbtype = function( term, object ) {
+
+	for ( var dbtype in object ) {
+		if ( object.hasOwnProperty(dbtype) ) {
+			for ( var item in object[dbtype] ) {
+				if ( object[dbtype].hasOwnProperty(item) ) {
+					if ( item === term ) {
+						return dbtype;
+					}
+				}
+			}
+		}
+	}
+	
+	return null;
 };
 
 exports.matchInArray = function( groups, tomatch ) {

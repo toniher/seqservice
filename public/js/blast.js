@@ -220,6 +220,7 @@ $(document).on('DOMNodeInserted', function(e) {
 
 $(document).on('click', ".down-hit-seqs", function() {
 
+	var basepath = $("body").data("basepath");
 
 	var parent = $(this).parent().parent();
 
@@ -229,8 +230,8 @@ $(document).on('click', ".down-hit-seqs", function() {
 
 	async.eachSeries(hitcheck, function(item, callback) {
 		
-		var hit = $(item).parent().children(".id").value();
-		var hitId = processHitId( hitid );
+		var hit = $(item).parent().children(".id").text();
+		var hitId = processHitId( hit );
 
 		listId.push( hitId );
 		callback();
@@ -240,6 +241,33 @@ $(document).on('click', ".down-hit-seqs", function() {
 		}
 
 		// TODO: Send to service
+
+		// Prepare params
+		params = {}
+		params.entry = listId;
+		params.dbtype = $("[name=moltype]").val(); // TODO: To be changed
+		
+		params.db = null;
+
+		if ( params.dbtype ) {
+			params.db = $("#"+params.dbtype).val();
+		}
+
+		params.fmt = 2;
+
+		$.ajax({
+			url: basepath+"/db",
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: params,                         
+			type: 'post',
+			success: function(response){
+	
+				console.log( response );
+			}
+		 });
+
 		console.log( listId );
 	});
 
@@ -752,9 +780,10 @@ $(function() {
 		var fd = new FormData();
 		fd.append( 'report', $( "input[name=report]" )[0].files[0] );
 	
-	
+		var basepath = $("body").data("basepath");
+
 		$.ajax({
-			url: "<%= basepath %>/load",
+			url: basepath+"/load",
 			dataType: 'text',
 			cache: false,
 			contentType: false,

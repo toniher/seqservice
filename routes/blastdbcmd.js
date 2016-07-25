@@ -22,14 +22,23 @@ exports.getBlastDBcmd = function(req, res) {
 	
 	var split = true; // Whether FASTA sequence is split
 
-	var db = config.db.def;
+	var db = null;
+
 	if ( req.body.db ) {
 		db = req.body.db;
 	}
 	if ( req.params.db ) {
 		db = req.params.db;
 	}
-	
+
+	var dbtype = null;
+	if ( req.body.dbtype ) {
+		dbtype = req.body.dbtype;
+	}
+	if ( req.params.dbtype ) {
+		dbtype = req.params.dbtype;
+	}
+
 	var blastdbcmd = null;
 	
 	var method = null;
@@ -62,10 +71,10 @@ exports.getBlastDBcmd = function(req, res) {
 	var outfmt = "%f";
 	var fmt = 1;
 	if ( req.body.fmt ) {
-		var fmt = req.body.fmt;
+		fmt = req.body.fmt;
 	}
 	if ( req.params.fmt ) {
-		var fmt = req.params.fmt;
+		fmt = req.params.fmt;
 	}
 
 	if ( fmt === "2" ) {
@@ -142,8 +151,13 @@ exports.getBlastDBcmd = function(req, res) {
 	var targetDB = functions.getPath( db, config.db.list ); // Get path from array
 	var fullpath = targetDB.path; // Get path
 
+	// Let's discover dbtype
+	if ( ! dbtype ) {
+		dbtype = functions.getDbtype( db, config.db.list );
+	}
+
 	// TODO: Check file exists!
-	if ( fullpath === '' ) {
+	if ( ! fullpath ) {
 		outcome.msg = "DB " + db + " does not exist.";
 		functions.returnJSON( res, outcome );
 	} else {
@@ -153,13 +167,23 @@ exports.getBlastDBcmd = function(req, res) {
 		// MANY: xargs samtools faidx base < list
 		// PENDING RANGE and LENGTH
 
+		if ( ! dbtype ) {
+			dbtype = config.db.def;
+		}
+
 		var cmd;
 
 		if ( ! entry_batch ) {
 
-			if ( entry.indexOf('+') !== -1 ) {
+			if ( entry.indexOf('+') !== -1  || Array.isArray( entry ) ) {
 
-				var listID = entry.split("+");
+				var listID = [];
+
+				if ( ! Array.isArray( entry ) ) {
+					listID = entry.split("+");
+				} else {
+					listID = entry;
+				}
 
 				if ( listID.length > 0 ) {
 					temp.track();
