@@ -260,10 +260,10 @@ $(document).on('click', ".down-hit-seqs", function() {
 		$.ajax({
 			url: basepath+"/db",
 			cache: false,
-			contentType: false,
+			contentType : 'application/json',
 			processData: false,
 			data: JSON.stringify( params ),                         
-			type: 'post',
+			type: 'POST',
 			success: function(response){
 	
 				console.log( response );
