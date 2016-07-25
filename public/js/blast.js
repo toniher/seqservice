@@ -221,14 +221,45 @@ $(document).on('DOMNodeInserted', function(e) {
 $(document).on('click', ".down-hit-seqs", function() {
 
 
-	var parent = $(this).parent();
+	var parent = $(this).parent().parent();
 
 	var hitcheck = $(parent).find("input.hitcheck").filter(":checked");
 
-	console.log( hitcheck );
+	var listId = [];
 
+	async.eachSeries(hitcheck, function(item, callback) {
+		
+		var hit = $(item).parent().children(".id").value();
+		var hitId = processHitId( hitid );
+
+		listId.push( hitId );
+		callback();
+	}, function(err){
+		if ( err ) {
+			console.log("error retrieving seq");
+		}
+
+		// TODO: Send to service
+		console.log( listId );
+	});
 
 });
+
+function processHitId( str ) {
+
+	if ( str.indexOf("|") > 0 ) {
+		// Process |
+
+		var parts = str.split("|");
+
+		// Let's take the first
+		return parts[1];
+
+	} else {
+		return str;
+	}
+}
+
 
 function prepareHTMLBLAST( response ) {
 
