@@ -202,7 +202,7 @@ exports.getBlastDBcmd = function(req, res) {
 									if ( method === 'samtools ') {
 										cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + info.path;
 									} else {
-										cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
+										cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
 									}
 									
 									execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
@@ -220,7 +220,7 @@ exports.getBlastDBcmd = function(req, res) {
 						}
 						cmd = blastdbcmd + " faidx "+ fullpath + " " + entry+range ;
 					} else {
-						cmd = blastdbcmd+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
+						cmd = blastdbcmd+" -dbtype " + dbtype+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
 					}
 					
 					execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
@@ -230,7 +230,7 @@ exports.getBlastDBcmd = function(req, res) {
 				if ( method === 'samtools ') {
 					cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + entry_batch;
 				} else {
-					cmd = blastdbcmd+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
+					cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
 				}
 				
 				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
