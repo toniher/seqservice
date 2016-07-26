@@ -59,6 +59,7 @@ var blast = require('./routes/blast.js');
 var align = require('./routes/align.js');
 var loadfile = require('./routes/load.js');
 var service = require('./routes/service.js');
+var down = require('./routes/down.js');
 
 
 // Landing
@@ -91,6 +92,10 @@ app.post(basepath + '/load', upload.single('report'), loadfile.getFile);
 
 // Send to service. Bypass
 app.post(basepath + '/service', service.performExec);
+
+// Temp down
+app.post(basepath + '/tmp', down.getTemp);
+
 
 // Now views
 app.set('views', __dirname + '/views');
