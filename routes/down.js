@@ -16,6 +16,8 @@ exports.checkExists = function( req, res ) {
 	var outcome = {};
 	outcome.exists = false;
 	
+	var filepath = "/tmp" + path;
+	
 	fs.exists(filepath, function(exists) {
 	    if (exists) {
 			outcome.exists = true;
