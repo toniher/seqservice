@@ -7,38 +7,11 @@ exports.checkExists = function( req, res ) {
 	
 	var config = req.app.set('config');
 	
-	var directory = false;
-	var compress = false;
 	var path = false;
-	var contenttype = "text/x-fasta";
-	var filename = "down.fasta";
-	
-	if ( req.body.directory ) {
-		directory = req.body.directory;
-	}
-
-	if ( req.body.compress ) {
-		compress = req.body.compress;
-	}
 	
 	if ( req.body.path ) {
 		path = req.body.path;
 	}
-	
-	if ( req.body.contenttype ) {
-		contenttype = req.body.contenttype;
-	}
-
-	if ( req.body.filename ) {
-		filename = req.body.filename;
-	}
-
-	// var contentdisposition = "attachment; filename=" + filename;
-
-	res.set( 'Content-Type', contenttype );
-	
-	var filepath = "/tmp" + path;
-	
 	
 	var outcome = {};
 	outcome.exists = false;
