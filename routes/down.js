@@ -16,7 +16,7 @@ exports.checkExists = function( req, res ) {
 	var outcome = {};
 	outcome.exists = false;
 	
-	var filepath = "/tmp" + path;
+	var filepath = os.tmpdir() + path;
 	
 	fs.exists(filepath, function(exists) {
 	    if (exists) {
@@ -63,7 +63,7 @@ exports.getTemp = function(req, res) {
 
 	res.set( 'Content-Type', contenttype );
 	
-	var filepath = "/tmp" + path;
+	var filepath = os.tmpdir() + path;
 	
 	
 	fs.exists(filepath, function(exists) {
