@@ -270,7 +270,7 @@ $(document).on('click', ".down-hit-seqs", function() {
 					$("#down-form").empty();
 
 					if ( response.path ) { $("#down-form").append("<input name='path' type='hidden' value='"+response.path+"' />"); }
-					if ( response.filename ) { $("#down-form").append("<input name='filename' type='hidden' value='"+response.filename+"' />"); }
+					if ( response.filename ) { $("#down-form").append("<input name='filename' type='hidden' value='"+response.filename+".fasta' />"); }
 					$("#down-form").append("<input id='down-button' class='btn btn-primary' type='submit' value='Download' />");
 				}
 			}
