@@ -177,6 +177,7 @@ exports.getBlastDBcmd = function(req, res) {
 			}
 	
 			var cmd;
+			var download_title = "download";
 	
 			if ( ! entry_batch ) {
 	
@@ -191,6 +192,11 @@ exports.getBlastDBcmd = function(req, res) {
 					}
 	
 					if ( listID.length > 0 ) {
+
+						if ( listID.length === 1 ) {
+							download_title = listID[0]; //Only one selection.
+						}
+
 						temp.track();
 	
 						// Process the data (note: error handling omitted)
@@ -205,7 +211,7 @@ exports.getBlastDBcmd = function(req, res) {
 										cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
 									}
 									
-									execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
+									execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "multi": true, "title": download_title, "split": split } );
 								});
 							}
 						});
@@ -233,7 +239,7 @@ exports.getBlastDBcmd = function(req, res) {
 					cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
 				}
 				
-				execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
+				execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "multi": true, "title": download_title, "split": split } );
 			}
 		}
 
