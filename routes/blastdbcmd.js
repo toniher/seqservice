@@ -205,7 +205,7 @@ exports.getBlastDBcmd = function(req, res) {
 										cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + info.path + " -outfmt "+outfmt;
 									}
 									
-									execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
+									execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 								});
 							}
 						});
@@ -223,7 +223,7 @@ exports.getBlastDBcmd = function(req, res) {
 						cmd = blastdbcmd+" -dbtype " + dbtype+" -db "+fullpath+" -entry "+entry+" -range "+range+length+" -outfmt "+outfmt;
 					}
 					
-					execBlastChild( cmd, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
+					execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "title": entry, "split": split } );
 				}
 			} else {
 				// Entry batch passed as param
@@ -233,7 +233,7 @@ exports.getBlastDBcmd = function(req, res) {
 					cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
 				}
 				
-				execBlastChild( cmd, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
+				execBlastChild( cmd, req, res, { "fmt": fmt, "download": download, "multi": true, "title": "download", "split": split } );
 			}
 		}
 
@@ -241,7 +241,7 @@ exports.getBlastDBcmd = function(req, res) {
 };
 
 
-function execBlastChild( cmd, res, params ) {
+function execBlastChild( cmd, req, res, params ) {
 
 	var outcome = {};
 
@@ -252,7 +252,35 @@ function execBlastChild( cmd, res, params ) {
 		if (error === null) {
 
 			if ( params.download ) {
-				functions.downloadFasta( res, stdout, params.title );
+
+				if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+					// send your xhr response here
+					outcome.download = true;
+
+					// Write temp file
+					temp.open('tmp', function(err, info) {
+						if (!err) {
+							fs.write(info.fd, stdout);
+							fs.close(info.fd, function(err) {
+								if ( ! err ) {
+									outcome.path = info.path;
+									functions.returnJSON( res, outcome );
+								} else {
+									outcome.msg = "Error! "+error;
+									functions.returnJSON( res, outcome );
+								}
+							});
+						} else {
+							outcome.msg = "Error! "+error;
+							functions.returnJSON( res, outcome );
+						}
+					});
+					
+				} else {
+					// send your normal response hereç
+					functions.downloadFasta( res, stdout, params.title );
+				}
+
 			} else {
 				outcome = processFasta( stdout, params.split );
 
