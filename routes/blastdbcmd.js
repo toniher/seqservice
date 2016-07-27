@@ -264,6 +264,7 @@ function execBlastChild( cmd, req, res, params ) {
 							fs.close(info.fd, function(err) {
 								if ( ! err ) {
 									outcome.path = info.path;
+									outcome.filename = params.title;
 									functions.returnJSON( res, outcome );
 								} else {
 									outcome.msg = "Error! "+error;

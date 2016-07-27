@@ -16,7 +16,7 @@ exports.checkExists = function( req, res ) {
 	var outcome = {};
 	outcome.exists = false;
 	
-	var filepath = os.tmpdir() + path;
+	var filepath = path;
 	
 	fs.exists(filepath, function(exists) {
 	    if (exists) {
@@ -29,7 +29,7 @@ exports.checkExists = function( req, res ) {
 	
 };
 
-exports.getTemp = function(req, res) {
+exports.downTemp = function(req, res) {
 
 	var config = req.app.set('config');
 	
@@ -63,7 +63,7 @@ exports.getTemp = function(req, res) {
 
 	res.set( 'Content-Type', contenttype );
 	
-	var filepath = os.tmpdir() + path;
+	var filepath = path;
 	
 	
 	fs.exists(filepath, function(exists) {

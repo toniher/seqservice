@@ -94,7 +94,7 @@ app.post(basepath + '/load', upload.single('report'), loadfile.getFile);
 app.post(basepath + '/service', service.performExec);
 
 // Temp down
-app.post(basepath + '/tmp', down.getTemp);
+app.post(basepath + '/tmp', down.downTemp);
 
 
 // Now views

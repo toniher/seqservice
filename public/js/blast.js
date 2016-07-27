@@ -265,8 +265,14 @@ $(document).on('click', ".down-hit-seqs", function() {
 			data: JSON.stringify( params ),                         
 			type: 'POST',
 			success: function(response){
-	
-				console.log( response );
+
+				if ( response && response.download ) {
+					$("#down-form").empty();
+
+					if ( response.path ) { $("#down-form").append("<input name='path' type='hidden' value='"+response.path+"' />"); }
+					if ( response.filename ) { $("#down-form").append("<input name='filename' type='hidden' value='"+response.filename+"' />"); }
+					$("#down-form").append("<input type='submit' value='Download' />");
+				}
 			}
 		 });
 
@@ -411,7 +417,7 @@ function printBLAST( obj, num, reorder ) {
 
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
-	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Download hit sequences</button></div>";
+	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='/tmp' method='POST></form></div>";
 	var str = "";
 	
 	// Considering reorders
