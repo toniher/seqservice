@@ -296,8 +296,13 @@ function processHitId( str ) {
 
 		var parts = str.split("|");
 
-		// Let's take the first
-		return parts[1];
+		// Hack here, let's assume only if sp, gi, ref or so...
+		if ( parts[0].length < 4 ) {
+			// Let's take the first
+			return parts[1];
+		} else {
+			return str;
+		}
 
 	} else {
 		return str;
