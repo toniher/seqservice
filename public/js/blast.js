@@ -861,7 +861,7 @@ $(function() {
 								if ( data['params'].hasOwnProperty("dbtype") ) {
 
 									var dbtype = data['params'].dbtype;
-									$("[name=moltype"]").val( dbtype );
+									$("[name=moltype]").val( dbtype );
 
 									if ( data['params'].hasOwnProperty("db") ) {
 										$(".dbdselect").hide();
