@@ -359,6 +359,7 @@ function printBLASTall( message, parse, target ) {
 			
 			if ( obj._id ) {
 				// Set data
+				// TODO: Put more data about the query here, context information
 				addDOMdata( "#blast-data", "id", obj._id );
 			}
 	
@@ -431,7 +432,7 @@ function printBLAST( obj, num, reorder ) {
 	var basepath = $("body").data("basepath");
 
 	var program = blastobj.program;
-	var head_str = "<div class='blast' id='blast-"+num+"' data-program='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
+	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
 	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
 	var str = "";
 	
