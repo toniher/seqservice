@@ -864,7 +864,7 @@ $(function() {
 									$("[name=moltype]").val( dbtype );
 
 									if ( data['params'].hasOwnProperty("db") ) {
-										$(".dbdselect").hide();
+										$(".dbselect").hide();
 										$("[name="+dbtype+"list]").val( data['params'].db );
 										$("[name="+dbtype+"list]").show();
 									}
@@ -872,7 +872,7 @@ $(function() {
 									if ( data['params'].hasOwnProperty("binary") ) {
 										$(".methodselect").hide();
 										$("[name=blast-"+dbtype+"]").val( data['params'].binary );
-										$("[name=blast-"+dbtype+"]").show();
+										$("#blast-"+dbtype).css('display', 'inline-block');
 									}
 								}
 
