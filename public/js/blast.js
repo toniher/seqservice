@@ -849,12 +849,30 @@ $(function() {
 					if ( response ) {
 	
 						if ( response.hasOwnProperty("data") ) {
-	
+
+							// Refill contents
 							var data = response.data;
 							if ( data.hasOwnProperty("seq") ) {
 								$("#seqinput").val( data.seq );
 							}
-	
+
+							if ( data.hasOwnProperty("params") ) {
+
+								if ( data['params'].hasOwnProperty("dbtype") ) {
+
+									var dbtype = data['params'].dbtype;
+
+									if ( data['params'].hasOwnProperty("db") ) {
+										$("#"+dbtype).val( data['params'].db );
+									}
+
+									if ( data['params'].hasOwnProperty("binary") ) {
+										$("[name=blast-"+dbtype+"]").val( data['params'].binary );
+									}
+								}
+
+							}
+
 							printBLASTall( response, null, function( txt, extra ) {
 								// console.log( extra );
 			
