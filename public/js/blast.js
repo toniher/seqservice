@@ -861,13 +861,18 @@ $(function() {
 								if ( data['params'].hasOwnProperty("dbtype") ) {
 
 									var dbtype = data['params'].dbtype;
+									$("[name=moltype"]").val( dbtype );
 
 									if ( data['params'].hasOwnProperty("db") ) {
-										$("#"+dbtype).val( data['params'].db );
+										$(".dbdselect").hide();
+										$("[name="+dbtype+"list]").val( data['params'].db );
+										$("[name="+dbtype+"list]").show();
 									}
 
 									if ( data['params'].hasOwnProperty("binary") ) {
+										$(".methodselect").hide();
 										$("[name=blast-"+dbtype+"]").val( data['params'].binary );
+										$("[name=blast-"+dbtype+"]").show();
 									}
 								}
 
