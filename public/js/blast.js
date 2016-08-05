@@ -337,8 +337,8 @@ function prepareHTMLBLAST( response ) {
 }
 
 function addDOMdata( selector, id, val ) {
-
-	$(selector).data( id, val );
+	
+	$(selector).attr( "data-"+id, val );
 
 }
 
@@ -358,11 +358,20 @@ function printBLASTall( message, parse, target ) {
 		if ( ! err ) {
 			
 			if ( obj._id ) {
-				// Set data
-				// TODO: Put more data about the query here, context information
 				addDOMdata( "#blast-data", "id", obj._id );
 			}
-	
+			if ( obj.params ) {
+				if ( obj['params'].binary ) {
+					addDOMdata( "#blast-data", "binary", obj['params'].binary );
+				}
+				if ( obj['params'].db ) {
+					addDOMdata( "#blast-data", "db", obj['params'].db );
+				}
+				if ( obj['params'].dbtype ) {
+					addDOMdata( "#blast-data", "dbtype", obj['params'].dbtype );
+				}
+			}
+
 			if ( obj.hasOwnProperty("data") ) {
 		
 				// All objects should have data part
@@ -587,9 +596,9 @@ function processHsps( hsps ) {
 		var arrSeqs = {};
 		arrSeqs = splitSeq( arrSeqs, qseq, midline, hseq, 60 );
 
-		content+="<div class='hsp'>";
-		content+="<div class='stats'><span class='field'>evalue:</span><span class='value'>"+evalue+"</span><span class='field'>bit score:</span><span class='value'>"+bit_score+"</span><span class='field'>score:</span><span class='value'>"+score+"</span>";
-		content+="<span class='field'>identity:</span><span class='value'>"+identity+"</span><span class='field'>positive:</span><span class='value'>"+positive+"</span><span class='field'>gaps:</span><span class='value'>"+gaps+"</span></div>";
+		content+="<div class='hsp' data-qstart="+qstart+" data-qend="+qend+" data-hstart="+hstart+" data-hend="+hend+" data-query_frame="+query_frame+" data-hit_frame="+hit_frame+">";
+		content+="<div class='stats'><span class='field'>evalue:</span><span class='value' data-name='evalue'>"+evalue+"</span><span class='field'>bit score:</span><span class='value' data-name='bit_score'>"+bit_score+"</span><span class='field'>score:</span><span class='value' data-name='score'>"+score+"</span>";
+		content+="<span class='field'>identity:</span><span class='value' data-name='identity'>"+identity+"</span><span class='field' data-name='positive'>positive:</span><span class='value' data-name='positive'>"+positive+"</span><span class='field'>gaps:</span><span class='value' data-name='gaps'>"+gaps+"</span></div>";
 		content+="<div class='block'>";
 
 		content+= printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend, 60 );
