@@ -554,7 +554,8 @@ function processHits( hits, reordList ) {
 		}
 		
 		str = str + "<span class='details'>Details...</span>"; // Details
-		
+
+
 		if ( reordInfo  && reordInfo.hasOwnProperty("new") ) {
 
 			str = str + "<div class='fuzdetails'>";
@@ -596,7 +597,15 @@ function processHsps( hsps ) {
 		var arrSeqs = {};
 		arrSeqs = splitSeq( arrSeqs, qseq, midline, hseq, 60 );
 
-		content+="<div class='hsp' data-qstart="+qstart+" data-qend="+qend+" data-hstart="+hstart+" data-hend="+hend+" data-query_frame="+query_frame+" data-hit_frame="+hit_frame+">";
+		var dataframes = "";
+		if ( query_frame ) {
+			dataframes = dataframes + " data-query_frame="+query_frame;
+		}
+		if ( hit_frame ) {
+			dataframes = dataframes + " data-hit_frame="+hit_frame;
+		}
+
+		content+="<div class='hsp' data-qstart="+qstart+" data-qend="+qend+" data-hstart="+hstart+" data-hend="+hend+dataframes">";
 		content+="<div class='stats'><span class='field'>evalue:</span><span class='value' data-name='evalue'>"+evalue+"</span><span class='field'>bit score:</span><span class='value' data-name='bit_score'>"+bit_score+"</span><span class='field'>score:</span><span class='value' data-name='score'>"+score+"</span>";
 		content+="<span class='field'>identity:</span><span class='value' data-name='identity'>"+identity+"</span><span class='field' data-name='positive'>positive:</span><span class='value' data-name='positive'>"+positive+"</span><span class='field'>gaps:</span><span class='value' data-name='gaps'>"+gaps+"</span></div>";
 		content+="<div class='block'>";
