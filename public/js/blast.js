@@ -360,25 +360,27 @@ function printBLASTall( message, parse, target ) {
 			if ( obj._id ) {
 				addDOMdata( "#blast-data", "id", obj._id );
 			}
-			if ( obj.params ) {
-				if ( obj['params'].binary ) {
-					addDOMdata( "#blast-data", "binary", obj['params'].binary );
-				}
-				if ( obj['params'].db ) {
-					addDOMdata( "#blast-data", "db", obj['params'].db );
-				}
-				if ( obj['params'].dbtype ) {
-					addDOMdata( "#blast-data", "dbtype", obj['params'].dbtype );
-				}
-			}
 
 			if ( obj.hasOwnProperty("data") ) {
 		
 				// All objects should have data part
-				
-				if ( obj["data"].hasOwnProperty("BlastOutput2") ) {
+				var data = obj.data;
+
+				if ( data.params ) {
+					if ( data['params'].binary ) {
+						addDOMdata( "#blast-data", "binary", data['params'].binary );
+					}
+					if ( data['params'].db ) {
+						addDOMdata( "#blast-data", "db", data['params'].db );
+					}
+					if ( data['params'].dbtype ) {
+						addDOMdata( "#blast-data", "dbtype", data['params'].dbtype );
+					}
+				}
+
+				if ( data.hasOwnProperty("BlastOutput2") ) {
 					
-					blastObj = obj["data"]["BlastOutput2"];
+					blastObj = data["BlastOutput2"];
 									
 					if ( blastObj instanceof Array ) {
 						
