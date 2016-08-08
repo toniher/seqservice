@@ -917,8 +917,17 @@ $(function() {
 
 							// Refill contents
 							var data = response.data;
+							var seqinput = null;
 							if ( data.hasOwnProperty("seq") ) {
-								$("#seqinput").val( data.seq );
+								seqinput = data.seq;
+	
+								if ( data.hasOwnProperty("name") ) {
+									seqinput = ">" + processHeaderName( data.name ) + "\n" + seqinput;
+								}
+							}
+		
+							if ( seqinput ) {
+								$("#seqinput").val( seqinput );
 							}
 
 							if ( data.hasOwnProperty("params") ) {
