@@ -907,7 +907,7 @@ $(function() {
 							var seqinput = null;
 							var seqs = recoverSequences( data );
 	
-							for ( var s = 0; s < seqs.length; s = s + 1 ) {
+							for ( var s = 0; s < seqs.length; s++ ) {
 								seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
 							}
 		
@@ -957,7 +957,7 @@ $(function() {
 
 		if ( data.BlastOutput2 ) {
 
-			for ( var s=0; s < data.BlastOutput2.length > 0; s = s+1 ) {
+			for ( var s=0; s < data.BlastOutput2.length; s++ ) {
 
 				var seq;
 				var name;
