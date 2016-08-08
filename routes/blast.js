@@ -265,7 +265,7 @@ function assignSeqName( seqContainer, object ) {
 				}
 			} else {
 				if ( seqContainer.hasOwnProperty("id") ) {
-					object[.name = "Seq" + String( seqContainer.hasOwnProperty("id") );
+					object.name = "Seq" + String( seqContainer.hasOwnProperty("id") );
 				} else {
 					object.name = "Seq";
 				}
