@@ -868,7 +868,11 @@ $(function() {
 						var seqs = recoverSequences( data );
 
 						for ( var s = 0; s < seqs.length; s++ ) {
-							seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
+							if ( seqs[s].name ) {
+									seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
+							} else {
+									seqinput = seqinput + ">Seq"+s+"\n"+seqs[s].seq+"\n";
+							}
 						}
 	
 						if ( seqinput !== "" ) {
@@ -908,7 +912,11 @@ $(function() {
 							var seqs = recoverSequences( data );
 	
 							for ( var s = 0; s < seqs.length; s++ ) {
-								seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
+								if ( seqs[s].name ) {
+										seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
+								} else {
+										seqinput = seqinput + ">Seq"+s+"\n"+seqs[s].seq+"\n";
+								}
 							}
 		
 							if ( seqinput !== "" ) {
@@ -977,19 +985,6 @@ $(function() {
 		}
 
 		return seqs;
-	}
-
-
-	function processHeaderName( name ) {
-
-		var detName = name.split("|");
-
-		if ( detName.length > 2 ) {
-			name = name + "| Seq";
-		}
-
-		return name;
-
 	}
 
 	// Detect changes on textarea
