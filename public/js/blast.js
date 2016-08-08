@@ -863,10 +863,20 @@ $(function() {
 					if ( response.hasOwnProperty("data") ) {
 	
 						var data = response.data;
+
+						var seqinput = null;
 						if ( data.hasOwnProperty("seq") ) {
-							$("#seqinput").val( data.seq );
+							seqinput = data.seq;
+
+							if ( data.hasOwnProperty("name") ) {
+								seqinput = ">" + processHeaderName( data.name ) + "\n" + seqinput;
+							}
 						}
 	
+						if ( seqinput ) {
+							$("#seqinput").val( seqinput );
+						}
+
 						printBLASTall( response, 1, function( txt, extra ) {
 							// console.log( extra );
 		
@@ -879,6 +889,18 @@ $(function() {
 			}
 		 });
 	});
+
+	function processHeaderName( name ) {
+
+		var detName = name.split("|");
+
+		if ( detName.length > 2 ) {
+			name = name + "| Seq";
+		}
+
+		return name;
+
+	}
 	
 	$("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
 	
