@@ -289,6 +289,28 @@ $(document).on('click', ".down-hit-seqs", function() {
 
 });
 
+// Access genome browser
+$(document).on('click', ".go-genome-browser", function() {
+
+	var hitBlock = $(this).parents(".hit").first();
+	
+	var hit = $(hitBlock).children(".id").text();
+	var hitId = processHitId( hit );
+	
+	
+	var hsps = $(hitBlock).find(".hsps .hsp");
+	if ( hsps.legnth > 0 ) {
+		var mainHsp = $(hsps).first();
+		
+		var start = $(mainHsp).data("hstart");
+		var end = $(mainHsp).data("hend");
+
+		// TODO: Continue query
+		
+	}
+	
+});
+
 function processHitId( str ) {
 
 	if ( str.indexOf("|") > 0 ) {
