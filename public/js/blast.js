@@ -871,7 +871,7 @@ $(function() {
 							if ( seqs[s].name ) {
 									seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
 							} else {
-									seqinput = seqinput + ">Seq"+s+"\n"+seqs[s].seq+"\n";
+									seqinput = seqinput + ">Seq"+String(s)+"\n"+seqs[s].seq+"\n";
 							}
 						}
 	
