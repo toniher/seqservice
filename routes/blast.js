@@ -249,23 +249,25 @@ function assignSeqName( seqContainer, object ) {
 		} else {
 			if ( seqContainer.hasOwnProperty("ids") ) {
 				var nameArr = [];
-				for ( var k in  Object.keys( seqContainer.ids ) ) {
-					if ( typeof seqContainer.ids[k] !== 'undefined' ) {
-						nameArr.push( k + "|" + seqContainer.ids[k] );
+				for ( var k in seqContainer.ids ) {
+					if ( seqContainer.ids.hasOwnProperty( k ) ) {
+						if ( typeof seqContainer.ids[k] !== 'undefined' ) {
+							nameArr.push( k + "|" + seqContainer.ids[k] );
+						}
 					}
 				}
 				if ( nameArr.length === 0 ) {
 					if ( seqContainer.hasOwnProperty("id") ) {
-						object.name = "Seq" + String( seqContainer.hasOwnProperty("id") );
+						object.name = "Seq" + String( seqContainer.id );
 					} else {
 						object.name = "Seq";
 					}
 				} else {
-					object.name = "|".join( nameArr );
+					object.name = nameArr.join("|");
 				}
 			} else {
 				if ( seqContainer.hasOwnProperty("id") ) {
-					object.name = "Seq" + String( seqContainer.hasOwnProperty("id") );
+					object.name = "Seq" + String( seqContainer.id );
 				} else {
 					object.name = "Seq";
 				}
