@@ -140,13 +140,13 @@ function run_blast( params, req, res, seqidpath ){
 		if ( ( output.match(/report/g)||[]).length > 1 ) {
 			// output = processMultiOutput( output ); TODO: Temporary outp
 			object = JSON.parse(output);
-			object = addMultiSeqs( object, seq );
+			object = addMultiSeqs( object, seq, false );
 		} else {
 			object = JSON.parse(output);
 			if ( ! seq.startsWith( ">" ) ) {
-				object.seq = seq;
+				object = addMultiSeqs( object, seq, true );
 			} else {
-				object = addUniSeq( object, seq );
+				object = addMultiSeqs( object, seq, false );
 			}
 		}
 		
@@ -187,9 +187,14 @@ function processMultiOutput( output ) {
 	return output;
 }
 
-function addMultiSeqs( object, seqs ) {
+function addMultiSeqs( object, seqs, nofasta ) {
 
-	var listSeqs = fasta.parse( seqs );
+	var listSeqs = [];
+	if ( nofasta ) {
+		listSeqs.push( { "seq": seqs, "id": 0, "name": "Seq" } );
+	} else {
+		listSeqs = fasta.parse( seqs );
+	}
 
 	if ( object.hasOwnProperty("BlastOutput2") ) {
 
@@ -217,27 +222,6 @@ function addMultiSeqs( object, seqs ) {
 		
 	}
 	
-	return object;
-}
-
-// TODO: Merge with Multiseqs
-function addUniSeq( object, seq ) {
-
-	var oneSeq = fasta.parse( seq );
-
-	if ( oneSeq.length > 0 ) {
-	
-		if ( oneSeq[0].hasOwnProperty("seq") ) {
-			object.seq = oneSeq[0].seq;
-		}
-		if ( oneSeq[0].hasOwnProperty("id") ) {
-			object.id = oneSeq[0].id;
-		}
-
-		object = assignSeqName( oneSeq[0], object );
-
-	}
-
 	return object;
 }
 
