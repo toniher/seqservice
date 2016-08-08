@@ -865,12 +865,10 @@ $(function() {
 						var data = response.data;
 
 						var seqinput = null;
-						if ( data.hasOwnProperty("seq") ) {
-							seqinput = data.seq;
+						var seqs = recoverSequences( data );
 
-							if ( data.hasOwnProperty("name") ) {
-								seqinput = ">" + processHeaderName( data.name ) + "\n" + seqinput;
-							}
+						for ( var s = 0; s < seqs.length; s = s + 1 ) {
+							seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
 						}
 	
 						if ( seqinput ) {
@@ -889,18 +887,6 @@ $(function() {
 			}
 		 });
 	});
-
-	function processHeaderName( name ) {
-
-		var detName = name.split("|");
-
-		if ( detName.length > 2 ) {
-			name = name + "| Seq";
-		}
-
-		return name;
-
-	}
 	
 	$("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
 	
@@ -917,13 +903,12 @@ $(function() {
 
 							// Refill contents
 							var data = response.data;
+
 							var seqinput = null;
-							if ( data.hasOwnProperty("seq") ) {
-								seqinput = data.seq;
+							var seqs = recoverSequences( data );
 	
-								if ( data.hasOwnProperty("name") ) {
-									seqinput = ">" + processHeaderName( data.name ) + "\n" + seqinput;
-								}
+							for ( var s = 0; s < seqs.length; s = s + 1 ) {
+								seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
 							}
 		
 							if ( seqinput ) {
@@ -965,7 +950,48 @@ $(function() {
 		}
 	
 	});
-	
+
+	function recoverSequences( data ) {
+
+		var seqs = [];
+
+		if ( data.BlastOutput2 ) {
+
+			for ( var s=0; s < data.BlastOutput2.length > 0; s = s+1 ) {
+
+				var seq;
+				var name;
+
+				if ( data.BlastOutput2[s].seq ) {
+					seq = data.BlastOutput2[s].seq;
+				}
+				if ( data.BlastOutput2[s].name ) {
+					name = data.BlastOutput2[s].name;
+				}
+
+				if ( seq ) {
+					seqs.push( { "seq": seq, "name": name } );
+				}
+
+			}
+		}
+
+		return seqs;
+	}
+
+
+	function processHeaderName( name ) {
+
+		var detName = name.split("|");
+
+		if ( detName.length > 2 ) {
+			name = name + "| Seq";
+		}
+
+		return name;
+
+	}
+
 	// Detect changes on textarea
 	var oldVal = "";
 	$("#seqinput").on("change keyup paste", function() {
