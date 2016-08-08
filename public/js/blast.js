@@ -864,14 +864,14 @@ $(function() {
 	
 						var data = response.data;
 
-						var seqinput = null;
+						var seqinput = "";
 						var seqs = recoverSequences( data );
 
-						for ( var s = 0; s < seqs.length; s = s + 1 ) {
+						for ( var s = 0; s < seqs.length; s++ ) {
 							seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
 						}
 	
-						if ( seqinput ) {
+						if ( seqinput !== "" ) {
 							$("#seqinput").val( seqinput );
 						}
 
@@ -904,14 +904,14 @@ $(function() {
 							// Refill contents
 							var data = response.data;
 
-							var seqinput = null;
+							var seqinput = "";
 							var seqs = recoverSequences( data );
 	
 							for ( var s = 0; s < seqs.length; s++ ) {
 								seqinput = ">" + processHeaderName( seq[s].name ) + "\n" + seqs[s].seq + "\n";
 							}
 		
-							if ( seqinput ) {
+							if ( seqinput !== "" ) {
 								$("#seqinput").val( seqinput );
 							}
 
