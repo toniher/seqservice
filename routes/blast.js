@@ -138,7 +138,7 @@ function run_blast( params, req, res, seqidpath ){
 		var object = {};
 		
 		if ( ( output.match(/report/g)||[]).length > 1 ) {
-			output = processMultiOutput( output );
+			// output = processMultiOutput( output ); TODO: Temporary outp
 			object = JSON.parse(output);
 			object = addMultiSeqs( object, seq );
 		} else {
@@ -147,7 +147,6 @@ function run_blast( params, req, res, seqidpath ){
 				object.seq = seq;
 			} else {
 				object = addUniSeq( object, seq );
-				console.log( object );
 			}
 		}
 		
@@ -208,9 +207,8 @@ function addMultiSeqs( object, seqs ) {
 					if ( listSeqs[f].hasOwnProperty("id") ) {
 						object["BlastOutput2"][f].id = listSeqs[f].id;
 					}
-					if ( listSeqs[f].hasOwnProperty("name") ) {
-						object["BlastOutput2"][f].name = listSeqs[f].name;
-					}
+
+					object["BlastOutput2"][f] = assignSeqName( listSeqs[f], object["BlastOutput2"][f] );
 		
 				}
 			}
@@ -235,10 +233,44 @@ function addUniSeq( object, seq ) {
 		if ( oneSeq[0].hasOwnProperty("id") ) {
 			object.id = oneSeq[0].id;
 		}
-		if ( oneSeq[0].hasOwnProperty("name") ) {
-			object.name = oneSeq[0].name;
+
+		object = assignSeqName( oneSeq[0], object );
+
+	}
+
+	return object;
+}
+
+function assignSeqName( seqContainer, object ) {
+
+	if ( seqContainer.hasOwnProperty("name")  ) {
+		if ( seqContainer.name !== "" ) { 
+			object.name = seqContainer.name;
+		} else {
+			if ( seqContainer.hasOwnProperty("ids") ) {
+				var nameArr = [];
+				for ( var k in  Object.keys( seqContainer.ids ) ) {
+					if ( typeof seqContainer.ids[k] !== 'undefined' ) {
+						nameArr.push( k + "|" + seqContainer.ids[k] );
+					}
+				}
+				if ( nameArr.length === 0 ) {
+					if ( seqContainer.hasOwnProperty("id") ) {
+						object.name = "Seq" + String( seqContainer.hasOwnProperty("id") );
+					} else {
+						object.name = "Seq";
+					}
+				} else {
+					object.name = "|".join( nameArr );
+				}
+			} else {
+				if ( seqContainer.hasOwnProperty("id") ) {
+					object[.name = "Seq" + String( seqContainer.hasOwnProperty("id") );
+				} else {
+					object.name = "Seq";
+				}
+			}
 		}
-	
 	}
 
 	return object;
