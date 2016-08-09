@@ -63,6 +63,7 @@ $(document).ready( function(){
 	//  // error occurred
 	//})
 
+
 	panelListing();
 
 });
@@ -398,6 +399,15 @@ function printBLASTall( message, parse, target ) {
 					if ( data['params'].dbtype ) {
 						addDOMdata( "#blast-data", "dbtype", data['params'].dbtype );
 					}
+
+					// Add links metadata
+					if ( data['params'].db && data['params'].dbtype ) {
+						retrieveDBlinks( data['params'].dbtype, data['params'].db, function( links ) {
+							if ( links && links.length > 0 ) {
+								addDOMdata( "#blast-data", "links", JSON.stringify( links ) );
+							}
+						});
+					}
 				}
 
 				if ( data.hasOwnProperty("BlastOutput2") ) {
@@ -434,6 +444,19 @@ function printBLASTall( message, parse, target ) {
 			}
 	
 		}
+	});
+
+}
+
+function retrieveDBlinks( dbtype, db, cb ) {
+
+	$.ajax({
+		type: 'GET',
+		 url: "/links/"+dbtype+"/"+db,
+		 dataType: 'json',
+		 success: function( data ) {
+			cb( data );
+		 }
 	});
 
 }
@@ -853,7 +876,7 @@ function addLinkParams( linkParam ) {
 		if ( linkParam.params ) {
 			var linkParamArr = [];
 
-			for var k in linkParam.params {
+			for ( var k in linkParam.params ) {
 				if ( linkParam.params.hasOwnProperty( k ) ) {
 					linkParamArr.push( k+":"+linkParam.params[k] );
 				}

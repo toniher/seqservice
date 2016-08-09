@@ -22,11 +22,12 @@ exports.getLinks = function(req, res) {
 	if ( db && dbtype ) {
 		if ( config['db']['list'] ) {
 
-		var list = config['db']['list'];
-		if ( list[ dbtype ] && list[ dbtype ][ db ] && list[ dbtype ][ db ]["links"] ) {
-			outcome = list[ dbtype ][ db ]["links"];
-		}
+			var list = config['db']['list'];
+			if ( list[ dbtype ] && list[ dbtype ][ db ] && list[ dbtype ][ db ]["links"] ) {
+				outcome = list[ dbtype ][ db ]["links"];
+			}
 
+		}
 	} 
 	
 	functions.returnJSON( res, outcome );
