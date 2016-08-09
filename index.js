@@ -60,6 +60,7 @@ var align = require('./routes/align.js');
 var loadfile = require('./routes/load.js');
 var service = require('./routes/service.js');
 var down = require('./routes/down.js');
+var linkurl = require('./routes/link.js');
 
 
 // Landing
@@ -95,6 +96,9 @@ app.post(basepath + '/service', service.performExec);
 
 // Temp down
 app.post(basepath + '/tmp', down.downTemp);
+
+// Link redirect
+app.get(basepath + '/links/:dbtype/:db', linkurl.getLinks);
 
 
 // Now views

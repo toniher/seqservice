@@ -451,6 +451,10 @@ function printBLAST( obj, num, reorder ) {
 	var gopen = blastobj.params.gap_open;
 	var gextend = blastobj.params.gap_extend;
 	
+
+	// Extra params
+	var params = {};
+
 	// Process reorder
 	var reord = null;
 	
@@ -469,6 +473,16 @@ function printBLAST( obj, num, reorder ) {
 	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
 	var str = "";
 	
+
+	// Get links
+	if ( $("#blast-data").data("links") ) {
+		var linksStr = $("#blast-data").data("links");
+
+		if ( linksStr && linksStr !== "" ) {
+			params.links = JSON.parse( linksStr );
+		}
+	}
+
 	// Considering reorders
 	var reordHits = null;
 	
@@ -491,7 +505,7 @@ function printBLAST( obj, num, reorder ) {
 			if ( iterationlist[iter].search && iterationlist[iter].search.hits && iterationlist[iter].search.hits.length > 0 ) {
 			
 				str = str + "<div class='results'>";
-				str = str + processHits( iterationlist[iter].search.hits, reordHits );
+				str = str + processHits( iterationlist[iter].search.hits, reordHits, params );
 				str = str + "</div>";
 			} else {
 				str = "<p class='not-found'>No hits found.</p>";
@@ -512,7 +526,7 @@ function printBLAST( obj, num, reorder ) {
 		
 		if ( blastobj.results && blastobj.results.search && blastobj.results.search.hits, blastobj.results.search.hits.length > 0 ) {
 			str = str + "<div class='results'>";
-			str = str + processHits( blastobj.results.search.hits, reordHits );
+			str = str + processHits( blastobj.results.search.hits, reordHits, params );
 			str = str + "</div>";		
 		} else {
 			str = "<p class='not-found'>No hits found.</p>";
@@ -526,7 +540,7 @@ function printBLAST( obj, num, reorder ) {
 
 }
 
-function processHits( hits, reordList ) {
+function processHits( hits, reordList, params ) {
 	
 	var str = "";
 	
@@ -575,6 +589,16 @@ function processHits( hits, reordList ) {
 		if ( reordInfo  && reordInfo.hasOwnProperty("new") ) {
 			str = str + "<span class='fuzzy'>"+reordInfo.Fuz+"</span>";
 
+		}
+
+		// links
+		if ( params && params.links ) {
+
+			if ( params.links.length > 0 ) {
+				for ( var link = 0; link <  params.links.length; link = link + 1 ) {
+					str = str + addLinkParams( params.links[ link ] );
+				}
+			}
 		}
 		
 		str = str + "<span class='details'>Details...</span>"; // Details
@@ -811,6 +835,41 @@ function getReorderInfo( info ) {
 	return hash;
 
 }
+
+function addLinkParams( linkParam ) {
+
+	var str = "";
+
+	var name = "Link";
+
+	if ( linkParam.name ) {
+		name = linkParam.name;
+	}
+
+	if ( linkParam.url ) {
+
+		var url = linkParam.url;
+
+		if ( linkParam.params ) {
+			var linkParamArr = [];
+
+			for var k in linkParam.params {
+				if ( linkParam.params.hasOwnProperty( k ) ) {
+					linkParamArr.push( k+":"+linkParam.params[k] );
+				}
+			}
+		}
+
+		if (linkParamArr.length > 0 ) {
+			url = url + "?"+ linkParamArr.join("&");
+		}
+
+		str = "<span class='link' data-link='"+name+"'><a href='"+url+"'>"+name+"</a>";
+	}
+
+	return str;
+}
+
 
 function panelListing( ) {
 	
