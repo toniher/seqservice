@@ -19,9 +19,12 @@ exports.getLinks = function(req, res) {
 		dbtype = req.params.dbtype;
 	}
 
-	if ( db && dbtype) {
-		if ( config[ dbtype ] && config[ dbtype ][ db ] && config[ dbtype ][ db ]["links"] ) {
-			outcome = config[ dbtype ][ db ]["links"];
+	if ( db && dbtype ) {
+		if ( config['db']['list'] ) {
+
+		var list = config['db']['list'];
+		if ( list[ dbtype ] && list[ dbtype ][ db ] && list[ dbtype ][ db ]["links"] ) {
+			outcome = list[ dbtype ][ db ]["links"];
 		}
 
 	} 
