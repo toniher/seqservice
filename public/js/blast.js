@@ -402,11 +402,9 @@ function printBLASTall( message, parse, target ) {
 
 					// Add links metadata
 					if ( data['params'].db && data['params'].dbtype ) {
-						retrieveDBlinks( data['params'].dbtype, data['params'].db, function( links ) {
-							if ( links && links.length > 0 ) {
-								addDOMdata( "#blast-data", "links", JSON.stringify( links ) );
-							}
-						});
+						// TODO: Get from somewhere links
+						//addDOMdata( "#blast-data", "links", JSON.stringify( links ) );
+					
 					}
 				}
 
@@ -447,22 +445,6 @@ function printBLASTall( message, parse, target ) {
 	});
 
 }
-
-function retrieveDBlinks( dbtype, db, cb ) {
-
-	var basepath = $("body").data("basepath");
-
-	$.ajax({
-		type: 'GET',
-		 url: basepath+"/links/"+dbtype+"/"+db,
-		 dataType: 'json',
-		 success: function( data ) {
-			cb( data );
-		 }
-	});
-
-}
-
 
 function printBLAST( obj, num, reorder ) {
 

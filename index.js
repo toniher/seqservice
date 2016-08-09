@@ -98,7 +98,8 @@ app.post(basepath + '/service', service.performExec);
 app.post(basepath + '/tmp', down.downTemp);
 
 // Link redirect
-app.get(basepath + '/links/:dbtype/:db', linkurl.getLinks);
+// TODO: NOT useful
+// app.get(basepath + '/links/:dbtype/:db', linkurl.getLinks);
 
 
 // Now views
