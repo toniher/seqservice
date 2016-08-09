@@ -450,9 +450,11 @@ function printBLASTall( message, parse, target ) {
 
 function retrieveDBlinks( dbtype, db, cb ) {
 
+	var basepath = $("body").data("basepath");
+
 	$.ajax({
 		type: 'GET',
-		 url: "/links/"+dbtype+"/"+db,
+		 url: basepath+"/links/"+dbtype+"/"+db,
 		 dataType: 'json',
 		 success: function( data ) {
 			cb( data );
