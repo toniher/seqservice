@@ -866,7 +866,7 @@ function addLinkParams( linkParam ) {
 
 			for ( var k in linkParam.params ) {
 				if ( linkParam.params.hasOwnProperty( k ) ) {
-					linkParamArr.push( k+":"+linkParam.params[k] );
+					linkParamArr.push( k+"="+linkParam.params[k] );
 				}
 			}
 		}
@@ -875,7 +875,7 @@ function addLinkParams( linkParam ) {
 			url = url + "?"+ linkParamArr.join("&");
 		}
 
-		str = "<span class='link' data-link='"+name+"'><a href='"+url+"'>"+name+"</a>";
+		str = "<span class='link' data-link='"+name+"'><a target='_blank' href='"+url+"'>"+name+"</a>";
 	}
 
 	return str;
