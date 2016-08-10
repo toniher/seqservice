@@ -592,6 +592,8 @@ function processHits( hits, reordList, params ) {
 		str = str + "><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
 		hitinfo.hitid = hits[hit].description[0].id;
+		hitinfo.start = 0;
+		hitinfo.end = 0;
 
 		if ( hits[hit].description[0].taxid ) {
 			str = str + "<span class='taxid'>" + hits[hit].description[0].taxid + "</span>";
@@ -896,7 +898,7 @@ function replaceWithInfo( str, hash ) {
 
 	for ( h in hash ) {
 		if ( hash.hasOwnProperty( h ) ) {
-			str = str.replace( h, hash.h );
+			str = str.replace( h, hash[h] );
 		}
 	}
 
