@@ -399,13 +399,6 @@ function printBLASTall( message, parse, target ) {
 					if ( data['params'].dbtype ) {
 						addDOMdata( "#blast-data", "dbtype", data['params'].dbtype );
 					}
-
-					// Add links metadata
-					if ( data['params'].db && data['params'].dbtype ) {
-						// TODO: Get from somewhere links
-						//addDOMdata( "#blast-data", "links", JSON.stringify( links ) );
-					
-					}
 				}
 
 				if ( data.hasOwnProperty("BlastOutput2") ) {
@@ -482,11 +475,19 @@ function printBLAST( obj, num, reorder ) {
 	
 
 	// Get links
-	if ( $("#blast-data").data("links") ) {
-		var linksStr = $("#blast-data").data("links");
+	if ( $("#body").data("dblist") ) {
+		var dblistStr = $("#blast-data").data("dblist");
+		var dblist = JSON.parse( dblistStr );
 
-		if ( linksStr && linksStr !== "" ) {
-			params.links = JSON.parse( linksStr );
+		var db = $( "#blast-data" ).data("db");
+		var dbtype = $( "#blast-data" ).data("dbtype");
+
+		if ( db && dbtype ) {
+	
+			if ( dblist[dbtype] && dblist[dbtype][db] && dblist[dbtype][db]["links"] ) {
+				params.links = dblist[dbtype][db]["links"];
+			}
+
 		}
 	}
 
