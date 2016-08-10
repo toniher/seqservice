@@ -564,7 +564,9 @@ function processHits( hits, reordList, params ) {
 		}
 		
 		var num = hit + 1;
-				
+
+		var hitinfo = {};
+		
 		str = str + "<div data-num="+num;
 		
 		var classStr = "hit";
@@ -589,6 +591,7 @@ function processHits( hits, reordList, params ) {
 				
 		str = str + "><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
+		hitinfo.hitid = hits[hit].description[0].id;
 
 		if ( hits[hit].description[0].taxid ) {
 			str = str + "<span class='taxid'>" + hits[hit].description[0].taxid + "</span>";
@@ -607,7 +610,7 @@ function processHits( hits, reordList, params ) {
 
 			if ( params.links.length > 0 ) {
 				for ( var link = 0; link <  params.links.length; link = link + 1 ) {
-					str = str + addLinkParams( params.links[ link ] );
+					str = str + addLinkParams( params.links[ link ], hitinfo );
 				}
 			}
 		}
@@ -847,7 +850,7 @@ function getReorderInfo( info ) {
 
 }
 
-function addLinkParams( linkParam ) {
+function addLinkParams( linkParam, info ) {
 
 	var str = "";
 
@@ -860,13 +863,21 @@ function addLinkParams( linkParam ) {
 	if ( linkParam.url ) {
 
 		var url = linkParam.url;
+		var linkParamArr = [];
 
 		if ( linkParam.params ) {
-			var linkParamArr = [];
 
 			for ( var k in linkParam.params ) {
 				if ( linkParam.params.hasOwnProperty( k ) ) {
 					linkParamArr.push( k+"="+linkParam.params[k] );
+				}
+			}
+		}
+
+		if ( linkParam.user ) {
+			for ( var k in linkParam.user ) {
+				if ( linkParam.user.hasOwnProperty( k ) ) {
+					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info ) );
 				}
 			}
 		}
@@ -879,6 +890,18 @@ function addLinkParams( linkParam ) {
 	}
 
 	return str;
+}
+
+function replaceWithInfo( str, hash ) {
+
+	for ( h in hash ) {
+		if ( hash.hasOwnProperty( h ) ) {
+			str = str.replace( h, hash.h );
+		}
+	}
+
+	return str;
+
 }
 
 
