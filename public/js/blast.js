@@ -375,6 +375,7 @@ function printBLASTall( message, parse, target ) {
 	}
 	
 	var extra = {};
+	var params = {};
 	
 	pouchdb_report( "reports", obj, function( db, obj, err ) {
 
@@ -392,12 +393,15 @@ function printBLASTall( message, parse, target ) {
 				if ( data.params ) {
 					if ( data['params'].binary ) {
 						addDOMdata( "#blast-data", "binary", data['params'].binary );
+						params.binary = data['params'].binary;
 					}
 					if ( data['params'].db ) {
 						addDOMdata( "#blast-data", "db", data['params'].db );
+						params.db = data['params'].db;
 					}
 					if ( data['params'].dbtype ) {
 						addDOMdata( "#blast-data", "dbtype", data['params'].dbtype );
+						params.dbtype = data['params'].dbtype;
 					}
 				}
 
@@ -413,7 +417,7 @@ function printBLASTall( message, parse, target ) {
 
 						async.eachSeries(blastObj, function(blastIter, callback) {
 							
-							str = str + printBLAST( blastIter, iter );
+							str = str + printBLAST( blastIter, iter, null, params );
 							iter = iter + 1;
 							callback();
 						}, function(err){
@@ -427,7 +431,7 @@ function printBLASTall( message, parse, target ) {
 						
 						
 					} else {
-						str = printBLAST( blastObj, 0 );
+						str = printBLAST( blastObj, 0, null, params );
 						target( str );
 					}
 				}
@@ -439,7 +443,7 @@ function printBLASTall( message, parse, target ) {
 
 }
 
-function printBLAST( obj, num, reorder ) {
+function printBLAST( obj, num, reorder, params ) {
 
 	var seq = obj['seq'];
 	var id = obj['id'];
@@ -453,7 +457,9 @@ function printBLAST( obj, num, reorder ) {
 	
 
 	// Extra params
-	var params = {};
+	if ( ! params ) {
+		params = {};
+	}
 
 	// Process reorder
 	var reord = null;
@@ -479,8 +485,8 @@ function printBLAST( obj, num, reorder ) {
 		var dblistStr = $("#blast-data").data("dblist");
 		var dblist = JSON.parse( dblistStr );
 
-		var db = $( "#blast-data" ).data("db");
-		var dbtype = $( "#blast-data" ).data("dbtype");
+		var db = params.db;
+		var dbtype = params.dbtype;
 
 		if ( db && dbtype ) {
 	
