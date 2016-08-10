@@ -481,20 +481,17 @@ function printBLAST( obj, num, reorder, params ) {
 	
 
 	// Get links
-	if ( $("#body").data("dblist") ) {
-		var dblistStr = $("#blast-data").data("dblist");
-		var dblist = JSON.parse( dblistStr );
+	var dblist = $("body").data("dblist");
 
-		var db = params.db;
-		var dbtype = params.dbtype;
+	var db = params.db;
+	var dbtype = params.dbtype;
 
-		if ( db && dbtype ) {
-	
-			if ( dblist[dbtype] && dblist[dbtype][db] && dblist[dbtype][db]["links"] ) {
-				params.links = dblist[dbtype][db]["links"];
-			}
+	if ( db && dbtype ) {
 
+		if ( dblist && dblist[dbtype] && dblist[dbtype][db] && dblist[dbtype][db]["links"] ) {
+			params.links = dblist[dbtype][db]["links"];
 		}
+
 	}
 
 	// Considering reorders
