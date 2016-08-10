@@ -592,6 +592,8 @@ function processHits( hits, reordList, params ) {
 		str = str + "><input type='checkbox' class='hitcheck' />";
 		str = str + "<span class='id'>" + hits[hit].description[0].id + "</span>"; // Assume first desc
 		hitinfo.hitid = hits[hit].description[0].id;
+
+		// TODO: Assing some default start - end for hit
 		hitinfo.start = 0;
 		hitinfo.end = 0;
 
