@@ -138,6 +138,10 @@ app.get(basepath + '/blast', function (req, res) {
 		render_config.session = true;
 	}
 
+	if ( config.db && config.db.list ) {
+		render_config.dblist = JSON.stringify( config.db.list );
+	}
+
 	res.render('blast.html', render_config  );
 });
 

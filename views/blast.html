@@ -9,7 +9,7 @@
 	    <link rel="stylesheet" href="<%= basepath %>/vendor/css/bootstrap/bootstrap-theme.min.css"></link>
 		<link rel="stylesheet" href="<%= basepath %>/blast.css">
 	</head>
-	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>">
+	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>" data-dblist="<%= locals.dblist %>">
 	<div id="wrapper">
 		
 		<%if (locals.session) { %>
