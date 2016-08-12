@@ -890,7 +890,7 @@ function addLinkParams( linkParam, info ) {
 			url = url + "?"+ linkParamArr.join("&");
 		}
 
-		str = "<span class='link' data-link='"+name+"'><a target='_blank' href='"+url+"'>"+name+"</a>";
+		str = "<span class='link' data-link='"+name+"'><a target='_blank' href='"+url+"'>"+name+"</a></span>";
 	}
 
 	return str;
