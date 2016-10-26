@@ -7,6 +7,10 @@
 					"drosoph_aa": {
 						"path": "/data/db/seqservice/drosoph.aa",
 						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.aa.gz"
+					},
+					"swissprot": {
+						"path": "/data/db/seqservice/swissprot",
+						"origin": "ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz"
 					}
 				},
 				"nucl": {
