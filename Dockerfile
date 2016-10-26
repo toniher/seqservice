@@ -17,14 +17,14 @@ WORKDIR /data/soft
 RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.5.0/ncbi-blast-2.5.0+-x64-linux.tar.gz && \
 	tar zxf ncbi-blast-2.5.0+-x64-linux.tar.gz && \
 	ln -s ncbi-blast-2.5.0+ blast && \
-	cd bin && ln -s ../blast/bin/* . && cd .. && \
+	cd /data/soft/bin && ln -s /data/soft/blast/bin/* . && cd /data/soft && \
 	rm -rf *tar.gz
 
 RUN wget -q https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
 	tar jxf samtools-1.3.1.tar.bz2 && \
 	cd samtools-1.3.1 && \
-	make prefix=/data/soft/samtools install && cd .. \
-	cd bin && ln -s ../samtools/bin/* . && cd .. && \
+	make prefix=/data/soft/samtools install && \
+	cd /data/soft/bin && ln -s /data/soft/samtools/bin/* . && cd /data/soft && \
 	rm -rf *tar.bz2
 
 # TEMPORARY. IN FUTURE HANDLED by App
@@ -34,12 +34,18 @@ WORKDIR /data/db/seqservice
 
 # They could be retrieved via update_blast.pl
 RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.aa.gz && gunzip drosoph.aa.gz && \
-	/data/soft/bin/makeblastdb -dbtype prot -parse_seqids -in drosoph.aa
+	/data/soft/bin/makeblastdb -dbtype prot -parse_seqids -in drosoph.aa && \
+	/data/soft/bin/samtools faidx drosoph.aa
 RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.nt.gz && gunzip drosoph.nt.gz && \
-	/data/soft/bin/makeblastdb -dbtype nucl -parse_seqids -in drosoph.nt
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/16SMicrobial.tar.gz && tar zxf 16SMicrobial.tar.gz
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz && tar zxf swissprot.tar.gz
-
+	/data/soft/bin/makeblastdb -dbtype nucl -parse_seqids -in drosoph.nt && \
+	/data/soft/bin/samtools faidx drosoph.nt
+RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/16SMicrobial.tar.gz && tar zxf 16SMicrobial.tar.gz && \
+	/data/soft/bin/blastdbcmd -db 16SMicrobial -entry all > 16SMicrobial && \
+	/data/soft/bin/samtools faidx 16SMicrobial
+RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz && tar zxf swissprot.tar.gz && \
+	/data/soft/bin/blastdbcmd -db swissprot -entry all > swissprot && \
+	/data/soft/bin/samtools faidx swissprot
+	
 # Create App Directory and cd into it
 WORKDIR /data/soft
 

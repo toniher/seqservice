@@ -69,7 +69,7 @@ From this repository:
 	sudo docker build -t seqservice .
 	sudo docker run -p 10030:10030 -d seqservice
 	
-	Open your browser at http://localhost:10030/seqservice
+	Open your browser at http://localhost:10030/seqservice/
 
 
 ## TODO
