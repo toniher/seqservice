@@ -20,9 +20,9 @@ RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.5.0/ncbi-blast
 	cd bin && ln -s ../blast/bin/* . && cd .. && \
 	rm -rf *tar.gz
 
-RUN wget -q https://github.com/samtools/samtools/releases/download/1.3/samtools-1.3.tar.bz2 && \
-	tar jxf samtools-1.3.tar.bz2 && \
-	cd samtools-1.3 && \
+RUN wget -q https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
+	tar jxf samtools-1.3.1.tar.bz2 && \
+	cd samtools-1.3.1 && \
 	make prefix=/data/soft/samtools install && cd .. \
 	cd bin && ln -s ../samtools/bin/* . && cd .. && \
 	rm -rf *tar.bz2
