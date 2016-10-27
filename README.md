@@ -1,6 +1,8 @@
 # seqservice
 NodeJS express API for handling biological sequences
 
+[![DOI](https://zenodo.org/badge/29487880.svg)](https://zenodo.org/badge/latestdoi/29487880)
+
 ## INSTALLATION
 
 ### Server configuration
