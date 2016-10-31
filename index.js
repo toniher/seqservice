@@ -114,7 +114,7 @@ app.use(basepath, express.static(__dirname + '/public'));
 app.get(basepath + '/blast', function (req, res) {
 
 	render_config = {};
-	render_config = { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid }
+	render_config = { basepath: basepath, exec: basepath + '/blast', protlist: getKeys( config.db.list.prot ), nucllist: getKeys( config.db.list.nucl ), socketio: config.socketio, taxonid: config.external.taxonid };
 	
 	if ( config.exec && config.exec.psiblast ) {
 		render_config.psiblast = true;
@@ -122,6 +122,10 @@ app.get(basepath + '/blast', function (req, res) {
 
 	if ( config.exec && config.exec.blastupload ) {
 		render_config.blastupload = true;
+	}
+	
+	if ( config.exec && config.exec.remote ) {
+		render_config.remote = true;
 	}
 
 	if ( config.exec && config.exec.go ) {

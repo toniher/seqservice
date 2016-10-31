@@ -21,17 +21,22 @@ exports.performBlast = function (req, res) {
 	if (req.body.db) {
 		db = req.body.db;
 	}
-	var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
-
-	var blastparams = {};
-	blastparams.taxon = req.body.organism;
-	blastparams.db = DBcontainer.path; // Get path
-	blastparams.exe = config.exec.blastdbcmd;
-
-	blastparams.psicheck = req.body.psicheck;
-	blastparams.psiiter = req.body.psiiter;
-
 	
+	// TODO: Handle types here
+	var blastparams = {};
+	blastparams.binary = req.body.binary;
+	blastparams.taxon = req.body.organism;
+	blastparams.db = db;
+
+	blastparams.psicheck = convertBoolean( req.body.psicheck, false );
+	blastparams.psiiter = req.body.psiiter;
+	blastparams.remote = convertBoolean( req.body.remotecheck, false );
+
+	// Avoiding PSI blast in remote
+	if ( blastparams.remote ) {
+		blastparams.psicheck = false;
+	}
+
 	var organism = parseInt( req.body.organism, 10 );
 
 	if ( organism && ( organism !== 0 || organism === 'NaN' ) ) {
@@ -73,7 +78,7 @@ function run_blast( params, req, res, seqidpath ){
 		binary = "psiblast";
 		
 		if ( params.psiiter && ( params.psiiter == ( parseInt( params.psiiter, 10 ) ) ) ) {
-			blast_params.psiiter = params.psiiter;
+			blast_params.num_iterations = params.psiiter;
 		}
 	}
 
@@ -89,28 +94,32 @@ function run_blast( params, req, res, seqidpath ){
 	
 	var socketio = config.socketio; // Wheter to use this socketio or not;
 
-	var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
-	var DBpath = DBcontainer.path;
 	var seq = req.body.seq;
-
 
 	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
 
 	var program = config.exec.path + "/" + binary;
 	var io = req.app.set('io');
 
-	//console.log( seq + "-" + program + "-" + DBpath + "-" );
-
 	var execparams = Object.assign({}, blast_params);
-	
+
 	blast_params.db = db;
 	blast_params.binary = binary;
 	blast_params.dbtype = dbtype;
-
-	execparams.db = DBpath;
 	
+	if ( params.remote ) {
+		execparams.db = db;
+		execparams.remote = ""; // Empty tag
+		blast_params.remote = true;
+	} else {
+		var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
+		var DBpath = DBcontainer.path;
+		execparams.db = DBpath;
+		blast_params.remote = false;
+	}
+		
 	strParams = joinParams( execparams, "-" );
-
+	
 	var child = spawn( 'node', [ './pipe.js', [ processTextInput( seq ) ].join("\n"), JSON.stringify( [{ "app": program, "params": strParams }] ) ] );
 
 	// Listen for stdout data
@@ -268,6 +277,21 @@ if (!String.prototype.startsWith) {
 		position = position || 0;
 		return this.indexOf(searchString, position) === position;
 	};
+}
+
+function convertBoolean( string, defaultval ) {
+	
+	var val;
+	
+	if ( string == 'true' ) {
+		val = true;
+	} else if ( string == 'false' ){
+		val = false;
+	} else {
+		val = defaultval;
+	}
+	
+	return val;
 }
 
 

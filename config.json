@@ -33,6 +33,7 @@
 			},
 			"psiblast": true,
 			"blastupload": true,
+			"remote": true,
 			"go": true
 		},
 		"external": {

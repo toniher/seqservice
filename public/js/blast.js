@@ -91,6 +91,16 @@ $(".psicheck").on( "click", function() {
 	
 });
 
+// Ensure remote no blast
+$(".remotecheck").on( "click", function() {
+	
+	if ( $(this).is(':checked') ) {
+		$(".psiiter").hide();
+		$(".psicheck").attr('checked', false );
+	}
+	
+});
+
 $(function() {
 	$('#blast-exec').on( 'click', function() {
 
@@ -114,6 +124,9 @@ $(function() {
 		var db = null;
 		var organism = 0;
 		var moltype = $( "[name=moltype]" ).val();
+		var psicheck = false;
+		var psiiter = null;
+		var remotecheck = false;
 
 		if ( moltype === 'nucl' ) {
 			binary = "blastn";
@@ -138,7 +151,23 @@ $(function() {
 		
 		organism = parseInt( $( "[name=organism]" ).val(), 10 );
 
-		$.post( exec, { seq: seqinput, binary: binary, db: db, dbtype: moltype, organism: organism }).done( function( data ) {
+		// Extra params
+		
+		if ( $( "[name=psicheck]" ).length > 0 ) {
+			if ( $( "[name=psicheck]" ).is(':checked') ) {
+				psicheck = true;
+			}
+		}
+		if ( $( "[name=psiiter]" ).length > 0 ) {
+			psiiter = $( "[name=psiiter]" ).val();
+		}
+		if ( $( "[name=remotecheck]" ).length > 0 ) {
+			if ( $( "[name=remotecheck]" ).is(':checked') ) {
+				remotecheck = true;
+			}
+		}
+		
+		$.post( exec, { seq: seqinput, binary: binary, db: db, dbtype: moltype, organism: organism, psicheck: psicheck, psiiter: psiiter, remotecheck: remotecheck }).done( function( data ) {
 
 			if ( ! socketio ){
 				prepareHTMLBLAST( JSON.stringify( data ) );

@@ -65,10 +65,14 @@
 					</select>
 				</div>
 				<div class="form-inline pull-right" id="blast-params">
+					<%if (locals.remote) { %>
+						<label for="remotecheck">Remote</label>
+						<input class="remotecheck form-control" type="checkbox" name="remotecheck" id="remotecheck">
+					<% } %>
 					<%if (locals.psiblast) { %>
 						<label for="psicheck">PSIBLAST</label>
-						<input class="psicheck form-control" type="checkbox" name="psiblast" id="psicheck">
-						<select class="psiiter form-control" name=psiiter">
+						<input class="psicheck form-control" type="checkbox" name="psicheck" id="psicheck">
+						<select class="psiiter form-control" name="psiiter">
 							<option></option>
 							<option>1</option>
 							<option>2</option>
