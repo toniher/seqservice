@@ -27,29 +27,37 @@ $(document).on( "click", '#go-exec', function() {
 
 	if ( listProts.length > 0 ) {
 		var strProts = listProts.join("-");
-		var apiurl = "http://prgdb.crg.eu/api/go/commonlist/" + strProts;
-		$.ajax({
-			url: apiurl,
-			type: 'GET',
-			dataType: 'jsonp',
-			error: function(xhr, status, error) {
-				console.log(error);
-			},
-			success: function(data) {
-				if ( data ) {
-					for ( var group in data ) {
-						if ( data.hasOwnProperty(group) ) {
+		var apiurl = "http://gogo.test.crg.eu/api/go/list/" + strProts;
+		console.log( apiurl );
+		
+		$.get( { url: apiurl, dataType: "jsonp" })
+			.done(function( data ) {
+				//console.log( data );
+				if ( data && data.hasOwnProperty('outcome') ) {
+					$("#go-data").empty();
+					
+					for ( var key in data.outcome ) {
+						if ( data.outcome.hasOwnProperty( key ) ) {
+							//console.log(data.outcome[key] );
+							$("#go-data").append( "<div class='go-"+key+"'>"+key+":&nbsp;</div>" );
+							var group = data.outcome[key];
+							var goArray = [];
+							var groupkey = "go-"+key;
 
-							// TODO: Turn properly async
-							for ( var n = 0; n < data[group].length; n = n + 1 ) {
-								$("#go-data").append( "<p class='go'><strong>"+group+"</strong>: <a href='http://amigo.geneontology.org/amigo/term/" + data[group][n]["acc"] + "' target='_blank'>" + data[group][n]["acc"] +"</a> - <em>" + data[group][n]["name"] + "</em></p>" );
+							for ( var n = 0; n < group.length; n = n + 1 ) {
+								goArray.push( "<span class='go' data-name='"+group[n].name+"' data-definition='"+group[n].definition+"' data-acc='"+group[n].acc+"'><a target='_blank' href='http://amigo.geneontology.org/amigo/term/"+group[n].acc+"'>"+group[n].name+"</a></span>" );
 							}
+							
+							$("#go-data ."+groupkey ).append( goArray.join(", "));
 						}
-						
 					}
 				}
-			}
-		});
+			})
+			.fail(function(  jqXHR, textStatus, errorThrown ) {
+				// console.log( textStatus );
+				// console.log( errorThrown );
+			});
+
 	}
 });
 
