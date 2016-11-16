@@ -27,7 +27,9 @@ $(document).on( "click", '#go-exec', function() {
 
 	if ( listProts.length > 0 ) {
 		var strProts = listProts.join("-");
-		var apiurl = "http://gogo.test.crg.eu/api/go/list/" + strProts;
+
+		// TODO: Allow different methods, more params
+		var apiurl = "http://gogo.test.crg.eu/api/go/list/" + strProts + "/common";
 		console.log( apiurl );
 		
 		$.get( { url: apiurl, dataType: "jsonp" })
