@@ -128,6 +128,14 @@ app.get(basepath + '/blast', function (req, res) {
 		render_config.remote = true;
 	}
 
+	if ( config.exec && config.exec.evalue ) {
+		render_config.evalue = true;
+	}
+
+	if ( config.exec && config.exec.maxhits ) {
+		render_config.maxhits = true;
+	}
+
 	if ( config.exec && config.exec.go ) {
 		render_config.go = true;
 	}

@@ -69,6 +69,22 @@
 						<label for="remotecheck">Remote</label>
 						<input class="remotecheck form-control" type="checkbox" name="remotecheck" id="remotecheck">
 					<% } %>
+					<%if (locals.evalue) { %>
+						<label for="evaluecheck">Evalue</label>
+						<input class="evaluecheck form-control" type="text" name="evaluecheck" id="evaluecheck" value=10>
+					<% } %>
+					<%if (locals.maxhits) { %>
+						<label for="maxhitsnum">Max hits</label>
+						<select class="maxhitsnum form-control" name="maxhitsnum">
+							<option>10</option>
+							<option>25</option>
+							<option>50</option>
+							<option selected=selected>100</option>
+							<option>250</option>
+							<option>500</option>
+							<option>1000</option>
+						</select>
+					<% } %>
 					<%if (locals.psiblast) { %>
 						<label for="psicheck">PSIBLAST</label>
 						<input class="psicheck form-control" type="checkbox" name="psicheck" id="psicheck">

@@ -127,6 +127,8 @@ $(function() {
 		var psicheck = false;
 		var psiiter = null;
 		var remotecheck = false;
+		var evaluecheck = null;
+		var maxhitsnum = null;
 
 		if ( moltype === 'nucl' ) {
 			binary = "blastn";
@@ -166,8 +168,27 @@ $(function() {
 				remotecheck = true;
 			}
 		}
-		
-		$.post( exec, { seq: seqinput, binary: binary, db: db, dbtype: moltype, organism: organism, psicheck: psicheck, psiiter: psiiter, remotecheck: remotecheck }).done( function( data ) {
+		if ( $( "[name=evaluecheck]" ).length > 0 ) {
+			evaluecheck = $( "[name=evaluecheck]" ).val();
+		}
+		if ( $( "[name=maxhitsnum]" ).length > 0 ) {
+			maxhitsnum = $( "[name=maxhitsnum]" ).val();
+		}
+
+		var params = {
+						seq: seqinput,
+						binary: binary,
+						db: db,
+						dbtype: moltype,
+						organism: organism,
+						psicheck: psicheck,
+						psiiter: psiiter,
+						remotecheck: remotecheck,
+						evalue: evaluecheck,
+						max_target_seqs: maxhitsnum
+					};
+
+		$.post( exec, params ).done( function( data ) {
 
 			if ( ! socketio ){
 				prepareHTMLBLAST( JSON.stringify( data ) );
@@ -367,6 +388,8 @@ function prepareHTMLBLAST( response ) {
 	if ( $("#blast-data").find(".results").length === 0 ) { // If nothing append output
 		// TODO: Handle continuous output
 		$("#blast-data").empty();
+		$("#go-data").empty();
+
 		//if ( $("#blast-form").find(".align-button").length === 0 ) {
 		//	$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
 		//}

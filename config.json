@@ -34,7 +34,9 @@
 			"psiblast": true,
 			"blastupload": true,
 			"remote": true,
-			"go": true
+			"go": true,
+			"evalue": true,
+			"maxhits": true
 		},
 		"external": {
 			"taxonid": "http://prgdb.crg.eu/api/taxon/"

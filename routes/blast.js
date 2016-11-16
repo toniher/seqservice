@@ -18,7 +18,7 @@ exports.performBlast = function (req, res) {
 	config = req.app.set('config');
 
 	var db = config.db.def;
-	if (req.body.db) {
+	if ( req.body.db ) {
 		db = req.body.db;
 	}
 	
@@ -27,10 +27,14 @@ exports.performBlast = function (req, res) {
 	blastparams.binary = req.body.binary;
 	blastparams.taxon = req.body.organism;
 	blastparams.db = db;
+	blastparams.dbtype = req.body.dbtype;
+
 
 	blastparams.psicheck = convertBoolean( req.body.psicheck, false );
 	blastparams.psiiter = req.body.psiiter;
 	blastparams.remote = convertBoolean( req.body.remotecheck, false );
+	blastparams.evalue = req.body.evalue;
+	blastparams.max_target_seqs = req.body.max_target_seqs;
 
 	// Avoiding PSI blast in remote
 	if ( blastparams.remote ) {
@@ -61,17 +65,16 @@ function run_blast( params, req, res, seqidpath ){
 	var binary = "blastn";
 	var dbtype = "nucl";
 	
-	if (req.body.binary) {
-		binary = req.body.binary;
+	if ( params.binary ) {
+		binary = params.binary;
 	}
 	
-	if (req.body.dbtype) {
-		dbtype = req.body.dbtype;
+	if ( params.dbtype ) {
+		dbtype = params.dbtype;
 	}
 
-	db = config.db.def;
-	if (req.body.db) {
-		db = req.body.db;
+	if ( params.db ) {
+		db = params.db;
 	}
 
 	if ( params.psicheck && binary == "blastp" ) {
@@ -82,8 +85,11 @@ function run_blast( params, req, res, seqidpath ){
 		}
 	}
 
-	if (req.body.evalue) {
-		blast_params.evalue = req.body.evalue;
+	if ( params.evalue ) {
+		blast_params.evalue = params.evalue;
+	}
+	if ( params.max_target_seqs && ( params.max_target_seqs == ( parseInt( params.max_target_seqs, 10 ) ) ) ) {
+		blast_params.max_target_seqs = params.max_target_seqs;
 	}
 
 	if ( seqidpath ) {
