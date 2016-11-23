@@ -75,6 +75,7 @@ From this repository:
 
 
 ## TODO
+* Download results in different forms (JSON, CSV, etc.)
 * Provide more information in the queries
 * Download databases if needed
 * Allow parameter prefix for IDs (to use in CouchDB)
