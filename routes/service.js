@@ -63,7 +63,7 @@ exports.performExec = function (req, res) {
 
 									// Process all execparams
 									strParams = joinParams( execparams );
-																		
+									var output = "";
 									// Run node with the child.js file as an argument
 									var child = spawn( 'node', [ './pipe.js', null, JSON.stringify( [{ "app": progconf.path, "params": strParams }] ) ] );
 
@@ -77,7 +77,15 @@ exports.performExec = function (req, res) {
 									// Listen for stdout data
 									child.stdout.on('data', function (data) {
 										
-											var obj = JSON.parse( data );
+											if (typeof data !== 'string') {
+												output = output + data.toString();
+											}
+
+									});
+									
+									child.on('exit', function (code) {
+
+											var obj = JSON.parse( output );
 											var digest = hash.digest( obj );
 											var newObj = {};
 											newObj._id = digest;
@@ -88,7 +96,6 @@ exports.performExec = function (req, res) {
 											
 											functions.returnSocketIO( socketio, io, 'service', res, JSON.stringify( newObj ) ); 
 									});
-									
 								});
 							}
 						});

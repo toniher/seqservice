@@ -77,7 +77,7 @@ $(document).on('click', ".service-exec", function() {
 
 function prepareHTMLService( message ) {
 
-	console.log( message );
+	// console.log( message );
 
 	var obj = JSON.parse( message );
 	
