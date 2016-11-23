@@ -535,6 +535,7 @@ function printBLAST( obj, num, reorder, params ) {
 	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
 	var str = "";
 	
+	// TODO: Handle iteration interfaces here
 
 	// Get links
 	var dblist = $("body").data("dblist");
