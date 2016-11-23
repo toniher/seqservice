@@ -421,7 +421,11 @@ function printBLASTall( message, parse, target ) {
 	
 	var obj;
 	if ( parse ) {
-		obj = JSON.parse( message );
+		if ( isJson( message ) ){
+			obj = JSON.parse( message );
+		} else {
+			obj = message;
+		}
 	} else {
 		obj = message;
 	}
@@ -986,6 +990,15 @@ function panelListing( ) {
 	}
 }
 
+function isJson(str) {
+	try {
+		JSON.parse(str);
+	} catch (e) {
+		return false;
+	}
+	return true;
+}
+
 $(function() {
 
 	$('#uploadform').on('click', "input[type=submit]", function( e ) {
@@ -1008,7 +1021,10 @@ $(function() {
 			success: function(response){
 	
 				if ( response ) {
-	
+					if ( isJson( response ) ) {
+						response = JSON.parse( response );
+					}
+
 					if ( response.hasOwnProperty("data") ) {
 	
 						var data = response.data;
@@ -1168,5 +1184,6 @@ $(function() {
 			cb( null );
 		}
 	}
+
 
 });
