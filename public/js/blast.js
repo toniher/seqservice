@@ -39,20 +39,20 @@ $(document).ready( function(){
 	});
 
 	// Getting organisms
-	$("[name=organism]").append("<option value='0'>" + "All" + "</option>" );
-	$.get( basepath + "/species", function( data ) {
-		if ( data ) {
-			if (data instanceof Array) {
-				for ( var k in data ) {
-					if ( data[k] ) {
-						$("[name=organism]").append("<option value="+data[k].id+">" + data[k]["scientific_name"] + "</option>" );
-					}
-				}
-			} else {
-				$("[name=organism]").append("<option value="+data.id+">" + data["scientific_name"] + "</option>" );
-			}
-		}
-	});
+	//$("[name=organism]").append("<option value='0'>" + "All" + "</option>" );
+	//$.get( basepath + "/species", function( data ) {
+	//	if ( data ) {
+	//		if (data instanceof Array) {
+	//			for ( var k in data ) {
+	//				if ( data[k] ) {
+	//					$("[name=organism]").append("<option value="+data[k].id+">" + data[k]["scientific_name"] + "</option>" );
+	//				}
+	//			}
+	//		} else {
+	//			$("[name=organism]").append("<option value="+data.id+">" + data["scientific_name"] + "</option>" );
+	//		}
+	//	}
+	//});
 	
 
 	// If upload form
