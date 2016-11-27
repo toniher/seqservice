@@ -75,7 +75,6 @@ From this repository:
 
 
 ## TODO
-* Show better multiple iterations
 * Download results in different forms (JSON, CSV, etc.)
 * Provide more information in the queries
 * Download databases if needed

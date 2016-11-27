@@ -534,9 +534,7 @@ function printBLAST( obj, num, reorder, params ) {
 	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
 	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
 	var str = "";
-	
-	// TODO: Handle iteration interfaces here
-
+		
 	// Get links
 	var dblist = $("body").data("dblist");
 
@@ -555,9 +553,24 @@ function printBLAST( obj, num, reorder, params ) {
 	var reordHits = null;
 	
 	if ( program === 'psiblast' && blastobj.results.iterations ) {
-		
+
 		var iterationlist = blastobj.results.iterations;
+		
+		if ( iterationlist.length > 0 ) {
+			
+			str = str + "<ul class='itertabs'>";
+			for ( var iter = 1; iter < iterationlist.length + 1; iter = iter + 1 ) {
+				str = str + "<li class='itertab' data-iter='"+iter+"'>"+iter+"</li>";
+			}
+			str = str + "</ul>";
+		}
+		
+		
+		str = str + "<div class='iterations'>";
+
+		
 		for ( var iter = 0; iter < iterationlist.length; iter = iter + 1 ) {
+			
 			
 			if ( reord ) {
 			
@@ -581,6 +594,8 @@ function printBLAST( obj, num, reorder, params ) {
 			
 			str = str + "</div>";
 		}
+		
+		str = str + "</div>";
 
 	} else {
 		
@@ -1123,6 +1138,16 @@ $(function() {
 			});
 		}
 	
+	});
+	
+	$( document ).on( "click", ".itertab", function( e ) {
+		
+		e.preventDefault();
+		var iternum = $(this).data('iter');
+		
+		$('.iter').hide();
+		$('.iter[data-iter='+iternum+']').show();
+
 	});
 
 	function recoverSequences( data ) {
