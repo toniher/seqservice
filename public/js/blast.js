@@ -552,7 +552,7 @@ function printBLAST( obj, num, reorder, params ) {
 	// Considering reorders
 	var reordHits = null;
 	
-	if ( program === 'psiblast' && blastobj.results.iterations ) {
+	if ( blastobj.results.iterations ) {
 
 		var iterationlist = blastobj.results.iterations;
 		
