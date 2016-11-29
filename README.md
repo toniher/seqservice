@@ -76,9 +76,10 @@ From this repository:
 
 ## TODO
 * Download results in different forms (JSON, CSV, etc.)
-* Provide more information in the queries
 * Download databases if needed
 * Allow parameter prefix for IDs (to use in CouchDB)
 * Keep JSON object in BLAST for better reuse: Session, DB
 * More coherent system of keeping params in configuration
+* Retrieve ids of species at once
+* Keep track of submissions. Plug a task queue or submit to a cluster
 

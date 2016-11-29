@@ -1,6 +1,6 @@
 # seqservice image
 # from node image
-FROM node:5-onbuild
+FROM node:6.9-onbuild
 
 MAINTAINER toniher <toniher@cau.cat>
 
