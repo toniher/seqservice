@@ -607,7 +607,7 @@ function printBLAST( obj, num, reorder, params ) {
 		
 		}
 		
-		if ( blastobj.results && blastobj.results.search && blastobj.results.search.hits, blastobj.results.search.hits.length > 0 ) {
+		if ( blastobj.results && blastobj.results.search && blastobj.results.search.hits && blastobj.results.search.hits.length > 0 ) {
 			str = str + "<div class='results'>";
 			str = str + processHits( blastobj.results.search.hits, reordHits, params );
 			str = str + "</div>";		
