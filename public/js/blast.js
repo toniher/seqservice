@@ -4,15 +4,11 @@ $(document).ready( function(){
 
 	var basepath = $("body").data("basepath");
 	var socketio = $("body").data("socketio");
-	var taxonidurl = $("#blast-form").data("external-taxonid");
 
 	if ( socketio ) {
 		var socket = io.connect( { path: basepath + "/socket.io" } );
 		socket.on('blast', function(message) {
 			prepareHTMLBLAST( message );
-			if ( taxonidurl ) {
-				addTaxonIDinBlast( taxonidurl );
-			}
 		});
 	}
 
@@ -108,7 +104,6 @@ $(function() {
 
 		var basepath = $("body").data("basepath");
 		var socketio = $("body").data("socketio");
-		var taxonidurl = $("#blast-form").data("external-taxonid");
 
 		// More generic seqinput
 		var seqinput = "";
@@ -192,9 +187,6 @@ $(function() {
 
 			if ( ! socketio ){
 				prepareHTMLBLAST( JSON.stringify( data ) );
-				if ( taxonidurl ) {
-					addTaxonIDinBlast( taxonidurl );
-				}
 			}
 
 		});
@@ -404,6 +396,8 @@ function prepareHTMLBLAST( response ) {
 				// console.log( extra );
 
 				$("#blast-data").append( txt );
+				var taxonidurl = $("#blast-form").data("external-taxonid");
+				addTaxonIDinBlast( taxonidurl );
 				panelListing();
 				
 			});
