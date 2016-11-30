@@ -1059,6 +1059,8 @@ $(function() {
 		
 							$("#blast-data").empty();
 							$("#blast-data").append( txt );
+							var taxonidurl = $("#blast-form").data("external-taxonid");
+							addTaxonIDinBlast( taxonidurl );
 							panelListing();
 						});
 					}
@@ -1124,7 +1126,9 @@ $(function() {
 								// console.log( extra );
 			
 								$("#blast-data").empty();
-								$("#blast-data").append( txt ); 
+								$("#blast-data").append( txt );
+								var taxonidurl = $("#blast-form").data("external-taxonid");
+								addTaxonIDinBlast( taxonidurl );
 							});
 						}
 					}
