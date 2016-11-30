@@ -864,30 +864,28 @@ function addTaxonIDinBlast( url ) {
 	});
 	
 	var mapTaxonID = {};
-	var counter = listTaxonIDu.length;
-		
-	// Retrieve from API names //TODO: Make async
-	$.each( listTaxonIDu, function(i, taxonid){
 
-		var queryurl = url + taxonid;
-		
-		$.ajax({
+	$.ajax({
 			type: 'GET',
-			 url: queryurl,
-			 async: false,
+			 url: url + listTaxonIDu.join("-"),
+			 async: true,
 			 jsonp: 'callback',
 			 dataType: 'jsonp',
 			 success: function( data ) {
-				if ( data["scientific_name"] ) {
-					mapTaxonID[ taxonid ] = data["scientific_name"]
+
+				if( Object.prototype.toString.call( data ) === '[object Array]' ) {
+					$.each( data, function(i, el){
+						mapTaxonID[ el["id"] ] = el["scientific_name"];
+					});
+				} else {
+					if ( data["scientific_name"] ) {
+						mapTaxonID[ data["id"] ] = data["scientific_name"];
+					}
 				}
-				counter = counter - 1;
-				if ( counter == 0 ) fillTaxonNames( mapTaxonID );
+
+				fillTaxonNames( mapTaxonID );
 			 }
-		});
-		
 	});
-	
 }
 
 function fillTaxonNames( mapTaxonID ) {

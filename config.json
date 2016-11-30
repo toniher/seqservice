@@ -39,7 +39,7 @@
 			"maxhits": true
 		},
 		"external": {
-			"taxonid": "http://prgdb.crg.eu/api/taxon/"
+			"taxonid": "http://gogo.test.crg.eu/api/taxon/"
 		},
 		"services": {
 			"bypass": {
