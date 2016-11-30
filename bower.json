@@ -1,6 +1,6 @@
 {
   "name": "seqservice",
-  "version": "0.0.2",
+  "version": "0.1.1",
   "dependencies": {
 	"pouchdb": "5.x",
 	"async": "1.x",
