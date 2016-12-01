@@ -234,38 +234,8 @@ $(document).on('click', "#panelBlast #cleanDocs", function() {
 	}).catch(function (err) {
 		// error occurred
 	});
-});		
-
-// Detect hit appears
-$(document).on('DOMNodeInserted', function(e) {
-
-	if ( $(e.target).hasClass("hit") ) {
-		
-		var idelem = $(e.target).children(".id").get(0);
-		var id = $(idelem).text();
-		// TODO: Link here to Database or system
-	}
 });
 
-// Mutation observer on results 
-// TODO: Fallback Mutation Events
-//var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-//var list = document.querySelector('#blast-data');
-//
-//var observer = new MutationObserver(function(mutations) {  
-//	mutations.forEach(function(mutation) {
-//		if (mutation.type === 'childList') {
-//			// console.log("tal!");
-//		}
-//	});
-//});
-//  
-//observer.observe(list, {
-//	attributes: true, 
-//	childList: true, 
-//	characterData: true,
-//	subtree: true
-//});
 
 $(document).on('click', ".down-hit-seqs", function() {
 
