@@ -75,11 +75,12 @@ From this repository:
 
 
 ## TODO
+* Allow check/uncheck all checkboxes
 * Download results in different forms (JSON, CSV, etc.)
-* Download databases if needed
+* Downlaod sequences in PSSM
+* Start PSIBLAST from user choice of sequences
 * Allow parameter prefix for IDs (to use in CouchDB)
 * Keep JSON object in BLAST for better reuse: Session, DB
 * More coherent system of keeping params in configuration
-* Retrieve ids of species at once
 * Keep track of submissions. Plug a task queue or submit to a cluster
-
+* Download databases if needed
