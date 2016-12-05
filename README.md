@@ -75,10 +75,11 @@ From this repository:
 
 
 ## TODO
-* Allow check/uncheck all checkboxes
+* Highlight selected stored result and order properly
 * Download results in different forms (JSON, CSV, etc.)
 * Downlaod sequences in PSSM
 * Start PSIBLAST from user choice of sequences
+* Include HMMER option
 * Allow parameter prefix for IDs (to use in CouchDB)
 * Keep JSON object in BLAST for better reuse: Session, DB
 * More coherent system of keeping params in configuration

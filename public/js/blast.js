@@ -497,6 +497,7 @@ function printBLAST( obj, num, reorder, params ) {
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
 	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
+	var select_str = "<div class='check-action'><a class='check-all' href='#'>Check all</a> | <a class='check-ten' href='#'>Check up to 10</a></div>";
 	var str = "";
 		
 	// Get links
@@ -581,7 +582,7 @@ function printBLAST( obj, num, reorder, params ) {
 
 	}
     
-	str = head_str + action_str + str + "</div>";
+	str = head_str + action_str + select_str + str + "</div>";
 		
 	return str;
 
@@ -1106,6 +1107,7 @@ $(function() {
 	
 	});
 	
+	/** Iterations **/
 	$( document ).on( "click", ".itertab", function( e ) {
 		
 		e.preventDefault();
@@ -1115,6 +1117,30 @@ $(function() {
 		$('.iter[data-iter='+iternum+']').show();
 
 	});
+
+	/** Check all hits **/
+	$( document ).on( "click", ".check-action > .check-all", function( e ) {
+		
+		e.preventDefault();
+
+		// Only select visible
+		$(".results .hit .hitcheck").prop( "checked", false );
+		$(".results:visible .hit .hitcheck").prop( "checked", true );
+
+	});
+
+	/** Check first ten hits **/
+	$( document ).on( "click", ".check-action > .check-ten", function( e ) {
+		
+		e.preventDefault();
+		
+		// Only select visible
+		$(".results .hit .hitcheck").prop( "checked", false );
+		$(".results:visible .hit .hitcheck").slice( 0, 10 ).prop( "checked", true );
+
+	});
+
+
 
 	function recoverSequences( data ) {
 
