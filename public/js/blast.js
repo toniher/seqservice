@@ -64,42 +64,47 @@ $(document).ready( function(){
 
 });
 
-$( "[name=moltype]" ).change(function() {
-
-	var valid = "#" + $(this).val();
-	var method = "#blast-" + $(this).val();
-	$( ".dbselect" ).hide();
-	$( ".methodselect" ).hide();
-
-	/** TODO: Not satisfying change **/
-	$( valid ).show();
-	$( method ).css("display", "inline-block");
-
-});
-
-$(".psicheck").on( "click", function() {
-	
-	if ( $(this).is(':checked') ) {
-		$(".psiiter").show();
-	} else {
-		$(".psiiter").hide();
-	}
-	
-});
-
-// Ensure remote no blast
-$(".remotecheck").on( "click", function() {
-	
-	if ( $(this).is(':checked') ) {
-		$(".psiiter").hide();
-		$(".psicheck").attr('checked', false );
-	}
-	
-});
-
 $(function() {
+
+	$( "[name=moltype]" ).change(function() {
+	
+		var valid = "#" + $(this).val();
+		var method = "#blast-" + $(this).val();
+		$( ".dbselect" ).hide();
+		$( ".methodselect" ).hide();
+	
+		/** TODO: Not satisfying change **/
+		$( valid ).show();
+		$( method ).css("display", "inline-block");
+	
+	});
+	
+	$(".psicheck").on( "click", function() {
+		
+		if ( $(this).is(':checked') ) {
+			$(".psiiter").show();
+		} else {
+			$(".psiiter").hide();
+		}
+		
+	});
+	
+	// Ensure remote no blast
+	$(".remotecheck").on( "click", function() {
+		
+		if ( $(this).is(':checked') ) {
+			$(".psiiter").hide();
+			$(".psicheck").attr('checked', false );
+		}
+		
+	});
+
+
 	$('#blast-exec').on( 'click', function() {
 
+		// Remove selected
+		$( "#storedBlast .storedDoc" ).removeClass( "selected" );
+	
 		var exec = $(this).data("exec");
 
 		var basepath = $("body").data("basepath");
@@ -191,137 +196,153 @@ $(function() {
 
 		});
 	});
-});
-
-
-$(document).on('click', "#blast-switch", function() {
-	$("#blast-data").toggle();
-});
-
-// Detect details
-$( document ).on( "click", ".hit > .details", function() {
-
-	var hsps = $(this).parent().children(".hsps").get(0);
-
-	$(hsps).fadeToggle('fast');
 	
-	// fuzzdetails
-	var fuzz = $(this).parent().children(".fuzdetails");
-
-	if ( fuzz.length > 0 ) {
-
-		$(fuzz.get(0)).fadeToggle('fast');
-	}
-	
-
-});
-
-$(document).on('click', ".hitcheck", function() {
-	// Clean form when choosing more stuff
-	$("#down-form").empty();
-	
-});
-
-
-$(document).on('click', "#panelBlast #cleanDocs", function() {
-
-	new PouchDB('reports').destroy().then(function () {
-		// database destroyed
-		// Clean panel
-		$( "#panel" ).empty();
-		$( "#panel" ).hide();
-
-	}).catch(function (err) {
-		// error occurred
+	$(document).on('click', "#blast-switch", function() {
+		$("#blast-data").toggle();
 	});
-});
-
-
-$(document).on('click', ".down-hit-seqs", function() {
-
-	var basepath = $("body").data("basepath");
-
-	var parent = $(this).parent().parent();
-
-	var hitcheck = $(parent).find("input.hitcheck").filter(":checked");
-
-	var listId = [];
-
-	async.eachSeries(hitcheck, function(item, callback) {
+	
+	// Detect details
+	$( document ).on( "click", ".hit > .details", function() {
+	
+		var hsps = $(this).parent().children(".hsps").get(0);
+	
+		$(hsps).fadeToggle('fast');
 		
-		var hit = $(item).parent().children(".id").text();
-		var hitId = processHitId( hit );
-
-		listId.push( hitId );
-		callback();
-	}, function(err){
-		if ( err ) {
-			console.log("error retrieving seq");
+		// fuzzdetails
+		var fuzz = $(this).parent().children(".fuzdetails");
+	
+		if ( fuzz.length > 0 ) {
+	
+			$(fuzz.get(0)).fadeToggle('fast');
+		}
+		
+	
+	});
+	
+	$(document).on('click', ".hitcheck", function() {
+		// Clean form when choosing more stuff
+		$("#down-form").empty();
+		
+	});
+	
+	
+	$(document).on('click', "#panelBlast #rmDoc", function() {
+	
+		var docId = $("#storedBlast .selected").first().data("id");
+		
+		if ( docId ) {
+			pouchdb_rm( "reports", docId, function( data ){
+	
+				// Refresh panel
+				panelListing();
+				$("#blast-data").empty();
+				
+			});
+			
 		}
 
-		// TODO: Send to service
-
-		// Prepare params
-		params = {}
-		params.entry = listId;
-		params.dbtype = $("[name=moltype]").val(); // TODO: To be changed
-		
-		params.db = null;
-
-		if ( params.dbtype ) {
-			params.db = $("#"+params.dbtype).val();
-		}
-
-		params.fmt = 2;
-
-		console.log( params );
-
-		$.ajax({
-			url: basepath+"/db",
-			cache: false,
-			contentType : 'application/json',
-			processData: false,
-			data: JSON.stringify( params ),                         
-			type: 'POST',
-			success: function(response){
-
-				if ( response && response.download ) {
-					$("#down-form").empty();
-
-					if ( response.path ) { $("#down-form").append("<input name='path' type='hidden' value='"+response.path+"' />"); }
-					if ( response.filename ) { $("#down-form").append("<input name='filename' type='hidden' value='"+response.filename+".fasta' />"); }
-					$("#down-form").append("<input id='down-button' class='btn btn-primary' type='submit' value='Download' />");
-
-					$("#down-form").submit( function( event ) { } );
-				}
+	});
+	
+	$(document).on('click', "#panelBlast #cleanDocs", function() {
+	
+		new PouchDB('reports').destroy().then(function () {
+			// database destroyed
+			// Clean panel
+			$( "#panel" ).empty();
+			$( "#panel" ).hide();
+	
+		}).catch(function (err) {
+			// error occurred
+		});
+	});
+	
+	
+	$(document).on('click', ".down-hit-seqs", function() {
+	
+		var basepath = $("body").data("basepath");
+	
+		var parent = $(this).parent().parent();
+	
+		var hitcheck = $(parent).find("input.hitcheck").filter(":checked");
+	
+		var listId = [];
+	
+		async.eachSeries(hitcheck, function(item, callback) {
+			
+			var hit = $(item).parent().children(".id").text();
+			var hitId = processHitId( hit );
+	
+			listId.push( hitId );
+			callback();
+		}, function(err){
+			if ( err ) {
+				console.log("error retrieving seq");
 			}
-		 });
-
-		// console.log( listId );
+	
+			// TODO: Send to service
+	
+			// Prepare params
+			params = {}
+			params.entry = listId;
+			params.dbtype = $("[name=moltype]").val(); // TODO: To be changed
+			
+			params.db = null;
+	
+			if ( params.dbtype ) {
+				params.db = $("#"+params.dbtype).val();
+			}
+	
+			params.fmt = 2;
+	
+			console.log( params );
+	
+			$.ajax({
+				url: basepath+"/db",
+				cache: false,
+				contentType : 'application/json',
+				processData: false,
+				data: JSON.stringify( params ),                         
+				type: 'POST',
+				success: function(response){
+	
+					if ( response && response.download ) {
+						$("#down-form").empty();
+	
+						if ( response.path ) { $("#down-form").append("<input name='path' type='hidden' value='"+response.path+"' />"); }
+						if ( response.filename ) { $("#down-form").append("<input name='filename' type='hidden' value='"+response.filename+".fasta' />"); }
+						$("#down-form").append("<input id='down-button' class='btn btn-primary' type='submit' value='Download' />");
+	
+						$("#down-form").submit( function( event ) { } );
+					}
+				}
+			 });
+	
+			// console.log( listId );
+		});
+	
 	});
-
-});
-
-// Access genome browser
-$(document).on('click', ".go-genome-browser", function() {
-
-	var hitBlock = $(this).parents(".hit").first();
 	
-	var hit = $(hitBlock).children(".id").text();
-	var hitId = processHitId( hit );
+	// Access genome browser
+	$(document).on('click', ".go-genome-browser", function() {
 	
-	
-	var hsps = $(hitBlock).find(".hsps .hsp");
-	if ( hsps.legnth > 0 ) {
-		var mainHsp = $(hsps).first();
+		var hitBlock = $(this).parents(".hit").first();
 		
-		var start = $(mainHsp).data("hstart");
-		var end = $(mainHsp).data("hend");
-
-		// TODO: Continue query
+		var hit = $(hitBlock).children(".id").text();
+		var hitId = processHitId( hit );
 		
-	}
+		
+		var hsps = $(hitBlock).find(".hsps .hsp");
+		if ( hsps.legnth > 0 ) {
+			var mainHsp = $(hsps).first();
+			
+			var start = $(mainHsp).data("hstart");
+			var end = $(mainHsp).data("hend");
 	
+			// TODO: Continue query
+			
+		}
+		
+	});
 });
 
 function processHitId( str ) {
@@ -497,7 +518,7 @@ function printBLAST( obj, num, reorder, params ) {
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
 	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
-	var select_str = "<div class='check-action'><a class='check-all' href='#'>Check all</a> | <a class='check-ten' href='#'>Check up to 10</a></div>";
+	var select_str = "<div class='check-action'><a class='check-all' href='#'>Check all</a> | <a class='check-ten' href='#'>Check up to 10</a> | <a class='check-none' href='#'>Check none</a></div>";
 	var str = "";
 		
 	// Get links
@@ -952,13 +973,25 @@ function panelListing( ) {
 			// console.log( data );
 			if ( data && data.total_rows > 0 ) {
 				if ( data.rows ) {
-					var str = "<div id='panelBlast'><a id='cleanDocs' href='#'>Clean History</a></div>";
+
+					var str = "<div id='panelBlast'><a id='rmDoc' href='#'>Remove Run</a> | <a id='cleanDocs' href='#'>Clean All History</a></div>";
 					str = str + "<h5>BLAST</h5>";
 					str = str + "<ul id='storedBlast' class='list-inline'>";
+					
+					// Sort values. TODO: Maybe at the DB level
+					var sorted = {};
+
 					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
 						var entry = data.rows[r];
-						str = str + "<li><a class='storedDoc' data-id='"+entry.value[0]+"' href='#'>"+entry.value[1]+"</a></li>";
+						sorted[ entry.value[1] ] = entry.value[0];
 					}
+					
+					var sortedKeys = Object.keys( sorted ).sort();
+										
+					for ( var s = 0; s < sortedKeys.length; s = s + 1 ) {
+						str = str + "<li><a class='storedDoc' data-id='"+sorted[ sortedKeys[s] ]+"' href='#'>"+sortedKeys[s]+"</a></li>";
+					}
+					
 					str = str + "</ul>";
 					$( "#panel" ).empty();
 					$( "#panel" ).append( str );
@@ -1042,6 +1075,9 @@ $(function() {
 	
 		e.preventDefault();
 		var docId = $(this).data( "id" );
+	
+		$( "#storedBlast .storedDoc" ).removeClass( "selected" );
+		$( this ).addClass( "selected" );
 	
 		if ( docId ) {
 			pouchdb_retrieve( "reports", docId, function( err, response ) {
@@ -1140,7 +1176,14 @@ $(function() {
 
 	});
 
+	/** Check no hits **/
+	$( document ).on( "click", ".check-action > .check-none", function( e ) {
+		
+		e.preventDefault();
+		
+		$(".results .hit .hitcheck").prop( "checked", false );
 
+	});
 
 	function recoverSequences( data ) {
 

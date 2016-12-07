@@ -75,9 +75,8 @@ From this repository:
 
 
 ## TODO
-* Highlight selected stored result and order properly
 * Download results in different forms (JSON, CSV, etc.)
-* Downlaod sequences in PSSM
+* Download sequences in PSSM
 * Start PSIBLAST from user choice of sequences
 * Include HMMER option
 * Allow parameter prefix for IDs (to use in CouchDB)

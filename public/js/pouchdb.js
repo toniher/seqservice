@@ -45,6 +45,23 @@ function pouchdb_retrieve( dbname, id, cb ) {
 
 }
 
+function pouchdb_rm( dbname, id, cb ) {
+
+	db = new PouchDB(dbname);
+
+
+	db.get( id ).then(function(doc) {
+		
+	  cb( null, db.remove(doc._id, doc._rev) );
+	}).then(function (result) {
+	  // handle result
+	}).catch(function (errrm) {
+		cb( errrm, null );
+	});
+
+}
+
+
 function pouchdb_listdocs( dbname, index, keyval, cb ) {
 
 	db = new PouchDB(dbname);
