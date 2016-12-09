@@ -225,6 +225,29 @@ $(function() {
 		
 	});
 	
+
+	$(document).on('click', "#panelBlast #downDoc", function() {
+	
+		var link = this;
+		var docId = $("#storedBlast .selected").first().data("id");
+		var name = $("#storedBlast .selected").first().text();
+		var filename = name + ".json";
+		
+		if ( docId ) {
+				
+			pouchdb_retrieve( "reports", docId, function( error, data ){
+	
+				if ( ! error ) {
+					
+					// Let's force download
+					var file = new File([ JSON.stringify(data) ], filename, {type: "text/json;charset=utf-8"});
+					saveAs(file);
+				}
+				
+			});
+		}
+
+	});
 	
 	$(document).on('click', "#panelBlast #rmDoc", function() {
 	
@@ -242,7 +265,7 @@ $(function() {
 		}
 
 	});
-	
+
 	$(document).on('click', "#panelBlast #cleanDocs", function() {
 	
 		new PouchDB('reports').destroy().then(function () {
@@ -974,7 +997,7 @@ function panelListing( ) {
 			if ( data && data.total_rows > 0 ) {
 				if ( data.rows ) {
 
-					var str = "<div id='panelBlast'><a id='rmDoc' href='#'>Remove Run</a> | <a id='cleanDocs' href='#'>Clean All History</a></div>";
+					var str = "<div id='panelBlast'><a id='downDoc' href='#'>Download Run (JSON)</a> | <a id='rmDoc' href='#'>Remove Run</a> | <a id='cleanDocs' href='#'>Clean All History</a></div>";
 					str = str + "<h5>BLAST</h5>";
 					str = str + "<ul id='storedBlast' class='list-inline'>";
 					

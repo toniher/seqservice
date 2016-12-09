@@ -2,11 +2,12 @@
   "name": "seqservice",
   "version": "0.1.1",
   "dependencies": {
-	"pouchdb": "5.x",
+	"pouchdb": "6.x",
 	"async": "1.x",
 	"jquery": "1.12.x",
 	"tinysort": "2.x",
-	"bootstrap": "3.x"
+	"bootstrap": "3.x",
+	"file-saver": "1.x"
   },
 	"install" : {
 	"path" : {
@@ -30,6 +31,9 @@
 			"bower-components/bootstrap/dist/js/bootstrap.min.js",
 			"bower-components/bootstrap/dist/css/bootstrap.min.css",
 			"bower-components/bootstrap/dist/css/bootstrap-theme.min.css"
+		],
+		"file-saver": [
+			"bower-components/file-saver/FileSaver.min.js"
 		]
 		}
 	}
