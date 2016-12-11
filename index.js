@@ -38,7 +38,7 @@ app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 // Compression
 app.use(compression({
   threshold: 512
-}))
+}));
 
 // TODO: Define custom upload directory and limits
 var upload = multer({ dest: 'uploads/',
@@ -60,7 +60,7 @@ var align = require('./routes/align.js');
 var loadfile = require('./routes/load.js');
 var service = require('./routes/service.js');
 var down = require('./routes/down.js');
-var linkurl = require('./routes/link.js');
+// var linkurl = require('./routes/link.js');
 
 
 // Landing

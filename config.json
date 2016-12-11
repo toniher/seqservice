@@ -75,6 +75,10 @@
 			"db" : {
 				"type": "pouchdb"
 			}
+		},
+		"meta": {
+			"name": "seqservice",
+			"version": "0.1"
 		}
 	}
 }
