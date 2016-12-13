@@ -240,8 +240,8 @@ $(function() {
 				if ( ! error ) {
 					
 					// Let's force download
-					var file = new File([ JSON.stringify(data) ], filename, {type: "text/json;charset=utf-8"});
-					saveAs(file);
+					var file = new File([ JSON.stringify(data) ], {type: "text/json;charset=utf-8"});
+					saveAs(file, filename, true); // True is for removing bom https://github.com/eligrey/FileSaver.js/issues/160
 				}
 				
 			});
