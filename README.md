@@ -76,7 +76,6 @@ From this repository:
 
 ## TODO
 * Download sequences in PSSM
-* Handle BOM in download reports
 * Start PSIBLAST from user choice of sequences
 * Include HMMER option
 * Save other analysis in DB
