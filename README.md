@@ -75,12 +75,12 @@ From this repository:
 
 
 ## TODO
-* Download sequences in PSSM
-* Start PSIBLAST from user choice of sequences
+* Generate alignment from results at user's choice
+	* Start PSIBLAST from user choice of sequences
 * Include HMMER option
 * Save other analysis in DB
 * Download results in different formats (CSV, etc.)
-* Allow parameter prefix for IDs (to use in CouchDB)
+* Allow syncing with CouchDB
 * More coherent system of keeping params in configuration
 * Keep track of submissions. Plug a task queue or submit to a cluster
 * Download databases if needed
