@@ -395,10 +395,6 @@ function prepareHTMLBLAST( response ) {
 		// TODO: Handle continuous output
 		$("#blast-data").empty();
 		$("#go-data").empty();
-
-		//if ( $("#blast-form").find(".align-button").length === 0 ) {
-		//	$("#blast-exec").after("<div class='align-button'><button id='align-exec'>Align</button></div>");
-		//}
 		
 		//if ( $("#blast-form").find(".switch-button").length === 0 ) {
 		//	$("#blast-exec").after("<div class='switch-button'><button id='blast-switch'>Show/hide</button></div>");
@@ -540,7 +536,7 @@ function printBLAST( obj, num, reorder, params ) {
 
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
-	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form></div>";
+	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form><button class='btn' id='align-exec'>Continue running with selection --TODO--</button></div>";	
 	var select_str = "<div class='check-action'><a class='check-all' href='#'>Check all</a> | <a class='check-ten' href='#'>Check up to 10</a> | <a class='check-none' href='#'>Check none</a></div>";
 	var str = "";
 		

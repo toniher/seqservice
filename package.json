@@ -4,6 +4,7 @@
   "description": "API for retrieval of biological sequences from FASTA DBs",
   "main": "index.js",
   "scripts": {
+    "postinstall": "bower-installer",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

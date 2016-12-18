@@ -83,4 +83,5 @@ From this repository:
 * Allow syncing with CouchDB
 * More coherent system of keeping params in configuration
 * Keep track of submissions. Plug a task queue or submit to a cluster
+* Merge Javascript in less files (webpack, grunt or gulp)
 * Download databases if needed
