@@ -36,7 +36,8 @@
 			"remote": true,
 			"go": true,
 			"evalue": true,
-			"maxhits": true
+			"maxhits": true,
+			"hmmer": true
 		},
 		"external": {
 			"taxonid": "http://gogo.test.crg.eu/api/taxon/"

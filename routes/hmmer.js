@@ -1,5 +1,5 @@
 var functions = require('../functions/index.js');
-var temp = require('temp'),
+var temp = require('temp').track(),
     fs   = require('fs');
 
 require('babel-polyfill');
@@ -26,7 +26,18 @@ exports.performHmmer = function (req, res) {
 	
 	// TODO: Handle types here
 	var hmmerparams = {};
+	hmmerparams.binary = req.body.binary;
+	hmmerparams.taxon = req.body.organism;
+	hmmerparams.db = db;
+	hmmerparams.dbtype = req.body.dbtype;
 
+
+	hmmerparams.psicheck = convertBoolean( req.body.psicheck, false );
+	hmmerparams.psiiter = req.body.psiiter;
+	//hmmerparams.remote = convertBoolean( req.body.remotecheck, false );
+	//hmmerparams.evalue = req.body.evalue;
+	// hmmerparams.max_target_seqs = req.body.max_target_seqs;
+	
 	var organism = parseInt( req.body.organism, 10 );
 
 	if ( organism && ( organism !== 0 || organism === 'NaN' ) ) {
@@ -42,133 +53,145 @@ exports.performHmmer = function (req, res) {
 
 function runHmmer( params, req, res ) {
 
-}
+	var config, opts, db, fullpath;
+	config = req.app.set('config');
 
-//function run_blast( params, req, res, seqidpath ){
-//
-//	var config, opts, db, fullpath;
-//	config = req.app.set('config');
-//	
-//	// TODO. Better handling params
-//	var blast_params = {};
-//	
-//	var binary = "blastn";
-//	var dbtype = "nucl";
-//	
-//	if ( params.binary ) {
-//		binary = params.binary;
-//	}
-//	
-//	if ( params.dbtype ) {
-//		dbtype = params.dbtype;
-//	}
-//
-//	if ( params.db ) {
-//		db = params.db;
-//	}
-//
-//	if ( params.psicheck && binary == "blastp" ) {
-//		binary = "psiblast";
-//		
-//		if ( params.psiiter && ( params.psiiter == ( parseInt( params.psiiter, 10 ) ) ) ) {
-//			blast_params.num_iterations = params.psiiter;
-//		}
-//	}
-//
-//	if ( params.evalue ) {
-//		blast_params.evalue = params.evalue;
-//	}
-//	if ( params.max_target_seqs && ( params.max_target_seqs == ( parseInt( params.max_target_seqs, 10 ) ) ) ) {
-//		blast_params.max_target_seqs = params.max_target_seqs;
-//	}
-//
-//	if ( seqidpath ) {
-//		blast_params.seqidlist = seqidpath;
-//	}
-//
-//	blast_params.outfmt = 15;
-//	
-//	var socketio = config.socketio; // Wheter to use this socketio or not;
-//
-//	var seq = req.body.seq;
-//
-//	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
-//
-//	var program = config.exec.path + "/" + binary;
-//	var io = req.app.set('io');
-//
-//	var execparams = Object.assign({}, blast_params);
-//
-//	blast_params.db = db;
-//	blast_params.binary = binary;
-//	blast_params.dbtype = dbtype;
-//	
-//	if ( params.remote ) {
-//		execparams.db = db;
-//		execparams.remote = ""; // Empty tag
-//		blast_params.remote = true;
-//	} else {
-//		var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
-//		var DBpath = DBcontainer.path;
-//		execparams.db = DBpath;
-//		blast_params.remote = false;
-//	}
-//		
-//	strParams = joinParams( execparams, "-" );
-//	
-//	var child = spawn( 'node', [ './pipe.js', [ processTextInput( seq ) ].join("\n"), JSON.stringify( [{ "app": program, "params": strParams }] ) ] );
-//
-//	// Listen for stdout data
-//	child.stderr.on('data', function (data) {
-//                if (typeof data !== 'string' || !( data  instanceof String) ) {
-//                        data = data.toString();
-//                }	
-//		console.error("ERR: " + data );
-//	});
-//	
-//	var output = "";
-//
-//	// Listen for stdout data
-//	child.stdout.on('data', function ( data ) {
-//				
-//		if (typeof data !== 'string' || !( data  instanceof String) ) {
-//			data = data.toString();
-//		}
-//		
-//		output += data;
-//	});
-//	
-//	child.on('close', function ( code ) {
-//
-//		var object = {};
-//		
-//		if ( ( output.match(/report/g)||[]).length > 1 ) {
-//			// output = processMultiOutput( output ); TODO: Temporary outp
-//			object = JSON.parse(output);
-//			object = addMultiSeqs( object, seq, false );
-//		} else {
-//			object = JSON.parse(output);
-//			if ( ! seq.startsWith( ">" ) ) {
-//				object = addMultiSeqs( object, seq, true );
-//			} else {
-//				object = addMultiSeqs( object, seq, false );
-//			}
-//		}
-//		
-//		object.params = blast_params;
-//		
-//		var digest = hash.digest( object );
-//		var newObj = {};
-//		newObj._id = digest;
-//		newObj.meta = config.meta; // Adding meta information
-//		newObj.type = "blast";
-//		newObj.data = object;
-//		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
-//		
-//		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( newObj ) ); 
-//	
-//	});
-//}
+	// TODO. Better handling params
+	var hmmer_params = {};
+	
+	var binary = "phmmer";
+	var dbtype = "prot";
+	
+	if ( params.binary ) {
+		binary = params.binary;
+	}
+	
+	if ( params.dbtype ) {
+		dbtype = params.dbtype;
+	}
+
+	if ( params.db ) {
+		db = params.db;
+	}
+
+	if ( params.psicheck && binary == "phmmer" ) {
+		binary = "jackhmmer";
+		
+		if ( params.psiiter && ( params.psiiter == ( parseInt( params.psiiter, 10 ) ) ) ) {
+			hmmer_params.num_iterations = params.psiiter;
+		}
+	}
+
+	if ( params.evalue ) {
+		hmmer_params.evalue = params.evalue;
+	}
+	if ( params.max_target_seqs && ( params.max_target_seqs == ( parseInt( params.max_target_seqs, 10 ) ) ) ) {
+		hmmer_params.max_target_seqs = params.max_target_seqs;
+	}
+
+	hmmer_params.notextw = "";
+	
+	var socketio = config.socketio; // Wheter to use this socketio or not;
+
+	var seq = req.body.seq;
+
+	// TODO: CHECK IF SEQUENCE is NUCLEIC ACID
+
+	var program = config.exec.path + "/" + binary;
+	var io = req.app.set('io');
+
+	var execparams = Object.assign({}, hmmer_params);
+
+	hmmer_params.db = db;
+	hmmer_params.binary = binary;
+	hmmer_params.dbtype = dbtype;
+	
+	console.log( db );
+	var DBpath = null;
+	
+	if ( params.remote ) {
+		execparams.remote = ""; // Empty tag
+		hmmer_params.remote = true;
+	} else {
+		var DBcontainer = functions.getPath( db, config.db.list ); // Get path from array
+		DBpath = DBcontainer.path;
+		hmmer_params.remote = false;
+	}
+	
+	// Using --
+	strParams = joinParams( execparams, "--" );
+	
+	
+	var stream = temp.createWriteStream();
+	stream.write( [ processTextInput( seq ) ].join("\n") );
+	
+	if ( stream ) {
+		strParams = strParams + " " + stream.path;
+	}
+	
+	if ( DBpath ) {
+		strParams = strParams + " " + DBpath;
+	}
+	
+	
+	var child = spawn( 'node', [ './pipe.js', JSON.stringify( [{ "app": program, "params": strParams }] ) ] );
+
+	// Listen for stdout data
+	child.stderr.on('data', function (data) {
+                if (typeof data !== 'string' || !( data  instanceof String) ) {
+                        data = data.toString();
+                }	
+		console.error("ERR: " + data );
+	});
+	
+	var output = "";
+
+	// Listen for stdout data
+	child.stdout.on('data', function ( data ) {
+				
+		if (typeof data !== 'string' || !( data  instanceof String) ) {
+			data = data.toString();
+		}
+		
+		output += data;
+	});
+	
+	child.on('close', function ( code ) {
+
+		stream.end();
+		
+		var object = {};
+		
+		console.log( output );
+		
+		if ( ( output.match(/report/g)||[]).length > 1 ) {
+			// output = processMultiOutput( output ); TODO: Temporary outp
+			object = JSON.parse(output);
+			object = addMultiSeqs( object, seq, false );
+		} else {
+			object = JSON.parse(output);
+			if ( ! seq.startsWith( ">" ) ) {
+				object = addMultiSeqs( object, seq, true );
+			} else {
+				object = addMultiSeqs( object, seq, false );
+			}
+		}
+		
+		object.params = hmmer_params;
+		
+		var digest = hash.digest( object );
+		var newObj = {};
+		newObj._id = digest;
+		newObj.meta = config.meta; // Adding meta information
+		newObj.type = "hmmer";
+		newObj.data = object;
+		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
+		
+		functions.returnSocketIO( socketio, io, "hmmer", res, JSON.stringify( newObj ) ); 
+	
+	});
+	
+}
 
 function processTextInput( text ) {
 

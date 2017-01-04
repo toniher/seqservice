@@ -4,9 +4,16 @@ var args = process.argv.slice(2);
 
 
 if ( args.length > 0 ) {
-		
-	var baseText = args.shift();
-	var appstr = args.shift();
+	
+	var baseText = null;
+	var appstr = "";
+	
+	if ( args.length > 1 ) {
+		baseText = args.shift();
+		appstr = args.shift();
+	} else {
+		appstr = args.shift();
+	}
 	
 	if ( appstr ) {
 	
@@ -47,7 +54,6 @@ function runPipe( baseText, apps, callBack ) {
 		
 	for ( var a = 0; a < apps.length; a = a + 1 ) {
 		var command = apps[a].app + " " + apps[a].params;
-
 		commandline = commandline.pipe( command );
 	}
 	

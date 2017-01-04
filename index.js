@@ -56,6 +56,7 @@ app.set("io", io);
 
 var blastdbcmd = require('./routes/blastdbcmd.js');
 var blast = require('./routes/blast.js');
+var hmmer = require('./routes/hmmer.js');
 var align = require('./routes/align.js');
 var loadfile = require('./routes/load.js');
 var service = require('./routes/service.js');
@@ -85,6 +86,10 @@ app.post(basepath + '/db', blastdbcmd.getBlastDBcmd);
 
 // Blast
 app.post(basepath + '/blast', blast.performBlast);
+
+// HMMER
+app.post(basepath + '/hmmer', hmmer.performHmmer);
+
 // Align
 app.post(basepath + '/align', align.performAlign);
 
@@ -140,6 +145,11 @@ app.get(basepath + '/blast', function (req, res) {
 		render_config.go = true;
 	}
 
+	if ( config.exec && config.exec.hmmer ) {
+		render_config.hmmer = true;
+		render_config.exechmmer = basepath + '/hmmer';
+	}
+	
 	if ( config.services ) {
 		if ( config.services.bypass ) {
 			render_config.bypass = functions.printForm( "bypass", config.services.bypass );

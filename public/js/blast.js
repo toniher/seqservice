@@ -100,7 +100,7 @@ $(function() {
 	});
 
 
-	$('#blast-exec').on( 'click', function() {
+	$('.prog-exec').on( 'click', function() {
 
 		// Remove selected
 		$( "#storedBlast .storedDoc" ).removeClass( "selected" );
@@ -188,6 +188,8 @@ $(function() {
 						max_target_seqs: maxhitsnum
 					};
 
+		console.log( params );
+					
 		$.post( exec, params ).done( function( data ) {
 
 			if ( ! socketio ){
@@ -366,7 +368,37 @@ $(function() {
 		}
 		
 	});
+	
+	// Change for adapting hmmer
+	
+	$( document ).on('change', '[name=blast-prot]', function() {
+		
+		let val = $("[name=blast-prot]:checked").val();
+				
+		if ( val === 'phmmer' ) {
+			changeDOMphmmer();
+		} else {
+			changeDOMblast();
+		}
+		
+	});
+	
+	function changeDOMphmmer() {
+		$("#blast-exec").hide();
+		$("#hmmer-exec").show();
+		$("#blast-params-extra").hide();
+	}
+	
+	function changeDOMblast() {
+		$("#blast-exec").show();
+		$("#hmmer-exec").hide();
+		$("#blast-params-extra").show();
+
+	}
+	
 });
+
+
 
 function processHitId( str ) {
 
@@ -1139,7 +1171,15 @@ $(function() {
 
 									if ( data['params'].hasOwnProperty("binary") ) {
 										$(".methodselect").hide();
-										$("[name=blast-"+dbtype+"]").val( data['params'].binary );
+										
+										var groupsel = "[name=blast-"+dbtype+"]";
+										
+										$(groupsel).each( function( i ){
+											if ( $(this).val() === data['params'].binary ) {
+												$(this).attr("checked", true );
+											}
+										});
+										
 										$("#blast-"+dbtype).css('display', 'inline-block');
 									}
 								}

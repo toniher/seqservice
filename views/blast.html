@@ -52,6 +52,9 @@
 					<div class='methodselect form-inline' id='blast-prot'>
 						<input type="radio" name="blast-prot" value="blastp" checked="checked">BLASTP
 						<input type="radio" name="blast-prot" value="blastx">BLASTX
+						<%if (locals.hmmer) { %>
+						<input type="radio" name="blast-prot" value="phmmer">PHMMER
+						<% } %>
 					</div>
 					<select class="dbselect form-control" id="nucl" name="nucllist">
 					  <% nucllist.forEach(function(element){ %>
@@ -64,7 +67,13 @@
 					  <% }) %>
 					</select>
 				</div>
-				<div class="form-inline pull-right" id="blast-params">
+				<div class="form-inline pull-right" id="exec-buttons">
+					<button class="btn btn-primary prog-exec" id="blast-exec" data-exec="<%= exec %>">Submit</button>
+					<%if (locals.hmmer) { %>
+					<button class="btn btn-primary prog-exec" id="hmmer-exec" data-exec="<%= exechmmer %>">Submit</button>
+					<% } %>
+				</div>
+				<div class="form-inline pull-right" id="blast-params-extra">
 					<%if (locals.remote) { %>
 						<label for="remotecheck">Remote</label>
 						<input class="remotecheck form-control" type="checkbox" name="remotecheck" id="remotecheck">
@@ -97,7 +106,6 @@
 							<option>5</option>
 						</select>
 					<% } %>
-					<button class="btn btn-primary" id="blast-exec" data-exec="<%= exec %>">Submit</button>
 				</div>
 			</div>
 			<%if (locals.blastupload) { %>
