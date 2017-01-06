@@ -106,7 +106,6 @@ function runHmmer( params, req, res ) {
 	hmmer_params.binary = binary;
 	hmmer_params.dbtype = dbtype;
 	
-	console.log( db );
 	var DBpath = null;
 	
 	if ( params.remote ) {
@@ -161,15 +160,15 @@ function runHmmer( params, req, res ) {
 		stream.end();
 		
 		var object = {};
-		
-		console.log( output );
-		
+				
 		if ( ( output.match(/report/g)||[]).length > 1 ) {
 			// output = processMultiOutput( output ); TODO: Temporary outp
-			object = JSON.parse(output);
+			object = hmmer3process.init( output );
 			object = addMultiSeqs( object, seq, false );
 		} else {
-			object = JSON.parse(output);
+			// console.log( output );
+			object = hmmer3process.init( output );
+
 			if ( ! seq.startsWith( ">" ) ) {
 				object = addMultiSeqs( object, seq, true );
 			} else {
@@ -186,7 +185,7 @@ function runHmmer( params, req, res ) {
 		newObj.type = "hmmer";
 		newObj.data = object;
 		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
-		
+				
 		functions.returnSocketIO( socketio, io, "hmmer", res, JSON.stringify( newObj ) ); 
 	
 	});
@@ -225,9 +224,9 @@ function addMultiSeqs( object, seqs, nofasta ) {
 		listSeqs = fasta.parse( seqs );
 	}
 
-	if ( object.hasOwnProperty("BlastOutput2") ) {
+	if ( object.hasOwnProperty("HMMEROutput") ) {
 
-		var outputReports = object["BlastOutput2"];
+		var outputReports = object["HMMEROutput"];
 		
 		if ( outputReports instanceof Array ) { //If array
 			
@@ -236,13 +235,13 @@ function addMultiSeqs( object, seqs, nofasta ) {
 				if ( listSeqs[f] ) {
 		
 					if ( listSeqs[f].hasOwnProperty("seq") ) {
-						object["BlastOutput2"][f].seq = listSeqs[f].seq;
+						object["HMMEROutput"][f].seq = listSeqs[f].seq;
 					}
 					if ( listSeqs[f].hasOwnProperty("id") ) {
-						object["BlastOutput2"][f].id = listSeqs[f].id;
+						object["HMMEROutput"][f].id = listSeqs[f].id;
 					}
 
-					object["BlastOutput2"][f] = assignSeqName( listSeqs[f], object["BlastOutput2"][f] );
+					object["HMMEROutput"][f] = assignSeqName( listSeqs[f], object["HMMEROutput"][f] );
 		
 				}
 			}
@@ -327,7 +326,7 @@ function joinParams( params, sep ) {
 }
 
 
-hmmer3process.init = function( text, limit ) {
+hmmer3process.init = function( text, limit=1000 ) {
 
 	let data = [];
 	let alignments = false;
@@ -339,6 +338,12 @@ hmmer3process.init = function( text, limit ) {
 	let title = "";
 	let length = 0;
 	let roundnum = 0;
+	
+	let qstart;
+	let qend;
+	
+	let hstart;
+	let hend;
 
 	let noSkip = true;
 
@@ -359,9 +364,9 @@ hmmer3process.init = function( text, limit ) {
 
 			let parts = line.split(/\s+/);
 			title = parts[1];
-			prelength = parts[2];
+			let prelength = parts[2];
 			//print prelength
-			let prelength = prelength.replace("[L=", "");
+			prelength = prelength.replace("[L=", "");
 			length = parseInt( prelength.replace("]", ""), 10 );
 
 			continue;
@@ -378,7 +383,7 @@ hmmer3process.init = function( text, limit ) {
 			data[roundnum]["search"]["query_title"] = title;
 			data[roundnum]["search"]["query_len"] = length;
 			data[roundnum]["search"]["hits"] = [];
-	
+		
 			seqiter = -1;
 			domiter = -1;
 			alniter = -1;
@@ -421,10 +426,14 @@ hmmer3process.init = function( text, limit ) {
 				// Positions of start and end
 				qstart = 0;
 				qend = 0;
+				qstartPos = 0;
+				qendPos = 0;
 
 				// Positions of start and end
 				hstart = 0;
 				hend = 0;
+				hstartPos = 0;
+				hendPos = 0;
 
 				// print seqiter
 
@@ -434,7 +443,7 @@ hmmer3process.init = function( text, limit ) {
 				data[roundnum]["search"]["hits"][seqiter]["description"].push( {} );
 				data[roundnum]["search"]["hits"][seqiter]["description"][0]["title"] = line.trim().replace(">> ", ""); // Need to process as well
 				data[roundnum]["search"]["hits"][seqiter]["hsps"] = [];
-
+				
 				hit_prev_title = hit_title;
 
 				noSkip = true;
@@ -451,90 +460,105 @@ hmmer3process.init = function( text, limit ) {
 			domiter = domiter + 1;
 			alniter = 0;
 			let scoreinfo = line.match(/^\s*\=\=\sdomain\s(\d+)\s+score\:\s+(\S+)\sbits\;\s+conditional\s+E-value\:\s+(\S+)/);
+			
 			data[roundnum]["search"]["hits"][seqiter]["hsps"].push( {} );
 
 			//print scoreinfo.groups()
-			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["num"] = parseInt( scoreinfo[0], 10 );
-			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["score"] = parseFloat( scoreinfo[1] );
-			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["evalue"] = parseFloat( scoreinfo[2] );
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["num"] = parseInt( scoreinfo[1], 10 );
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["score"] = parseFloat( scoreinfo[2] );
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["evalue"] = parseFloat( scoreinfo[3] );
+						
 			continue;
 		}
 
 
-		//let titleRe = new RegExp( "^\s*"+title );
-		//
-		//if ( line.match( titleRe ) && alniter === 0 ) {
-		//
-		//	let queryinfo = line.match( /^\s*\S.*\s*(\d+)\s(.*)\s(\d+)\s*$/ );
-		//	alniter = alniter + 1;
-		//	pstartRe = new RegExp( "^\s*"+title+"\S*\s*\d+\s" );
-		//	qstart = line.match(pstartRe)[-1]
-		//
-		//	
-		//
-		//}
-		//// TODO: Finish translating from Python
-		////# And different domains
-		//
-		//	#qstart = re.search(pstart, line).end()
-		//	#print qstart
-		//	#print line[qstart]
-		//
-		//	qstart = re.compile("^\s*\S+\s*\d+\s")
-		//	qstart = re.search(qstart, line).end()
-		//
-		//
-		//	qend = re.compile("\s\d+\s*$")
-		//	qend = re.search(qend, line).start() - 1
-		//
-		//	#print qend
-		//	#print line[qend]
-		//
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["query_from"] = int( qstart )
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["query_to"] = int( qend )
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["qseq"] = line[qstart:qend+1]
-		//
-		//	continue
-		//
-		//if re.match( "^\s*.*\s*$", line ) and alniter == 1 :
-		//	#print line
-		//	#print "mid: *"+line[qstart:qend+1] + "*"
-		//
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["midline"] = line[qstart:qend+1]
-		//
-		//	alniter = alniter + 1
-		//	continue
-		//
-		//if re.match( "^\s*\S+\s*\d+\s.*\s\d+\s*", line ) and alniter == 2 :
-		//
-		//	hitinfo = re.match( "^\s*\S+\s*(\d+)\s(.*)\s(\d+)\s*$", line );
-		//	#print hitinfo.groups()
-		//
-		//	alniter = alniter + 1
-		//	hstart = re.compile("^\s*\S+\s*\d+\s")
-		//	hstart = re.search(hstart, line).end()
-		//	#print hstart
-		//	#print line[hstart]
-		//
-		//	hend = re.compile("\s\d+\s*$")
-		//	hend = re.search(hend, line).start() - 1
-		//	#print hend
-		//	#print line[hend]
-		//
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["hit_to"] = int( hstart )
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["hit_end"] = int( hend )
-		//
-		//	data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["hseq"] = line[hstart:hend+1]
-		//
-		//	continue
+		let titleRe = new RegExp( "^\\s*"+title );
+		
+		if ( line.match( titleRe ) && alniter === 0 ) {
+		
+			alniter = alniter + 1;
+			
+			let qstartRe = new RegExp( /^\s*\S+\s*\d+\s/ );
+			
+			let qstartMatch = qstartRe.exec( line );
+			qstartPos = qstartMatch.index + qstartMatch[0].length;
 
+			let qstartRetake = new RegExp( /^\s*\S+\s*(\d+)\s/ );
+			let qstartTake = line.match( qstartRetake );
+			
+			qstart = parseInt( qstartTake[1], 10 );
+
+			let qendRe = new RegExp( /\s\d+\s*$/ );
+
+			let qendMatch = qendRe.exec( line );
+			qendPos = qendMatch.index;
+			
+			let qendRetake = new RegExp( /\s(\d+)\s*$/ );
+			let qendTake = line.match( qendRetake );
+			qend = parseInt( qendTake[1], 10 );
+		
+			let lineArr = line.split("");
+			let qseq = lineArr.slice( qstartPos, qendPos ).join("");
+			
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["query_from"] = qstart;
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["query_to"] = qend;
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["qseq"] = qseq;
+			
+			continue;
+		
+		}
+		
+		if ( line.match( /^\s*.*\s*$/ ) && alniter === 1 ) {
+
+			let lineArr = line.split("");
+			let mseq = lineArr.slice( qstartPos, qendPos ).join("");
+			
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["midline"] = mseq;
+		
+			alniter = alniter + 1
+			continue;
+		}
+		
+		if ( line.match( /^\s*\S+\s*\d+\s.*\s\d+\s*/ ) && alniter === 2 ) {
+
+			alniter = alniter + 1;
+
+			let hstartRe = new RegExp( /^\s*\S+\s*\d+\s/ );
+			
+			let hstartMatch = hstartRe.exec( line );
+			hstartPos = hstartMatch.index + hstartMatch[0].length;
+
+			let hstartRetake = new RegExp( /^\s*\S+\s*(\d+)\s/ );
+			let hstartTake = line.match( hstartRetake );
+			
+			hstart = parseInt( hstartTake[1], 10 );
+
+			let hendRe = new RegExp( /\s\d+\s*$/ );
+
+			let hendMatch = hendRe.exec( line );
+			hendPos = hendMatch.index;
+			
+			let hendRetake = new RegExp( /\s(\d+)\s*$/ );
+			let hendTake = line.match( hendRetake );
+			hend = parseInt( hendTake[1], 10 );
+		
+			let lineArr = line.split("");
+			let hseq = lineArr.slice( hstartPos, hendPos ).join("");
+			
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["hit_from"] = hstart;
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["hit_to"] = hend;
+			data[roundnum]["search"]["hits"][seqiter]["hsps"][domiter]["hseq"] = hseq;
+			
+			continue;
+		}
 	}
 
 	outcome = {};
-	outcome["HMMEROutput"] = {};
-	outcome["HMMEROutput"]["report"] = {};
-	outcome["HMMEROutput"]["report"]["results"] = {};
-	outcome["HMMEROutput"]["report"]["results"]["iterations"] = data;
+	outcome["HMMEROutput"] = [];
+	outcome["HMMEROutput"].push( {} );
+	outcome["HMMEROutput"][0]["report"] = {};
+	outcome["HMMEROutput"][0]["report"]["results"] = {};
+	outcome["HMMEROutput"][0]["report"]["results"]["iterations"] = data;
 
 	return outcome;
 
