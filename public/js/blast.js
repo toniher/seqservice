@@ -105,7 +105,7 @@ $(function() {
 	$('.prog-exec').on( 'click', function() {
 
 		// Remove selected
-		$( "#storedBlast .storedDoc" ).removeClass( "selected" );
+		$( "#storedblast .storedDoc" ).removeClass( "selected" );
 	
 		var exec = $(this).data("exec");
 
@@ -230,11 +230,11 @@ $(function() {
 	});
 	
 
-	$(document).on('click', "#panelBlast #downDoc", function() {
+	$(document).on('click', "#panelBlast .downDoc", function() {
 	
 		var link = this;
-		var docId = $("#storedBlast .selected").first().data("id");
-		var name = $("#storedBlast .selected").first().text();
+		var docId = $("#storedblast .selected").first().data("id");
+		var name = $("#storedblast .selected").first().text();
 		var filename = name + ".json";
 		
 		if ( docId ) {
@@ -253,9 +253,9 @@ $(function() {
 
 	});
 	
-	$(document).on('click', "#panelBlast #rmDoc", function() {
+	$(document).on('click', "#panelBlast .rmDoc", function() {
 	
-		var docId = $("#storedBlast .selected").first().data("id");
+		var docId = $("#storedblast .selected").first().data("id");
 		
 		if ( docId ) {
 			pouchdbInterface.rm( "reports", docId, function( data ){
@@ -270,7 +270,7 @@ $(function() {
 
 	});
 
-	$(document).on('click', "#panelBlast #cleanDocs", function() {
+	$(document).on('click', "#panelBlast .cleanDocs", function() {
 	
 		new PouchDB('reports').destroy().then(function () {
 			// database destroyed
@@ -321,7 +321,7 @@ $(function() {
 	
 			params.fmt = 2;
 	
-			console.log( params );
+			// console.log( params );
 	
 			$.ajax({
 				url: basepath+"/db",
@@ -705,9 +705,7 @@ reportProcess.processHits = function( hits, reordList, params ) {
 		var num = hit + 1;
 
 		var hitinfo = {};
-		
-		console.log( hits[hit] );
-				
+						
 		str = str + "<div data-num="+num;
 		
 		var classStr = "hit";
@@ -1051,36 +1049,59 @@ function replaceWithInfo( str, hash ) {
 function panelListing( ) {
 	
 	if ( $('#panel').length > 0 ) {
+		
+		let programs = ["blast", "hmmer"];
+		let panelContent = "";
 
-		pouchdbInterface.listdocs( "reports", "typeindex", "blast", function( data ){
-			// console.log( data );
-			if ( data && data.total_rows > 0 ) {
-				if ( data.rows ) {
+		async.eachSeries( programs, function( program, callback ) {
 
-					var str = "<div id='panelBlast'><a id='downDoc' href='#'>Download Run (JSON)</a> | <a id='rmDoc' href='#'>Remove Run</a> | <a id='cleanDocs' href='#'>Clean All History</a></div>";
-					str = str + "<h5>BLAST</h5>";
-					str = str + "<ul id='storedBlast' class='list-inline'>";
-					
-					// Sort values. TODO: Maybe at the DB level
-					var sorted = {};
 
-					for ( var r = 0; r < data.rows.length; r = r + 1 ) {
-						var entry = data.rows[r];
-						sorted[ entry.value[1] ] = entry.value[0];
+			pouchdbInterface.listdocs( "reports", "typeindex", program, function( data ){
+				// console.log( data );
+				if ( data && data.total_rows > 0 ) {
+					if ( data.rows ) {
+	
+						var str = "<div id='panelBlast'><a class='downDoc' href='#'>Download Run (JSON)</a> | <a class='rmDoc' href='#'>Remove Run</a> | <a class='cleanDocs' href='#'>Clean All History</a></div>";
+						str = str + "<h5>"+ program.toUpperCase() +"</h5>";
+						str = str + "<ul id='stored"+program+"' class='list-inline'>";
+						
+						// Sort values. TODO: Maybe at the DB level
+						var sorted = {};
+	
+						for ( var r = 0; r < data.rows.length; r = r + 1 ) {
+							var entry = data.rows[r];
+							sorted[ entry.value[1] ] = entry.value[0];
+						}
+						
+						var sortedKeys = Object.keys( sorted ).sort();
+											
+						for ( var s = 0; s < sortedKeys.length; s = s + 1 ) {
+							str = str + "<li><a class='storedDoc' data-id='"+sorted[ sortedKeys[s] ]+"' href='#'>"+sortedKeys[s]+"</a></li>";
+						}
+						
+						str = str + "</ul>";
+						
+						panelContent = panelContent + str;
+
+						callback();
+					} else {
+						callback();
 					}
-					
-					var sortedKeys = Object.keys( sorted ).sort();
-										
-					for ( var s = 0; s < sortedKeys.length; s = s + 1 ) {
-						str = str + "<li><a class='storedDoc' data-id='"+sorted[ sortedKeys[s] ]+"' href='#'>"+sortedKeys[s]+"</a></li>";
-					}
-					
-					str = str + "</ul>";
-					$( "#panel" ).empty();
-					$( "#panel" ).append( str );
-					$( "#panel" ).show();
+				} else {
+				
+					callback();	
 				}
+			});
+		
+		}, function(err){
+			if ( err ) {
+				console.log("error printing panel");
 			}
+						
+			$( "#panel" ).empty();
+			$( "#panel" ).append( panelContent );
+			$( "#panel" ).show();
+			
 		});
 	}
 }
@@ -1154,12 +1175,12 @@ $(function() {
 		 });
 	});
 	
-	$("#panel").on('click', "#storedBlast .storedDoc", function( e ) {
+	$("#panel").on('click', "#storedblast .storedDoc", function( e ) {
 	
 		e.preventDefault();
 		var docId = $(this).data( "id" );
 	
-		$( "#storedBlast .storedDoc" ).removeClass( "selected" );
+		$( "#storedblast .storedDoc" ).removeClass( "selected" );
 		$( this ).addClass( "selected" );
 	
 		if ( docId ) {
