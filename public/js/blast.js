@@ -105,7 +105,7 @@ $(function() {
 	$('.prog-exec').on( 'click', function() {
 
 		// Remove selected
-		$( "#storedblast .storedDoc" ).removeClass( "selected" );
+		$( ".stored-container .storedDoc" ).removeClass( "selected" );
 	
 		var exec = $(this).data("exec");
 
@@ -230,11 +230,11 @@ $(function() {
 	});
 	
 
-	$(document).on('click', "#panelBlast .downDoc", function() {
+	$(document).on('click', ".panel-container .downDoc", function() {
 	
 		var link = this;
-		var docId = $("#storedblast .selected").first().data("id");
-		var name = $("#storedblast .selected").first().text();
+		var docId = $(".stored-container .selected").first().data("id");
+		var name = $(".stored-container .selected").first().text();
 		var filename = name + ".json";
 		
 		if ( docId ) {
@@ -253,9 +253,9 @@ $(function() {
 
 	});
 	
-	$(document).on('click', "#panelBlast .rmDoc", function() {
+	$(document).on('click', ".panel-container .rmDoc", function() {
 	
-		var docId = $("#storedblast .selected").first().data("id");
+		var docId = $(".stored-container .selected").first().data("id");
 		
 		if ( docId ) {
 			pouchdbInterface.rm( "reports", docId, function( data ){
@@ -270,7 +270,7 @@ $(function() {
 
 	});
 
-	$(document).on('click', "#panelBlast .cleanDocs", function() {
+	$(document).on('click', ".panel-container .cleanDocs", function() {
 	
 		new PouchDB('reports').destroy().then(function () {
 			// database destroyed
@@ -1061,9 +1061,9 @@ function panelListing( ) {
 				if ( data && data.total_rows > 0 ) {
 					if ( data.rows ) {
 	
-						var str = "<div id='panelBlast'><a class='downDoc' href='#'>Download Run (JSON)</a> | <a class='rmDoc' href='#'>Remove Run</a> | <a class='cleanDocs' href='#'>Clean All History</a></div>";
+						var str = "<div class='panel-container'><a class='downDoc' href='#'>Download Run (JSON)</a> | <a class='rmDoc' href='#'>Remove Run</a> | <a class='cleanDocs' href='#'>Clean All History</a></div>";
 						str = str + "<h5>"+ program.toUpperCase() +"</h5>";
-						str = str + "<ul id='stored"+program+"' class='list-inline'>";
+						str = str + "<ul class='stored-container' class='list-inline'>";
 						
 						// Sort values. TODO: Maybe at the DB level
 						var sorted = {};
@@ -1175,12 +1175,12 @@ $(function() {
 		 });
 	});
 	
-	$("#panel").on('click', "#storedblast .storedDoc", function( e ) {
+	$("#panel").on('click', ".storedDoc", function( e ) {
 	
 		e.preventDefault();
 		var docId = $(this).data( "id" );
 	
-		$( "#storedblast .storedDoc" ).removeClass( "selected" );
+		$( ".stored-container .storedDoc" ).removeClass( "selected" );
 		$( this ).addClass( "selected" );
 	
 		if ( docId ) {
@@ -1299,20 +1299,25 @@ $(function() {
 
 	function recoverSequences( data ) {
 
-		var seqs = [];
+		let seqs = [];
 
-		if ( data.BlastOutput2 ) {
+		if ( data.BlastOutput2 || data.HMMEROutput ) {
+			
+			let content = data.BlastOutput2;
+			if ( ! content ) {
+				content = data.HMMEROutput;
+			}
 
-			for ( var s=0; s < data.BlastOutput2.length; s++ ) {
+			for ( var s=0; s < content.length; s++ ) {
 
 				var seq;
 				var name;
 
-				if ( data.BlastOutput2[s].seq ) {
-					seq = data.BlastOutput2[s].seq;
+				if ( content.seq ) {
+					seq = content.seq;
 				}
-				if ( data.BlastOutput2[s].name ) {
-					name = data.BlastOutput2[s].name;
+				if ( content.name ) {
+					name = content.name;
 				}
 
 				if ( seq ) {

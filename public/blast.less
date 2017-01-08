@@ -19,17 +19,33 @@
 			outline: 1px solid #ddd;
 			padding: 1em;
 
-			#panelBlast {
+			h5 {
+				clear: left;
+				float: left;
+			}
+			
+			.panel-container {
 				float: right;
 				display: inline-block;
+				clear: right;
 
-				#cleanDocs {
+				.cleanDocs {
 					text-align: right;
 					cursor: pointer;
 				}
 			}
 			
-			#storedBlast {
+			.stored-container {
+				
+				clear: left;
+				float: left;
+				list-style-type: none;
+				
+				li {
+					float: left;
+					margin-right: 1em;
+				}
+				
 				.selected {
 					text-decoration: underline;
 				}
