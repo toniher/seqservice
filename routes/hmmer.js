@@ -186,7 +186,7 @@ function runHmmer( params, req, res ) {
 		newObj.data = object;
 		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 				
-		functions.returnSocketIO( socketio, io, "hmmer", res, JSON.stringify( newObj ) ); 
+		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( newObj ) ); 
 	
 	});
 	
@@ -440,8 +440,24 @@ hmmer3process.init = function( text, limit=1000 ) {
 				data[roundnum]["search"]["hits"].push( {} ); // We append
 				data[roundnum]["search"]["hits"][seqiter]["num"] = seqiter + 1;
 				data[roundnum]["search"]["hits"][seqiter]["description"] = [];
-				data[roundnum]["search"]["hits"][seqiter]["description"].push( {} );
-				data[roundnum]["search"]["hits"][seqiter]["description"][0]["title"] = line.trim().replace(">> ", ""); // Need to process as well
+				
+				let titlePart = line.trim().replace(">> ", "");
+				
+				for ( let part of titlePart.split(">") ) {
+					
+					part = part.trim();
+					
+					let desc = {};
+					
+					let parts = part.split(" ", 2);
+					
+					desc.id = parts[0];
+					desc.title = parts[1];
+
+					data[roundnum]["search"]["hits"][seqiter]["description"].push( desc );
+
+				}
+				
 				data[roundnum]["search"]["hits"][seqiter]["hsps"] = [];
 				
 				hit_prev_title = hit_title;

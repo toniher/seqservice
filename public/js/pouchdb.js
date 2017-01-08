@@ -1,10 +1,12 @@
-function pouchdb_report( dbname, obj, cb ) {
+var pouchdbInterface = {};
+
+pouchdbInterface.report = function( dbname, obj, cb ) {
 
 	err = null;
 	db = new PouchDB(dbname);
 
 
-	add_indexes( db, null );
+	pouchdbInterface.add_indexes( db, null );
 
 	
 	db.get(obj._id).then(function (doc) {
@@ -26,9 +28,9 @@ function pouchdb_report( dbname, obj, cb ) {
 
 	}); 
 	
-}
+};
 
-function pouchdb_retrieve( dbname, id, cb ) {
+pouchdbInterface.retrieve = function( dbname, id, cb ) {
 
 	db = new PouchDB(dbname);
 
@@ -43,9 +45,9 @@ function pouchdb_retrieve( dbname, id, cb ) {
 		cb( errget, null );
 	}); 
 
-}
+};
 
-function pouchdb_rm( dbname, id, cb ) {
+pouchdbInterface.rm = function( dbname, id, cb ) {
 
 	db = new PouchDB(dbname);
 
@@ -59,14 +61,14 @@ function pouchdb_rm( dbname, id, cb ) {
 		cb( errrm, null );
 	});
 
-}
+};
 
 
-function pouchdb_listdocs( dbname, index, keyval, cb ) {
+pouchdbInterface.listdocs = function( dbname, index, keyval, cb ) {
 
 	db = new PouchDB(dbname);
 
-	add_indexes( db, ( db.query( index, {
+	pouchdbInterface.add_indexes( db, ( db.query( index, {
 			key: keyval
 		}).then(function (result) {
 		  cb ( result )
@@ -76,9 +78,9 @@ function pouchdb_listdocs( dbname, index, keyval, cb ) {
 		})
 	) );
 
-}
+};
 
-function add_indexes( db, cb ) {
+pouchdbInterface.add_indexes = function( db, cb ) {
 
 	// TODO: Refactor for more check if there
 	db.get("_design/typeindex").then(function (doc) {
@@ -104,4 +106,4 @@ function add_indexes( db, cb ) {
 			cb();
 		}
 	});
-}
+};

@@ -1,5 +1,7 @@
 /*globals console io $ document */
 
+var reportProcess = {}; // Object storing processing of reports
+
 $(document).ready( function(){
 
 	var basepath = $("body").data("basepath");
@@ -237,7 +239,7 @@ $(function() {
 		
 		if ( docId ) {
 				
-			pouchdb_retrieve( "reports", docId, function( error, data ){
+			pouchdbInterface.retrieve( "reports", docId, function( error, data ){
 	
 				if ( ! error ) {
 					
@@ -256,7 +258,7 @@ $(function() {
 		var docId = $("#storedBlast .selected").first().data("id");
 		
 		if ( docId ) {
-			pouchdb_rm( "reports", docId, function( data ){
+			pouchdbInterface.rm( "reports", docId, function( data ){
 	
 				// Refresh panel
 				panelListing();
@@ -469,7 +471,7 @@ function printBLASTall( message, parse, target ) {
 	var extra = {};
 	var params = {};
 	
-	pouchdb_report( "reports", obj, function( db, obj, err ) {
+	pouchdbInterface.report( "reports", obj, function( db, obj, err ) {
 
 		if ( ! err ) {
 			
@@ -497,19 +499,29 @@ function printBLASTall( message, parse, target ) {
 					}
 				}
 
-				if ( data.hasOwnProperty("BlastOutput2") ) {
+				if ( data.hasOwnProperty("BlastOutput2") || data.hasOwnProperty("HMMEROutput") ) {
 					
-					blastObj = data["BlastOutput2"];
+					let blastObj;
+					let type = "blast";
+					
+					if ( data.hasOwnProperty("BlastOutput2") ) {
+					
+						blastObj = data["BlastOutput2"];
+					
+					} else {
+						blastObj = data["HMMEROutput"];
+						type = "hmmer";
+					}
 									
 					if ( blastObj instanceof Array ) {
 						
 						// Move async
 						var iter = 0;
-						var str = "";
+						let str = "";
 
 						async.eachSeries(blastObj, function(blastIter, callback) {
 							
-							str = str + printBLAST( blastIter, iter, null, params );
+							str = str + printReport( type, blastIter, iter, null, params );
 							iter = iter + 1;
 							callback();
 						}, function(err){
@@ -523,7 +535,10 @@ function printBLASTall( message, parse, target ) {
 						
 						
 					} else {
-						str = printBLAST( blastObj, 0, null, params );
+						
+						let str = "";
+						
+						str = printReport( type, blastObj, 0, null, params );
 						target( str );
 					}
 				}
@@ -535,7 +550,21 @@ function printBLASTall( message, parse, target ) {
 
 }
 
-function printBLAST( obj, num, reorder, params ) {
+function printReport( type, obj, num, reorder, params ) {
+	
+	
+	if ( type === "hmmer" ) {
+		return reportProcess.printBLAST( obj, num, reorder, params );
+		// return null;
+		//printHMMER( obj, num, reorder, params );
+	} else {
+		 return reportProcess.printBLAST( obj, num, reorder, params );
+	}
+	
+}
+
+
+reportProcess.printBLAST = function( obj, num, reorder, params ) {
 
 	var seq = obj['seq'];
 	var id = obj['id'];
@@ -543,9 +572,10 @@ function printBLAST( obj, num, reorder, params ) {
 	//console.log( obj );
 	var blastobj = obj["report"];
 
-	var expect = blastobj.params.expect;
-	var gopen = blastobj.params.gap_open;
-	var gextend = blastobj.params.gap_extend;
+	// TODO: Check if this below needed
+	// var expect = blastobj.params.expect;
+	// var gopen = blastobj.params.gap_open;
+	// var gextend = blastobj.params.gap_extend;
 	
 
 	// Extra params
@@ -623,7 +653,7 @@ function printBLAST( obj, num, reorder, params ) {
 			if ( iterationlist[iter].search && iterationlist[iter].search.hits && iterationlist[iter].search.hits.length > 0 ) {
 			
 				str = str + "<div class='results'>";
-				str = str + processHits( iterationlist[iter].search.hits, reordHits, params );
+				str = str + reportProcess.processHits( iterationlist[iter].search.hits, reordHits, params );
 				str = str + "</div>";
 			} else {
 				str = "<p class='not-found'>No hits found.</p>";
@@ -646,7 +676,7 @@ function printBLAST( obj, num, reorder, params ) {
 		
 		if ( blastobj.results && blastobj.results.search && blastobj.results.search.hits && blastobj.results.search.hits.length > 0 ) {
 			str = str + "<div class='results'>";
-			str = str + processHits( blastobj.results.search.hits, reordHits, params );
+			str = str + reportProcess.processHits( blastobj.results.search.hits, reordHits, params );
 			str = str + "</div>";		
 		} else {
 			str = "<p class='not-found'>No hits found.</p>";
@@ -658,9 +688,9 @@ function printBLAST( obj, num, reorder, params ) {
 		
 	return str;
 
-}
+};
 
-function processHits( hits, reordList, params ) {
+reportProcess.processHits = function( hits, reordList, params ) {
 	
 	var str = "";
 	
@@ -676,6 +706,8 @@ function processHits( hits, reordList, params ) {
 
 		var hitinfo = {};
 		
+		console.log( hits[hit] );
+				
 		str = str + "<div data-num="+num;
 		
 		var classStr = "hit";
@@ -740,14 +772,14 @@ function processHits( hits, reordList, params ) {
 			str = str + "</div>";
 		}
 		
-		str = str + "<div class='hsps'>" + processHsps( hits[hit].hsps ) + "</div>";
+		str = str + "<div class='hsps'>" + reportProcess.processHsps( hits[hit].hsps ) + "</div>";
 		str = str + "</div>"
 	}
 
 	return str;
-}
+};
 
-function processHsps( hsps ) {
+reportProcess.processHsps = function( hsps ) {
 
 	var content = "";
 
@@ -770,7 +802,7 @@ function processHsps( hsps ) {
 		var length = hsps[iter].align_len;
 
 		var arrSeqs = {};
-		arrSeqs = splitSeq( arrSeqs, qseq, midline, hseq, 60 );
+		arrSeqs = reportProcess.splitSeq( arrSeqs, qseq, midline, hseq, 60 );
 
 		var dataframes = "";
 		if ( query_frame ) {
@@ -785,7 +817,7 @@ function processHsps( hsps ) {
 		content+="<span class='field'>identity:</span><span class='value' data-name='identity'>"+identity+"</span><span class='field' data-name='positive'>positive:</span><span class='value' data-name='positive'>"+positive+"</span><span class='field'>gaps:</span><span class='value' data-name='gaps'>"+gaps+"</span></div>";
 		content+="<div class='block'>";
 
-		content+= printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend, 60 );
+		content+= reportProcess.printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend, 60 );
 
 		content+="</div>";
 
@@ -793,9 +825,9 @@ function processHsps( hsps ) {
 	}
 
 	return content;
-}
+};
 
-function printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend, num ){
+reportProcess.printBlock = function( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend, num ){
 
 	var content = "";
 
@@ -835,9 +867,9 @@ function printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend
 
 	return content;
 
-}
+};
 
-function splitSeq( arrSeqs, qseq, midline, hseq, num ) {
+reportProcess.splitSeq = function( arrSeqs, qseq, midline, hseq, num ) {
 
 
 	arrSeqs.qseq = [];
@@ -884,7 +916,7 @@ function splitSeq( arrSeqs, qseq, midline, hseq, num ) {
 	}
 
 	return arrSeqs;
-}
+};
 
 function addTaxonIDinBlast( url ) {
 	
@@ -1020,7 +1052,7 @@ function panelListing( ) {
 	
 	if ( $('#panel').length > 0 ) {
 
-		pouchdb_listdocs( "reports", "typeindex", "blast", function( data ){
+		pouchdbInterface.listdocs( "reports", "typeindex", "blast", function( data ){
 			// console.log( data );
 			if ( data && data.total_rows > 0 ) {
 				if ( data.rows ) {
@@ -1131,7 +1163,7 @@ $(function() {
 		$( this ).addClass( "selected" );
 	
 		if ( docId ) {
-			pouchdb_retrieve( "reports", docId, function( err, response ) {
+			pouchdbInterface.retrieve( "reports", docId, function( err, response ) {
 				if ( ! err ) {
 	
 					if ( response ) {
