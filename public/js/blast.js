@@ -1211,7 +1211,7 @@ $(function() {
 
 							var seqinput = "";
 							var seqs = recoverSequences( data );
-							console.log( data );
+
 							for ( var s = 0; s < seqs.length; s++ ) {
 								if ( seqs[s].name ) {
 										seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
@@ -1317,9 +1317,7 @@ $(function() {
 		let seqs = [];
 		
 		if ( data.hasOwnProperty("BlastOutput2") || data.hasOwnProperty("HMMEROutput") ) {
-			
-			console.log( "Here! ");
-		
+					
 			let content = data.BlastOutput2;
 			if ( ! content ) {
 				content = data.HMMEROutput;
