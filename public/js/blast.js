@@ -811,8 +811,23 @@ reportProcess.processHsps = function( hsps ) {
 		}
 
 		content+="<div class='hsp' data-qstart="+qstart+" data-qend="+qend+" data-hstart="+hstart+" data-hend="+hend+dataframes+">";
-		content+="<div class='stats'><span class='field'>evalue:</span><span class='value' data-name='evalue'>"+evalue+"</span><span class='field'>bit score:</span><span class='value' data-name='bit_score'>"+bit_score+"</span><span class='field'>score:</span><span class='value' data-name='score'>"+score+"</span>";
-		content+="<span class='field'>identity:</span><span class='value' data-name='identity'>"+identity+"</span><span class='field' data-name='positive'>positive:</span><span class='value' data-name='positive'>"+positive+"</span><span class='field'>gaps:</span><span class='value' data-name='gaps'>"+gaps+"</span></div>";
+		content+="<div class='stats'>";
+		content+="<span class='field'>evalue:</span><span class='value' data-name='evalue'>"+evalue+"</span>";
+		if ( bit_score ) {
+			content+="<span class='field'>bit score:</span><span class='value' data-name='bit_score'>"+bit_score+"</span>";
+		}
+		if ( score ) {
+			content+="<span class='field'>score:</span><span class='value' data-name='score'>"+score+"</span>";
+		}
+		if ( identity ) {
+			content+="<span class='field'>identity:</span><span class='value' data-name='identity'>"+identity+"</span>";
+		}
+		if ( positive ) {
+			content+="<span class='field' data-name='positive'>positive:</span><span class='value' data-name='positive'>"+positive+"</span>";
+		}
+		if ( gaps ) {
+			content+="<span class='field'>gaps:</span><span class='value' data-name='gaps'>"+gaps+"</span></div>";
+		}
 		content+="<div class='block'>";
 
 		content+= reportProcess.printBlock( arrSeqs, query_frame, hit_frame, qstart, qend, hstart, hend, 60 );
@@ -829,7 +844,7 @@ reportProcess.printBlock = function( arrSeqs, query_frame, hit_frame, qstart, qe
 
 	var content = "";
 
-	var count = 0
+	var count = 0;
 	for ( var qst = 0; qst < arrSeqs["qseq"].length; ++qst ) {
 
 		var start1 = qstart + (count*num);
@@ -1196,7 +1211,7 @@ $(function() {
 
 							var seqinput = "";
 							var seqs = recoverSequences( data );
-	
+							console.log( data );
 							for ( var s = 0; s < seqs.length; s++ ) {
 								if ( seqs[s].name ) {
 										seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
@@ -1300,26 +1315,28 @@ $(function() {
 	function recoverSequences( data ) {
 
 		let seqs = [];
-
-		if ( data.BlastOutput2 || data.HMMEROutput ) {
+		
+		if ( data.hasOwnProperty("BlastOutput2") || data.hasOwnProperty("HMMEROutput") ) {
 			
+			console.log( "Here! ");
+		
 			let content = data.BlastOutput2;
 			if ( ! content ) {
 				content = data.HMMEROutput;
 			}
-
+						
 			for ( var s=0; s < content.length; s++ ) {
 
-				var seq;
-				var name;
+				var seq = null;
+				var name = null;
 
-				if ( content.seq ) {
-					seq = content.seq;
+				if ( content[s].hasOwnProperty("seq") ) {
+					seq = content[s].seq;
 				}
-				if ( content.name ) {
-					name = content.name;
+				if ( content[s].hasOwnProperty("name") ) {
+					name = content[s].name;
 				}
-
+				
 				if ( seq ) {
 					seqs.push( { "seq": seq, "name": name } );
 				}

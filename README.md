@@ -77,7 +77,7 @@ From this repository:
 ## TODO
 * Generate alignment from results at user's choice
 	* Start PSIBLAST from user choice of sequences
-* Include HMMER option
+* Include more HMMER options
 * Save other analysis in DB
 * Download results in different formats (CSV, etc.)
 * Allow syncing with CouchDB
