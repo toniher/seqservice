@@ -598,7 +598,7 @@ reportProcess.printBLAST = function( obj, num, reorder, params ) {
 
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
-	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form><button class='btn' id='align-exec'>Continue running with selection --TODO--</button></div>";	
+	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form><!--<button class='btn' id='align-exec'>Continue running with selection --TODO--</button>--></div>";	
 	var select_str = "<div class='check-action'><a class='check-all' href='#'>Check all</a> | <a class='check-ten' href='#'>Check up to 10</a> | <a class='check-none' href='#'>Check none</a></div>";
 	var str = "";
 		
