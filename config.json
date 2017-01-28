@@ -37,8 +37,19 @@
 			"go": true,
 			"evalue": true,
 			"maxhits": true,
-			"hmmer": true
+			"hmmer": true,
+			"align": false
 		},
+		"align": [
+			{
+				"name": "t-coffee from hsp",
+				"hsp": true
+			},
+			{
+				"name": "t-coffee",
+				"hsp": false
+			}
+		],
 		"external": {
 			"taxonid": "http://gogo.test.crg.eu/api/taxon/"
 		},
@@ -65,7 +76,15 @@
 				"labels": {
 					
 				}				
-			}	
+			},
+			"t-coffee from hsp": {
+				"type": "exec",
+				"input": "file"
+			},
+			"t-coffee": {
+				"type": "exec",
+				"input": "file"
+			}
 		},
 		"port": "10030",
 		"jsonp": false,
