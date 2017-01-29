@@ -1,3 +1,7 @@
+/*globals console io $ document */
+
+var serviceProcess = {}; // Object for storing service
+
 $(document).ready( function(){
 
 	var basepath = $("body").data("basepath");
@@ -7,7 +11,7 @@ $(document).ready( function(){
 	if ( socketio ) {
 		var socket = io.connect( { path: basepath + "/socket.io" } );
 		socket.on('service', function(message) {
-			prepareHTMLService( message );
+			serviceProcess.prepareHTMLService( message );
 		});
 	}
 	
@@ -50,7 +54,7 @@ $(document).on('click', ".service-exec", function() {
 		
 		if ( objectid ) {
 
-			pouchdb_retrieve( "reports", objectid, function( err, obj ) {
+			pouchdbInterface.retrieve( "reports", objectid, function( err, obj ) {
 				
 				if ( ! err ) {
 					
@@ -61,7 +65,7 @@ $(document).on('click', ".service-exec", function() {
 					$.post( basepath+"/service", { params: params }).done( function( data ) {
 						
 						if ( ! socketio ){
-							prepareHTMLService( data );
+							serviceProcess.prepareHTMLService( data );
 						}
 			
 					});
@@ -75,7 +79,7 @@ $(document).on('click', ".service-exec", function() {
 });
 
 
-function prepareHTMLService( message ) {
+serviceProcess.prepareHTMLService = function( message ) {
 
 	// console.log( message );
 
@@ -84,9 +88,9 @@ function prepareHTMLService( message ) {
 	if ( obj.type == 'bypass' ) {
 
 		
-		printBypass( obj, 0, function( txt, extra ) {
+		serviceProcess.printBypass( obj, 0, function( txt, extra ) {
 			// Handle extra iter
-			console.log( extra );
+			// console.log( extra );
 			$("#blast-data").empty();
 			$("#blast-data").append( txt ); 
 
@@ -105,9 +109,9 @@ function prepareHTMLService( message ) {
 	
 	}
 	
-}
+};
 
-function printBypass( message, parse, target ) {
+serviceProcess.printBypass = function ( message, parse, target ) {
 	
 	var obj;
 	if ( parse ) {
@@ -120,7 +124,7 @@ function printBypass( message, parse, target ) {
 	
 	var extra = {};
 	
-	pouchdb_report( "reports", obj, function( db, obj, err ) {
+	pouchdbInterface.report( "reports", obj, function( db, obj, err ) {
 
 		if ( ! err ) {
 			
@@ -138,7 +142,7 @@ function printBypass( message, parse, target ) {
 					ref = obj.ref;
 					
 					// Retrieve ref
-					pouchdb_retrieve( "reports", ref, function( err, doc ) {
+					pouchdbInterface.retrieve( "reports", ref, function( err, doc ) {
 						
 						if ( ! err ) {
 							if ( doc.hasOwnProperty("data") ) {
@@ -157,7 +161,7 @@ function printBypass( message, parse, target ) {
 								
 										async.eachSeries(blastObj, function(blastIter, callback) {
 											
-											str = str + printBLAST( blastIter, iter, reorder );
+											str = str + reportProcess.printBLAST( blastIter, iter, reorder );
 											iter = iter + 1;
 											callback();
 										}, function(err){
@@ -171,7 +175,7 @@ function printBypass( message, parse, target ) {
 										
 										
 									} else {
-										str = printBLAST( blastObj, 0, reorder );
+										str = reportProcess.printBLAST( blastObj, 0, reorder );
 										target( str );
 									}
 								}
@@ -192,5 +196,5 @@ function printBypass( message, parse, target ) {
 		}
 	});
 	
-}
+};
 
