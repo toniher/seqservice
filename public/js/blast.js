@@ -1023,7 +1023,7 @@ function addLinkParams( linkParam, info ) {
 
 		if ( linkParam.params ) {
 
-			for ( var k in linkParam.params ) {
+			for ( let k in linkParam.params ) {
 				if ( linkParam.params.hasOwnProperty( k ) ) {
 					linkParamArr.push( k+"="+linkParam.params[k] );
 				}
@@ -1031,7 +1031,7 @@ function addLinkParams( linkParam, info ) {
 		}
 
 		if ( linkParam.user ) {
-			for ( var k in linkParam.user ) {
+			for ( let k in linkParam.user ) {
 				if ( linkParam.user.hasOwnProperty( k ) ) {
 					
 					let urx = {};
