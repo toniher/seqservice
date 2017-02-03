@@ -1041,7 +1041,7 @@ function addLinkParams( linkParam, info ) {
 						urx[ k ] = linkParam.urx[k];
 					}
 					
-					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info, urx ) );
+					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info, ur[k] ) );
 				}
 			}
 		}
@@ -1065,7 +1065,7 @@ function replaceWithInfo( str, hash, rx=null ) {
 			
 			if ( rx && rx.hasOwnProperty( h ) ) {
 				
-				let regex = rx.h;
+				let regex = rx[h];
 				// Hack for escaping
 				regex = regex.replace("\\\\", "\\");
 				let re = new RegExp(regex);
