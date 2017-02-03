@@ -1033,7 +1033,15 @@ function addLinkParams( linkParam, info ) {
 		if ( linkParam.user ) {
 			for ( var k in linkParam.user ) {
 				if ( linkParam.user.hasOwnProperty( k ) ) {
-					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info ) );
+					
+					let urx = {};
+					
+					// Process regex of variable just in case
+					if ( linkParam.urx && linkParam.urx.hasOwnProperty( k ) ) {
+						urx[ k ] = linkParam.urx[k];
+					}
+					
+					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info, urx ) );
 				}
 			}
 		}
@@ -1048,11 +1056,30 @@ function addLinkParams( linkParam, info ) {
 	return str;
 }
 
-function replaceWithInfo( str, hash ) {
+function replaceWithInfo( str, hash, rx=null ) {
 
-	for ( h in hash ) {
+	for ( let h in hash ) {
 		if ( hash.hasOwnProperty( h ) ) {
-			str = str.replace( h, hash[h] );
+			
+			let value = hash[h];
+			
+			if ( rx && rx.hasOwnProperty( h ) ) {
+				
+				let regex = rx.h;
+				// Hack for escaping
+				regex = regex.replace("\\\\", "\\");
+				let re = new RegExp(regex);
+				
+				let found = value.match(re);
+				
+				if ( found && found.length > 1 ) {
+					// Assuming only one match
+					value = found[1];
+				}
+				
+			}
+			
+			str = str.replace( h, value );
 		}
 	}
 
