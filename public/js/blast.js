@@ -1101,8 +1101,11 @@ function panelListing( ) {
 			pouchdbInterface.listdocs( "reports", "typeindex", program, function( data ){
 				// console.log( data );
 				if ( data && data.total_rows > 0 ) {
-					if ( data.rows ) {
-	
+					if ( data.rows && data.rows.length > 0 ) {
+						
+						// Trigget panel show here
+						$( "#panel" ).show();
+
 						var str = "<div class='panel-container'><a class='downDoc' href='#'>Download Run (JSON)</a> | <a class='rmDoc' href='#'>Remove Run</a> | <a class='cleanDocs' href='#'>Clean All History</a></div>";
 						str = str + "<h5>"+ program.toUpperCase() +"</h5>";
 						str = str + "<ul class='stored-container' class='list-inline'>";
@@ -1142,7 +1145,6 @@ function panelListing( ) {
 						
 			$( "#panel" ).empty();
 			$( "#panel" ).append( panelContent );
-			$( "#panel" ).show();
 			
 		});
 	}
