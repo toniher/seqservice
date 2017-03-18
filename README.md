@@ -75,6 +75,8 @@ From this repository:
 
 
 ## TODO
+* Keep track of submissions
+* Allow single-hit accompanying analyses (e.g. ProtLoc or GO)
 * Generate alignment from results at user's choice
 	* Start PSIBLAST from user choice of sequences
 * Include more HMMER options
@@ -82,6 +84,6 @@ From this repository:
 * Download results in different formats (CSV, etc.)
 * Allow syncing with CouchDB
 * More coherent system of keeping params in configuration
-* Keep track of submissions. Plug a task queue or submit to a cluster
+* Plug a task queue or submit to a cluster
 * Merge Javascript in less files (webpack, grunt or gulp)
 * Download databases if needed

@@ -55,6 +55,7 @@ var io = require('socket.io').listen(server, { path: basepath + "/socket.io" } )
 app.set("io", io);
 
 var blastdbcmd = require('./routes/blastdbcmd.js');
+var request = require('./routes/request.js');
 var blast = require('./routes/blast.js');
 var hmmer = require('./routes/hmmer.js');
 var align = require('./routes/align.js');
@@ -83,6 +84,9 @@ app.get(basepath + '/db/:db/:method/:entry/fasta/:fmt/:range/:line', blastdbcmd.
 
 // Retrieval by POST
 app.post(basepath + '/db', blastdbcmd.getBlastDBcmd);
+
+// Request
+app.post(basepath + '/request', request.prepareRequest);
 
 // Blast
 app.post(basepath + '/blast', blast.performBlast);

@@ -189,16 +189,33 @@ $(function() {
 						evalue: evaluecheck,
 						max_target_seqs: maxhitsnum
 					};
-
-		console.log( params );
+		
+		// Send first request
+		var reqexec = basepath + "/request" ;
+		var reqparams = params;
+		
+		$.post( reqexec, reqparams ).done( function( request ) {
 					
-		$.post( exec, params ).done( function( data ) {
+			if ( request && request._id ) {
+				
+				params.refid = request._id;
+				request.entry = "submit";
 
-			if ( ! socketio ){
-				prepareHTMLBLAST( JSON.stringify( data ) );
+				// TODO: we should make next steps dependent on this
+				pouchdbInterface.report( "reports", request, function( db, request, err ) {}  );
+				
+				$.post( exec, params ).done( function( data ) {
+		
+					if ( ! socketio ){
+						prepareHTMLBLAST( JSON.stringify( data ) );
+					}
+		
+				});
+				
 			}
-
+	
 		});
+
 	});
 	
 	$(document).on('click', "#blast-switch", function() {
@@ -309,7 +326,7 @@ $(function() {
 			// TODO: Send to service
 	
 			// Prepare params
-			params = {}
+			let params = {};
 			params.entry = listId;
 			params.dbtype = $("[name=moltype]").val(); // TODO: To be changed
 			
@@ -1170,53 +1187,75 @@ $(function() {
 	
 		var basepath = $("body").data("basepath");
 
-		$.ajax({
-			url: basepath+"/load",
-			dataType: 'text',
-			cache: false,
-			contentType: false,
-			processData: false,
-			data: fd,                         
-			type: 'post',
-			success: function(response){
-	
-				if ( response ) {
-					if ( isJson( response ) ) {
-						response = JSON.parse( response );
-					}
+		// Send first request
+		var reqexec = basepath + "/request" ;
+		var reqparams = {};
+		
+		$.post( reqexec, reqparams ).done( function( request ) {
+					
+			if ( request && request._id ) {
+				
+				let refid = request._id;
+				request.entry = "upload";
 
-					if ( response.hasOwnProperty("data") ) {
-	
-						var data = response.data;
-
-						var seqinput = "";
-						var seqs = recoverSequences( data );
-
-						for ( var s = 0; s < seqs.length; s++ ) {
-							if ( seqs[s].name ) {
-									seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
-							} else {
-									seqinput = seqinput + ">Seq"+String(s)+"\n"+seqs[s].seq+"\n";
+				// TODO: we should make next steps dependent on this
+				pouchdbInterface.report( "reports", request, function( db, request, err ) {}  );
+						
+				$.ajax({
+					url: basepath+"/load",
+					dataType: 'text',
+					cache: false,
+					contentType: false,
+					processData: false,
+					data: fd,                         
+					type: 'post',
+					success: function(response){
+			
+						if ( response ) {
+							if ( isJson( response ) ) {
+								response = JSON.parse( response );
+							}
+							
+							response.refid = refid;
+		
+							if ( response.hasOwnProperty("data") ) {
+			
+								var data = response.data;
+		
+								var seqinput = "";
+								var seqs = recoverSequences( data );
+		
+								for ( var s = 0; s < seqs.length; s++ ) {
+									if ( seqs[s].name ) {
+											seqinput = seqinput + ">"+seqs[s].name+"\n"+seqs[s].seq+"\n";
+									} else {
+											seqinput = seqinput + ">Seq"+String(s)+"\n"+seqs[s].seq+"\n";
+									}
+								}
+			
+								if ( seqinput !== "" ) {
+									$("#seqinput").val( seqinput );
+								}
+		
+								printBLASTall( response, 1, function( txt, extra ) {
+									// console.log( extra );
+				
+									$("#blast-data").empty();
+									$("#blast-data").append( txt );
+									var taxonidurl = $("#blast-form").data("external-taxonid");
+									addTaxonIDinBlast( taxonidurl );
+									panelListing();
+								});
 							}
 						}
-	
-						if ( seqinput !== "" ) {
-							$("#seqinput").val( seqinput );
-						}
-
-						printBLASTall( response, 1, function( txt, extra ) {
-							// console.log( extra );
-		
-							$("#blast-data").empty();
-							$("#blast-data").append( txt );
-							var taxonidurl = $("#blast-form").data("external-taxonid");
-							addTaxonIDinBlast( taxonidurl );
-							panelListing();
-						});
 					}
-				}
+				});
+				
 			}
-		 });
+	
+		});
+		
+
 	});
 	
 	$("#panel").on('click', ".storedDoc", function( e ) {

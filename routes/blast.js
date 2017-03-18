@@ -35,6 +35,9 @@ exports.performBlast = function (req, res) {
 	blastparams.remote = convertBoolean( req.body.remotecheck, false );
 	blastparams.evalue = req.body.evalue;
 	blastparams.max_target_seqs = req.body.max_target_seqs;
+	
+	// Refid
+	blastparams.refid = req.body.refid;
 
 	// Avoiding PSI blast in remote
 	if ( blastparams.remote ) {
@@ -58,7 +61,7 @@ function run_blast( params, req, res, seqidpath ){
 
 	var config, opts, db, fullpath;
 	config = req.app.set('config');
-	
+		
 	// TODO. Better handling params
 	var blast_params = {};
 	
@@ -130,9 +133,9 @@ function run_blast( params, req, res, seqidpath ){
 
 	// Listen for stdout data
 	child.stderr.on('data', function (data) {
-                if (typeof data !== 'string' || !( data  instanceof String) ) {
-                        data = data.toString();
-                }	
+		if (typeof data !== 'string' || !( data  instanceof String) ) {
+				data = data.toString();
+		}	
 		console.error("ERR: " + data );
 	});
 	
@@ -173,6 +176,7 @@ function run_blast( params, req, res, seqidpath ){
 		newObj.meta = config.meta; // Adding meta information
 		newObj.type = "blast";
 		newObj.data = object;
+		newObj.refid = params.refid;
 		newObj.timestamp = moment().format('YYYYMMDDHHmmSS');
 		
 		functions.returnSocketIO( socketio, io, "blast", res, JSON.stringify( newObj ) ); 
