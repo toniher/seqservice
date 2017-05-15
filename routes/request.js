@@ -8,6 +8,18 @@ var moment = require('moment');
 
 exports.prepareRequest  = function (req, res) {
 	
+	var config;
+	config = req.app.set('config');
+	
+	var socketio = config.socketio; // Wheter to use this socketio or not;
+	var io = req.app.set('io');
+	
+	// var digest = hash.digest( object );
+	var newObj = {};
+	
+	functions.returnSocketIO( socketio, io, "request", res, JSON.stringify( newObj ) );
+	
+	
 };
 
 

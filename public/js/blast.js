@@ -212,6 +212,10 @@ $(function() {
 		
 				});
 				
+			} else {
+				
+				// TODO: Handle problem
+				console.log( "problem!" );
 			}
 	
 		});
@@ -1250,6 +1254,11 @@ $(function() {
 						}
 					}
 				});
+				
+			} else {
+				
+				// TODO: Handle problem
+				console.log( "problem!" );
 				
 			}
 	
