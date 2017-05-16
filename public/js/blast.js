@@ -1193,6 +1193,8 @@ $(function() {
 
 		// Send first request
 		var reqexec = basepath + "/request" ;
+		
+		// TODO: convert something of fd into reqparams
 		var reqparams = {};
 		
 		$.post( reqexec, reqparams ).done( function( request ) {

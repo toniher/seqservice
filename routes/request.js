@@ -11,6 +11,8 @@ exports.prepareRequest  = function (req, res) {
 	var config;
 	config = req.app.set('config');
 	
+	reqconfig = config.request;
+	
 	var socketio = config.socketio; // Wheter to use this socketio or not;
 	var io = req.app.set('io');
 	

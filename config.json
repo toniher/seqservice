@@ -96,6 +96,10 @@
 				"type": "pouchdb"
 			}
 		},
+		"request": {
+			"approach": "content",
+			"content": ["seq"]
+		},
 		"meta": {
 			"name": "seqservice",
 			"version": "0.1"
