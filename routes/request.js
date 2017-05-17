@@ -16,11 +16,8 @@ exports.prepareRequest  = function (req, res) {
 	
 	var approach = "content";
 	
-	if ( reqconfig ) {
-		
-		if ( reqconfig.hasOwnProperty( "approach" ) ) {
-			approach = reqconfig.approach;
-		}
+	if ( reqconfig && reqconfig.approach ) {
+		approach = reqconfig.approach;
 	}
 
 	var newObj = {};
