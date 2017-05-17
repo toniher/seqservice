@@ -1064,7 +1064,7 @@ function addLinkParams( linkParam, info ) {
 						urx[ k ] = linkParam.urx[k];
 					}
 					
-					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info, ur[k] ) );
+					linkParamArr.push( k+"="+replaceWithInfo( linkParam.user[k], info, urx[k] ) );
 				}
 			}
 		}
