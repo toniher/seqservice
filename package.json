@@ -1,6 +1,6 @@
 {
   "name": "seqservice",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "API for retrieval of biological sequences from FASTA DBs",
   "main": "index.js",
   "scripts": {
