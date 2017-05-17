@@ -16,10 +16,12 @@ exports.prepareRequest  = function (req, res) {
 	
 	var approach = "content";
 	
-	if ( reqconfig && reqconfig.hasOwnProperty("approach") ) {
-		approach = reqconfig.approach;
+	if ( reqconfig ) {
+		
+		if ( reqconfig.hasOwnProperty( "approach" ) ) {
+			approach = reqconfig.approach;
+		}
 	}
-	
 
 	var newObj = {};
 	// Default entry, simply timestamp
