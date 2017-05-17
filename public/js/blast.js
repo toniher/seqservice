@@ -196,8 +196,6 @@ $(function() {
 		
 		$.post( reqexec, reqparams ).done( function( request ) {
 			
-			console.log( request );
-			
 			if ( request && request._id ) {
 				
 				params.refid = request._id;
