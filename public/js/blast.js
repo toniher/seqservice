@@ -195,11 +195,13 @@ $(function() {
 		var reqparams = params;
 		
 		$.post( reqexec, reqparams ).done( function( request ) {
-					
+			
+			console.log( request );
+			
 			if ( request && request._id ) {
 				
 				params.refid = request._id;
-				request.entry = "submit";
+				request.type = "submit";
 
 				// TODO: we should make next steps dependent on this
 				pouchdbInterface.report( "reports", request, function( db, request, err ) {}  );
@@ -1202,7 +1204,7 @@ $(function() {
 			if ( request && request._id ) {
 				
 				let refid = request._id;
-				request.entry = "upload";
+				request.type = "upload";
 
 				// TODO: we should make next steps dependent on this
 				pouchdbInterface.report( "reports", request, function( db, request, err ) {}  );

@@ -10,17 +10,43 @@ exports.prepareRequest  = function (req, res) {
 	
 	var config;
 	config = req.app.set('config');
+	reqbody = req.body;
 	
 	reqconfig = config.request;
 	
-	var socketio = config.socketio; // Wheter to use this socketio or not;
-	var io = req.app.set('io');
+	var approach = "content";
 	
-	// var digest = hash.digest( object );
+	if ( reqconfig && reqconfig.hasOwnProperty("approach") ) {
+		approach = reqconfig.approach;
+	}
+	
+
 	var newObj = {};
 	
-	functions.returnSocketIO( socketio, io, "request", res, JSON.stringify( newObj ) );
-	
+	// TODO: We assume content for now as approach
+	if ( approach === 'content' && reqconfig.hasOwnProperty('content') ) {
+		
+		let contentKeys = reqconfig.content;
+
+		if ( contentKeys.length > 0 ) {
+			
+			for ( let k = 0; k < contentKeys.length; k++) {
+				let key = contentKeys[k];
+
+				// TODO assuming only one, otherwise a concatenation of criteria
+				if ( reqbody.hasOwnProperty( key ) ) {
+					newObj._id = hash.digest( reqbody[key] );
+				}
+			}
+			
+		} else {
+			// Default entry, simply timestamp
+			newObj._id = "fd"+moment().format('YYYYMMDDHHmmSS');
+		}
+	}
+		
+		
+	functions.returnSocketIO( false, false, "request", res, JSON.stringify( newObj ) );
 	
 };
 
