@@ -22,6 +22,9 @@ exports.prepareRequest  = function (req, res) {
 	
 
 	var newObj = {};
+	// Default entry, simply timestamp
+	let timestamp = moment().format('YYYYMMDDHHmmSS');
+	newObj._id = "fd"+ timestamp;
 	
 	// TODO: We assume content for now as approach
 	if ( approach === 'content' && reqconfig.hasOwnProperty('content') ) {
@@ -38,14 +41,11 @@ exports.prepareRequest  = function (req, res) {
 					newObj._id = hash.digest( reqbody[key] );
 				}
 			}
-			
-		} else {
-			// Default entry, simply timestamp
-			newObj._id = "fd"+moment().format('YYYYMMDDHHmmSS');
 		}
 	}
-		
-		
+	
+	newObj.timestamp = timestamp;
+	
 	functions.returnSocketIO( false, false, "request", res, JSON.stringify( newObj ) );
 	
 };

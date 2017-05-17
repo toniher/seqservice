@@ -1196,8 +1196,8 @@ $(function() {
 		// Send first request
 		var reqexec = basepath + "/request" ;
 		
-		// TODO: convert something of fd into reqparams
-		var reqparams = {};
+		// TODO: convert something of fd into reqparams, maybe to be handled differently
+		var reqparams = { "upload": true };
 		
 		$.post( reqexec, reqparams ).done( function( request ) {
 					
