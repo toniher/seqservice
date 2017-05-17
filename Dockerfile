@@ -1,6 +1,6 @@
 # seqservice image
 # from node image
-FROM node:6.9-onbuild
+FROM node:boron
 
 MAINTAINER toniher <toniher@cau.cat>
 
@@ -14,9 +14,9 @@ RUN mkdir -p /data/soft/bin
 
 WORKDIR /data/soft
 
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.5.0/ncbi-blast-2.5.0+-x64-linux.tar.gz && \
-	tar zxf ncbi-blast-2.5.0+-x64-linux.tar.gz && \
-	ln -s ncbi-blast-2.5.0+ blast && \
+RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
+	tar zxf ncbi-blast-2.6.0+-x64-linux.tar.gz && \
+	ln -s ncbi-blast-2.6.0+ blast && \
 	cd /data/soft/bin && ln -s /data/soft/blast/bin/* . && cd /data/soft && \
 	rm -rf *tar.gz
 
