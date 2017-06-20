@@ -619,7 +619,11 @@ reportProcess.printBLAST = function( obj, num, reorder, params ) {
 
 	var program = blastobj.program;
 	var head_str = "<div class='blast' id='blast-"+num+"' data-binary='"+program+"' data-seq='"+seq+"' data-id='"+id+"' data-name='"+name+"'>";
-	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form><!--<button class='btn' id='align-exec'>Continue running with selection --TODO--</button>--></div>";	
+	
+	var single_str = retrieveSingleButtons();
+	
+	var action_str = "<div class='blast-action'><button class='btn down-hit-seqs'>Retrieve hit sequences</button><form id='down-form' action='"+basepath+"/tmp' method='post'></form>"+single_str+"<!--<button class='btn' id='align-exec'>Continue running with selection --TODO--</button>--></div>";
+		
 	var select_str = "<div class='check-action'><a class='check-all' href='#'>Check all</a> | <a class='check-ten' href='#'>Check up to 10</a> | <a class='check-none' href='#'>Check none</a></div>";
 	var str = "";
 		
@@ -781,6 +785,7 @@ reportProcess.processHits = function( hits, reordList, params ) {
 		
 		str = str + "<span class='details'>Details...</span>"; // Details
 
+		str = str + addSingleServices( );
 
 		if ( reordInfo  && reordInfo.hasOwnProperty("new") ) {
 
@@ -1012,6 +1017,27 @@ function fillTaxonNames( mapTaxonID ) {
 		}
 		
 	});
+	
+}
+
+function retrieveSingleButtons( ){
+
+	var str = "";
+
+	return str;
+	
+}
+
+
+function addSingleServices( ) {
+	
+	var str = "";
+	
+	// Add single services
+	str = "<span class='single'></span>";
+	
+	
+	return str;
 	
 }
 

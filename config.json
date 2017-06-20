@@ -84,6 +84,12 @@
 			"t-coffee": {
 				"type": "exec",
 				"input": "file"
+			},
+			"protloc": {
+				"context": "single",
+				"type": "get",
+				"url": "",
+				"input": "seq"
 			}
 		},
 		"port": "10030",
