@@ -59,7 +59,12 @@ function runPipe( baseText, apps, callBack ) {
 	
 	commandline.data( function(err, stdout, stderr) {
 		
-		resp += stdout.toString();
+		resp = "";
+		
+		if ( stdout ) {
+			resp += stdout.toString();
+		}
+				
 		callBack( err, stderr, resp);
 	});
 
