@@ -5,9 +5,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	    <link rel="stylesheet" href="<%= basepath %>/vendor/css/bootstrap/bootstrap.min.css"></link>
-	    <link rel="stylesheet" href="<%= basepath %>/vendor/css/bootstrap/bootstrap-theme.min.css"></link>
-		<link rel="stylesheet" href="<%= basepath %>/blast.css">
+		<link rel="stylesheet" href="<%= basepath %>/main.css">
 	</head>
 	<body data-basepath="<%= basepath %>" data-socketio="<%= socketio %>" data-dblist="<%= locals.dblist %>">
 	<div id="wrapper">
@@ -144,18 +142,6 @@
 			<div id="treeview-data"></div>
 		</div>
 	</div>
-	<script src='<%= basepath %>/vendor/js/babel-standalone/babel.min.js'></script>
-	<script src='<%= basepath %>/vendor/js/jquery/jquery.min.js'></script>
-	<script src='<%= basepath %>/socket.io/socket.io.js'></script>
-	<script src='<%= basepath %>/vendor/js/file-saver/FileSaver.min.js'></script>
-	<script src='<%= basepath %>/vendor/js/async/async.min.js'></script>
-	<script src='<%= basepath %>/vendor/js/pouchdb/pouchdb.min.js'></script>
-	<script src='<%= basepath %>/vendor/js/tinysort/tinysort.min.js'></script>
-	<script src='<%= basepath %>/vendor/js/bootstrap/bootstrap.min.js'></script>
-	<script src='<%= basepath %>/js/pouchdb.js'></script>
-	<script src='<%= basepath %>/js/blast.js'></script>
-	<script src='<%= basepath %>/js/align.js'></script>
-	<script src='<%= basepath %>/js/extern/goapi.js'></script>
-	<script src='<%= basepath %>/js/extern/service.js'></script>
+	<script src='<%= basepath %>/js/app.js'></script>
 	</body>
 </html>
