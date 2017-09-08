@@ -1,4 +1,4 @@
-var $ = require('jquery');
+/*globals console io $ document */
 
 $(document).on( "click", '#go-exec', function() {
 

@@ -4,6 +4,13 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const plugins = [];
 
+plugins.push( new Webpack.ProvidePlugin( { 
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        async: 'async'
+} ) );
+
 plugins.push( new ExtractTextPlugin("public/main.css") );
 
 const config = {

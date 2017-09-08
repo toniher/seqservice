@@ -1,6 +1,5 @@
 /*globals console io $ document */
-var $ = require('jquery');
-var async = require('async');
+import {pouchdbInterface} from '../pouchdb.js';
 
 var serviceProcess = {}; // Object for storing service
 
@@ -33,7 +32,7 @@ $(document).on('click', ".service-exec", function() {
 		var paramclass = service + "-param";
 		
 		var params = {};
-		progparams = {};
+		var progparams = {};
 		
 		$( "." + paramclass ).each( function( i ) {
 			var name = $(this).attr( "name" );
@@ -141,7 +140,7 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 				
 				if ( obj.hasOwnProperty("ref") ) {
 					
-					ref = obj.ref;
+					var ref = obj.ref;
 					
 					// Retrieve ref
 					pouchdbInterface.retrieve( "reports", ref, function( err, doc ) {
@@ -199,4 +198,10 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 	});
 	
 };
+
+function addDOMdata( selector, id, val ) {
+
+    $(selector).attr( "data-"+id, val );
+
+}
 
