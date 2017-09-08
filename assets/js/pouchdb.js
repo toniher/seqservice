@@ -4,7 +4,7 @@ var pouchdbInterface = {};
 
 pouchdbInterface.report = function( dbname, obj, cb ) {
 
-	err = null;
+	let err = null;
 	let db = new PouchDB(dbname);
 
 
@@ -108,6 +108,17 @@ pouchdbInterface.add_indexes = function( db, cb ) {
 			cb();
 		}
 	});
+};
+
+pouchdbInterface.destroy = function( db, cb ) {
+		
+		new PouchDB('reports').destroy().then(function () {
+			cb();
+		}).catch(function (err) {
+			// error occurred
+			cb();
+		});
+	
 };
 
 export {pouchdbInterface};

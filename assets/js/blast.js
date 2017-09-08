@@ -1,6 +1,8 @@
 /*globals console io $ document */
 var $ = require('jquery');
+var jQuery = require('jquery');
 var async = require('async');
+require('bootstrap');
 import {pouchdbInterface} from './pouchdb.js';
 
 
@@ -297,17 +299,12 @@ $(function() {
 
 	$(document).on('click', ".panel-container .cleanDocs", function() {
 	
-		new PouchDB('reports').destroy().then(function () {
-			// database destroyed
+		pouchdbInterface.destroy( "reports", function( data ){
 			// Clean panel
 			$( "#panel" ).empty();
 			$( "#panel" ).hide();
-	
-		}).catch(function (err) {
-			// error occurred
 		});
 	});
-	
 	
 	$(document).on('click', ".down-hit-seqs", function() {
 	
