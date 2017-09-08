@@ -1483,3 +1483,6 @@ $(function() {
 
 
 });
+
+
+export {reportProcess};

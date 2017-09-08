@@ -1,5 +1,7 @@
 /*globals console io $ document */
 import {pouchdbInterface} from '../pouchdb.js';
+import tinysort from 'tinysort';
+import {reportProcess} from '../blast.js';
 
 var serviceProcess = {}; // Object for storing service
 
@@ -121,8 +123,6 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 		obj = message;
 	}
 	
-	console.log( obj );
-	
 	var extra = {};
 	
 	pouchdbInterface.report( "reports", obj, function( db, obj, err ) {
@@ -144,24 +144,24 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 					
 					// Retrieve ref
 					pouchdbInterface.retrieve( "reports", ref, function( err, doc ) {
-						
+
 						if ( ! err ) {
 							if ( doc.hasOwnProperty("data") ) {
 								
 								// All objects should have data part
 				
 								if ( doc["data"].hasOwnProperty("BlastOutput2") ) {
-									
-									blastObj = doc["data"]["BlastOutput2"];
-													
+							
+									let blastObj = doc["data"]["BlastOutput2"];
+					
 									if ( blastObj instanceof Array ) {
-										
+				
 										// Move async
 										var iter = 0;
 										var str = "";
-								
+							
 										async.eachSeries(blastObj, function(blastIter, callback) {
-											
+										
 											str = str + reportProcess.printBLAST( blastIter, iter, reorder );
 											iter = iter + 1;
 											callback();
