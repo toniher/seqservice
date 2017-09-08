@@ -2,8 +2,6 @@ const Webpack = require('webpack');
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-
 const plugins = [];
 
 plugins.push( new ExtractTextPlugin("public/main.css") );
@@ -43,9 +41,12 @@ const config = {
             }],
           })
         }
-      ]
-    },
-  plugins: plugins
+      ],
+  },
+  plugins: plugins,
+  node : {
+	fs: "empty"
+  }
 };
 
 module.exports = function(env) {

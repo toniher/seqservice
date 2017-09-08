@@ -6,9 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack --watch --progress --colors",
-    "production": "webpack --progress --colors --env.production",
-    "start": "webpack-dev-server",
-    "startprod": "webpack-dev-server --env.production"
+    "production": "webpack --progress --colors --env.production"
   },
   "repository": {
     "type": "git",
@@ -25,6 +23,7 @@
     "biojs-io-fasta": "^0.1.12",
     "body-parser": "1.x",
     "bootstrap": "3.x",
+    "bootstrap-webpack": "0.0.6",
     "compression": "1.x",
     "ejs": "1.x",
     "errorhandler": "1.x",

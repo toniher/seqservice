@@ -1,4 +1,6 @@
 /*globals console io $ document */
+var $ = require('jquery');
+var async = require('async');
 
 var serviceProcess = {}; // Object for storing service
 

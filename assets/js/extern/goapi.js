@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 $(document).on( "click", '#go-exec', function() {
 
 	$("#go-data").empty();

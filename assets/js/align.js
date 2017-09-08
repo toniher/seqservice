@@ -1,4 +1,5 @@
 /*globals console io $ document */
+var $ = require('jquery');
 
 var basicAlign = {};
 

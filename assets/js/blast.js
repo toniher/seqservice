@@ -1,4 +1,8 @@
 /*globals console io $ document */
+var $ = require('jquery');
+var async = require('async');
+import {pouchdbInterface} from './pouchdb.js';
+
 
 var reportProcess = {}; // Object storing processing of reports
 
