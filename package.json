@@ -4,6 +4,7 @@
   "description": "API for retrieval of biological sequences from FASTA DBs",
   "main": "index.js",
   "scripts": {
+    "cpcss": "cpx \"node_modules/bootstrap/dist/css/*.min.css\" public/css",
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack --watch --progress --colors",
     "production": "webpack --progress --colors --env.production"
@@ -47,6 +48,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
+    "cpx": "^1.5.0",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.0",
     "less": "^2.7.2",
