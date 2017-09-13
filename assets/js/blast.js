@@ -1,7 +1,7 @@
 /*globals console io $ document */
 import {pouchdbInterface} from './pouchdb.js';
 import 'bootstrap/dist/js/bootstrap';
-
+import {saveAs} from 'file-saver';
 
 var reportProcess = {}; // Object storing processing of reports
 

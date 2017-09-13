@@ -4,7 +4,7 @@
   "description": "API for retrieval of biological sequences from FASTA DBs",
   "main": "index.js",
   "scripts": {
-    "cpcss": "cpx \"node_modules/bootstrap/dist/css/*.min.css\" public/css; cpx \"node_modules/bootstrap/dist/fonts/*\" public/fonts",
+    "cpcss": "cpx \"node_modules/bootstrap/dist/css/*\" public/css; cpx \"node_modules/bootstrap/dist/fonts/*\" public/fonts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --progress --colors",
     "production": "webpack --progress --colors --env.production"
@@ -24,12 +24,11 @@
     "biojs-io-fasta": "^0.1.12",
     "body-parser": "1.x",
     "bootstrap": "3.x",
-    "bootstrap-webpack": "0.0.6",
     "compression": "1.x",
     "ejs": "1.x",
     "errorhandler": "1.x",
     "express": "4.x",
-    "file-saver": "1.x",
+    "file-saver": "^1.3.3",
     "jquery": "1.x",
     "json-hash": "^1.1.0",
     "less-middleware": "2.x",
