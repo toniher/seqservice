@@ -27,25 +27,40 @@ const config = {
       rules: [
         {
           test: /\.(js|jsx)$/,
-          use: 'babel-loader',
-		  exclude: /(node_modules|bower_components)/
+          use: { 
+		loader: 'babel-loader',
+		query: {
+                presets: ['es2015']
+          	}
+	  },
+          exclude: /(node_modules|bower_components)/,
         },
         {
           test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: "css-loader"
+          use: ExtractTextPlugin.extract( {
+                fallback: "style-loader",
+                use: [ {
+                  loader: 'css-loader',
+                  options: {
+                    minimize: true || {/* CSSNano Options */}
+                  }
+                }]
           })
         },
         {
           test: /\.less$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
-            use: [{
-                loader: "css-loader"
-            }, {
-                loader: "less-loader"
-            }],
+                use: [
+                {
+                  loader: 'css-loader',
+                  options: {
+                    minimize: true || {/* CSSNano Options */}
+                  }
+                },
+                { loader: "less-loader" }
+
+                ]
           })
         }
       ],
