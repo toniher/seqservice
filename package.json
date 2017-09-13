@@ -4,7 +4,7 @@
   "description": "API for retrieval of biological sequences from FASTA DBs",
   "main": "index.js",
   "scripts": {
-    "cpcss": "cpx \"node_modules/bootstrap/dist/css/*.min.css\" public/css",
+    "cpcss": "cpx \"node_modules/bootstrap/dist/css/*.min.css\" public/css; cpx \"node_modules/bootstrap/dist/fonts/*\" public/fonts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack --watch --progress --colors",
     "production": "webpack --progress --colors --env.production"
