@@ -1,4 +1,7 @@
 /*globals console io $ document */
+import {pouchdbInterface} from '../pouchdb.js';
+import tinysort from 'tinysort';
+import {reportProcess} from '../blast.js';
 
 var serviceProcess = {}; // Object for storing service
 
@@ -31,7 +34,7 @@ $(document).on('click', ".service-exec", function() {
 		var paramclass = service + "-param";
 		
 		var params = {};
-		progparams = {};
+		var progparams = {};
 		
 		$( "." + paramclass ).each( function( i ) {
 			var name = $(this).attr( "name" );
@@ -120,8 +123,6 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 		obj = message;
 	}
 	
-	console.log( obj );
-	
 	var extra = {};
 	
 	pouchdbInterface.report( "reports", obj, function( db, obj, err ) {
@@ -139,28 +140,28 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 				
 				if ( obj.hasOwnProperty("ref") ) {
 					
-					ref = obj.ref;
+					var ref = obj.ref;
 					
 					// Retrieve ref
 					pouchdbInterface.retrieve( "reports", ref, function( err, doc ) {
-						
+
 						if ( ! err ) {
 							if ( doc.hasOwnProperty("data") ) {
 								
 								// All objects should have data part
 				
 								if ( doc["data"].hasOwnProperty("BlastOutput2") ) {
-									
-									blastObj = doc["data"]["BlastOutput2"];
-													
+							
+									let blastObj = doc["data"]["BlastOutput2"];
+					
 									if ( blastObj instanceof Array ) {
-										
+				
 										// Move async
 										var iter = 0;
 										var str = "";
-								
+							
 										async.eachSeries(blastObj, function(blastIter, callback) {
-											
+										
 											str = str + reportProcess.printBLAST( blastIter, iter, reorder );
 											iter = iter + 1;
 											callback();
@@ -197,4 +198,10 @@ serviceProcess.printBypass = function ( message, parse, target ) {
 	});
 	
 };
+
+function addDOMdata( selector, id, val ) {
+
+    $(selector).attr( "data-"+id, val );
+
+}
 

@@ -1,4 +1,7 @@
 /*globals console io $ document */
+import {pouchdbInterface} from './pouchdb.js';
+import 'bootstrap/dist/js/bootstrap';
+import {saveAs} from 'file-saver';
 
 var reportProcess = {}; // Object storing processing of reports
 
@@ -293,17 +296,12 @@ $(function() {
 
 	$(document).on('click', ".panel-container .cleanDocs", function() {
 	
-		new PouchDB('reports').destroy().then(function () {
-			// database destroyed
+		pouchdbInterface.destroy( "reports", function( data ){
 			// Clean panel
 			$( "#panel" ).empty();
 			$( "#panel" ).hide();
-	
-		}).catch(function (err) {
-			// error occurred
 		});
 	});
-	
 	
 	$(document).on('click', ".down-hit-seqs", function() {
 	
@@ -1485,3 +1483,6 @@ $(function() {
 
 
 });
+
+
+export {reportProcess};

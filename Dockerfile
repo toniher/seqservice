@@ -61,9 +61,9 @@ RUN npm install -g forever
 # Install app deps
 RUN npm install
 
-# Install Bower deps
-RUN npm install -g bower-installer
-RUN bower-installer
+# Execute npm run
+RUN npm run cpcss
+RUN npm run production
 
 #Default port, change if necessary
 EXPOSE 10030 

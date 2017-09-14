@@ -1,9 +1,11 @@
+import PouchDB from 'pouchdb';
+
 var pouchdbInterface = {};
 
 pouchdbInterface.report = function( dbname, obj, cb ) {
 
-	err = null;
-	db = new PouchDB(dbname);
+	let err = null;
+	let db = new PouchDB(dbname);
 
 
 	pouchdbInterface.add_indexes( db, null );
@@ -32,7 +34,7 @@ pouchdbInterface.report = function( dbname, obj, cb ) {
 
 pouchdbInterface.retrieve = function( dbname, id, cb ) {
 
-	db = new PouchDB(dbname);
+	let db = new PouchDB(dbname);
 
 	db.get(id).then(function (doc) {
 		
@@ -49,7 +51,7 @@ pouchdbInterface.retrieve = function( dbname, id, cb ) {
 
 pouchdbInterface.rm = function( dbname, id, cb ) {
 
-	db = new PouchDB(dbname);
+	let db = new PouchDB(dbname);
 
 
 	db.get( id ).then(function(doc) {
@@ -66,7 +68,7 @@ pouchdbInterface.rm = function( dbname, id, cb ) {
 
 pouchdbInterface.listdocs = function( dbname, index, keyval, cb ) {
 
-	db = new PouchDB(dbname);
+	let db = new PouchDB(dbname);
 
 	pouchdbInterface.add_indexes( db, ( db.query( index, {
 			key: keyval
@@ -107,3 +109,17 @@ pouchdbInterface.add_indexes = function( db, cb ) {
 		}
 	});
 };
+
+pouchdbInterface.destroy = function( db, cb ) {
+		
+		new PouchDB('reports').destroy().then(function () {
+			cb();
+		}).catch(function (err) {
+			// error occurred
+			cb();
+		});
+	
+};
+
+export {pouchdbInterface};
+

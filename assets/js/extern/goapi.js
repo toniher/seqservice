@@ -1,3 +1,5 @@
+/*globals console io $ document */
+
 $(document).on( "click", '#go-exec', function() {
 
 	$("#go-data").empty();
