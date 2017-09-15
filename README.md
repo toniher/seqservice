@@ -57,9 +57,9 @@ NodeJS express API for handling biological sequences
 
 From the directory of the application
 
-	npm install -g bower-installer
 	npm install
-	bower-installer
+	npm run cpcss
+	npm run webpack
 	node index.js
 
 	FUN!
