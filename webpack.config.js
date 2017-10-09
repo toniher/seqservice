@@ -80,7 +80,12 @@ module.exports = function(env) {
     }
     
     if (prod) {
-      plugins.push( new UglifyJSPlugin()) ;
+        plugins.push( new UglifyJSPlugin({
+                ie8: false,
+                mangle: {
+                  except: ['$super', '$', 'exports', 'require']
+                }
+        }));
     }
     plugins.push(new Webpack.DefinePlugin({
       __PRODUCTION__: prod,
