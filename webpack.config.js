@@ -11,6 +11,7 @@ const debug = (process.env.NODE_ENV !== 'production');
 // Development asset host (webpack dev server)
 const publicHost = debug ? 'http://localhost:2992' : '';
 
+const dist = path.resolve(__dirname, 'public');
 
 const plugins = [];
 
@@ -21,6 +22,7 @@ plugins.push(
         'window.jQuery': 'jquery',
         async: 'async'
     } ),
+    new CleanWebpackPlugin([dist]),
     new HtmlWebpackPlugin({
             title: 'Hot Module Reload'
     }),
