@@ -1,6 +1,5 @@
 const Webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -23,9 +22,6 @@ plugins.push(
         async: 'async'
     } ),
     new CleanWebpackPlugin([dist]),
-    new HtmlWebpackPlugin({
-            title: 'Hot Module Reload'
-    }),
     new ExtractTextPlugin("public/main.css"),
     new Webpack.HotModuleReplacementPlugin()
 );
