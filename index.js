@@ -1,4 +1,4 @@
-var express = require("express");
+const express = require("express");
 
 var args = process.argv.slice(2);
 
@@ -10,6 +10,13 @@ var bodyParser = require('body-parser');
 var compression = require('compression');
 
 var functions = require('./functions/index.js');
+
+// Webpack
+const webpack = require('webpack');
+const webpackconfig = require('./webpack.config.js');
+const webpackMiddleware = require("webpack-dev-middleware");
+
+const webpackCompiler = webpack(webpackconfig);
 
 
 var lessMiddleware = require('less-middleware');

@@ -1,19 +1,54 @@
 const Webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+// take debug mode from the environment
+const debug = (process.env.NODE_ENV !== 'production');
+
+// Development asset host (webpack dev server)
+const publicHost = debug ? 'http://localhost:2992' : '';
+
+
 const plugins = [];
 
-plugins.push( new Webpack.ProvidePlugin( { 
+plugins.push(
+    new Webpack.ProvidePlugin( { 
         $: 'jquery',
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
         async: 'async'
-} ) );
+    } ),
+    new HtmlWebpackPlugin({
+            title: 'Hot Module Reload'
+    }),
+    new ExtractTextPlugin("public/main.css"),
+    new Webpack.HotModuleReplacementPlugin()
+);
 
-plugins.push( new ExtractTextPlugin("public/main.css") );
+if ( ! debug ) {
+    
+    plugins.concat( [
+    // production webpack plugins go here
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production'),
+      }
+    }),
+    new UglifyJSPlugin({
+                ie8: false,
+                mangle: {
+                  except: ['$super', '$', 'exports', 'require']
+                }
+    })
+  ]);
+    
+}
 
-const config = {
+module.exports =  {
+    
   entry: {
     app: ['./assets/js/blast.js', './assets/js/align.js', './assets/js/pouchdb.js', './assets/js/extern/goapi.js', './assets/js/extern/service.js' ],
     styles: ['./assets/styles/blast.less' ]
@@ -69,31 +104,5 @@ const config = {
   node : {
 	fs: "empty"
   }
-};
 
-module.exports = function(env) {
-  
-    let prod = false;
-    
-    if ( env && env.production ) {
-        prod = true;
-    }
-    
-    if (prod) {
-        plugins.push( new UglifyJSPlugin({
-                ie8: false,
-                mangle: {
-                  except: ['$super', '$', 'exports', 'require']
-                }
-        }));
-    }
-    plugins.push(new Webpack.DefinePlugin({
-      __PRODUCTION__: prod,
-      __DEV__: !prod
-    }));
-  
-    return config;
-  
 };
-                          
-
