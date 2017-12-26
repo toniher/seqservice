@@ -11,12 +11,9 @@ var compression = require('compression');
 
 var functions = require('./functions/index.js');
 
-// Webpack
-const webpack = require('webpack');
-const webpackconfig = require('./webpack.config.js');
-const webpackMiddleware = require("webpack-dev-middleware");
-
 // var lessMiddleware = require('less-middleware');
+
+const dev = (process.env.NODE_ENV !== 'production');
 
 var multer  = require('multer');
 
@@ -123,9 +120,18 @@ app.engine('html', require('ejs').renderFile);
 // app.use(basepath, lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
 app.use(basepath, express.static(__dirname + '/public')); 
 
-const webpackCompiler = webpack(webpackconfig);
-const wpmw = webpackMiddleware(webpackCompiler,{ publicPath: basepath });
-app.use(wpmw);
+
+// Use Webpack Hot reload if dev
+if ( dev ) {
+	// Webpack
+	const webpack = require('webpack');
+	const webpackconfig = require('./webpack.config.js');
+	const webpackMiddleware = require("webpack-dev-middleware");
+	const webpackCompiler = webpack(webpackconfig);
+	const wpmw = webpackMiddleware(webpackCompiler,{ publicPath: basepath });
+	app.use(wpmw);
+
+}
 
 
 // TODO: This is not fully working. Redundant for now

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --progress --colors",
-    "production": "webpack --progress --colors -p --env.production"
+    "start": "node index.js",
+    "production": "NODE_ENV=production webpack -p --progress --colors; NODE_ENV=production node index.js"
   },
   "repository": {
     "type": "git",
