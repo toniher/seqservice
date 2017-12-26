@@ -12,14 +12,15 @@ const dist = path.resolve(__dirname, 'public');
 const plugins = [];
 
 plugins.push(
-    new Webpack.ProvidePlugin( { 
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery',
-        async: 'async'
-    } ),
-    new ExtractTextPlugin("[name].css"),
-    new Webpack.HotModuleReplacementPlugin()
+	new Webpack.ProvidePlugin( { 
+		$: 'jquery',
+		jQuery: 'jquery',
+		'window.jQuery': 'jquery',
+		async: 'async'
+	} ),
+	new ExtractTextPlugin("[name].css"),
+	new Webpack.NamedModulesPlugin(),
+	new Webpack.HotModuleReplacementPlugin()
 );
 
 if ( ! dev ) {

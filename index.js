@@ -127,10 +127,12 @@ if ( dev ) {
 	const webpack = require('webpack');
 	const webpackconfig = require('./webpack.config.js');
 	const webpackMiddleware = require("webpack-dev-middleware");
+	// const webpackHotware = require('webpack-hot-middleware');
 	const webpackCompiler = webpack(webpackconfig);
 	const wpmw = webpackMiddleware(webpackCompiler,{ publicPath: basepath });
+	// const wphw = webpackHotware(webpackCompiler,{ publicPath: basepath });
 	app.use(wpmw);
-
+	// app.use(wphw);
 }
 
 
