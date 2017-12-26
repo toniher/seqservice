@@ -16,7 +16,7 @@ const webpack = require('webpack');
 const webpackconfig = require('./webpack.config.js');
 const webpackMiddleware = require("webpack-dev-middleware");
 
-var lessMiddleware = require('less-middleware');
+// var lessMiddleware = require('less-middleware');
 
 var multer  = require('multer');
 
@@ -120,11 +120,11 @@ app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 
 
-app.use(basepath, lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
+// app.use(basepath, lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
 app.use(basepath, express.static(__dirname + '/public')); 
 
 const webpackCompiler = webpack(webpackconfig);
-const wpmw = webpackMiddleware(webpackCompiler,{});
+const wpmw = webpackMiddleware(webpackCompiler,{ publicPath: basepath });
 app.use(wpmw);
 
 

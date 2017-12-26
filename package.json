@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --progress --colors",
-    "production": "webpack --progress --colors --env.production"
+    "production": "webpack --progress --colors -p --env.production"
   },
   "repository": {
     "type": "git",
@@ -52,9 +52,10 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "style-loader": "^0.19.0",
-    "uglifyjs-webpack-plugin": "^1.1.4",
+    "url-loader": "^0.6.2",
     "webpack": "3.x",
     "webpack-dev-middleware": "2.x",
+    "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "2.x"
   },
   "author": "Toni Hermoso",

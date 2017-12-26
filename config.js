@@ -7,7 +7,7 @@ function config( file ) {
 	}
 
 	nconf.argv().env("_");
-	var environment = nconf.get("NODE:ENV") || nconf.file( "default", file );
+	var environment = nconf.file( "default", file );
 }
 
 config.prototype.get = function( key ) {
