@@ -1,4 +1,4 @@
-var express = require("express");
+const express = require("express");
 
 var args = process.argv.slice(2);
 
@@ -11,8 +11,9 @@ var compression = require('compression');
 
 var functions = require('./functions/index.js');
 
+// var lessMiddleware = require('less-middleware');
 
-var lessMiddleware = require('less-middleware');
+const dev = (process.env.NODE_ENV !== 'production');
 
 var multer  = require('multer');
 
@@ -116,8 +117,24 @@ app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 
 
-app.use(basepath, lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
+// app.use(basepath, lessMiddleware(__dirname + '/public')); // TODO: Minor, allow other paths
 app.use(basepath, express.static(__dirname + '/public')); 
+
+
+// Use Webpack Hot reload if dev
+if ( dev ) {
+	// Webpack
+	const webpack = require('webpack');
+	const webpackconfig = require('./webpack.config.js');
+	const webpackMiddleware = require("webpack-dev-middleware");
+	// const webpackHotware = require('webpack-hot-middleware');
+	const webpackCompiler = webpack(webpackconfig);
+	const wpmw = webpackMiddleware(webpackCompiler,{ publicPath: basepath });
+	// const wphw = webpackHotware(webpackCompiler,{ publicPath: basepath });
+	app.use(wpmw);
+	// app.use(wphw);
+}
+
 
 // TODO: This is not fully working. Redundant for now
 app.get(basepath + '/blast', function (req, res) {
