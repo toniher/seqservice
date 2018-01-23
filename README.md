@@ -58,8 +58,7 @@ NodeJS express API for handling biological sequences
 From the directory of the application
 
 	npm install
-	npm run cpcss
-	npm run webpack
+	npm run build
 	node index.js
 
 	FUN!
@@ -75,6 +74,7 @@ From this repository:
 
 
 ## TODO
+* Webpack: Consider putting manifest for hashed version
 * Keep track of submissions
 * Allow single-hit accompanying analyses (e.g. ProtLoc or GO)
 * Generate alignment from results at user's choice

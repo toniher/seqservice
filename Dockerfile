@@ -62,9 +62,8 @@ RUN npm install -g forever
 RUN npm install
 
 # Execute npm run
-RUN npm run cpcss
-RUN npm run production
+RUN npm run build
 
 #Default port, change if necessary
 EXPOSE 10030 
-CMD forever index.js
+CMD NODE_ENV=production forever index.js
