@@ -34,7 +34,7 @@ From the directory of the application
 
 	npm install
 	npm run build
-	node index.js
+	NODE_ENV=production node index.js
 
 	FUN!
 
