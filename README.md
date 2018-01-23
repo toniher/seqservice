@@ -25,33 +25,8 @@ NodeJS express API for handling biological sequences
 
 #### NGINX
 
-	upstream api {
-	    server localhost:10030;
-	}
-	
-	server {
-	   ...
-	
-	    location /seqservice/socket.io {
-	        proxy_pass http://seqservice;
-	        proxy_http_version 1.1;
-	        proxy_set_header Upgrade $http_upgrade;
-	        proxy_set_header Connection "upgrade";
-	    }
-	
-	    location /seqservice {
-	        proxy_http_version 1.1;
-	        proxy_set_header   X-Real-IP        $remote_addr;
-	        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-	        proxy_set_header   X-NginX-Proxy    true;
-	        proxy_set_header   Host             $http_host;
-	        proxy_set_header   Upgrade          $http_upgrade;
-	        proxy_redirect     off;
-	        proxy_pass         http://seqservice;
-	    }
-	    ...
-	
-	}
+Check example `nginx.conf` file
+
 
 ### Application start
 
