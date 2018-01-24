@@ -49,6 +49,8 @@ From this repository:
 
 
 ## TODO
+* FIXING Websocket access behind proxies such as NGINX
+* FIXING piping when run as cron
 * Webpack: Consider putting manifest for hashed version
 * Keep track of submissions
 * Allow single-hit accompanying analyses (e.g. ProtLoc or GO)
