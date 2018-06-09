@@ -1,5 +1,5 @@
 # seqservice
-NodeJS express API for handling biological sequences
+NodeJS express API for handling biological sequences analyses
 
 [![DOI](https://zenodo.org/badge/29487880.svg)](https://zenodo.org/badge/latestdoi/29487880)
 
@@ -50,16 +50,16 @@ From this repository:
 
 ## TODO
 * FIXING Websocket access behind proxies such as NGINX
-* FIXING piping when run as cron
 * Webpack: Consider putting manifest for hashed version
-* Keep track of submissions
+* Webpack and npm run: enable proper PRODUCTION and DEVELOPMENT behaviour 
 * Allow single-hit accompanying analyses (e.g. ProtLoc or GO)
 * Generate alignment from results at user's choice
-	* Start PSIBLAST from user choice of sequences
+* Start PSIBLAST from user choice of sequences
 * Include more HMMER options
-* Save other analysis in DB
 * Download results in different formats (CSV, etc.)
-* Allow syncing with CouchDB
-* More coherent system of keeping params in configuration
-* Plug a task queue or submit to a cluster
-* Download databases if needed
+* Allow syncing/saving with a DB (e. g. CouchDB)
+* Plug a task queue. By using https://github.com/paulmillr/chokidar and maybe Nextflow
+* Download input databases if needed (through CLI or web interface)
+* Plug an embeddable Genome Browser (e. g. igv.js)
+* More coherent system of keeping params in configuration for more different analyses
+
