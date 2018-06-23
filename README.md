@@ -62,4 +62,5 @@ From this repository:
 * Download input databases if needed (through CLI or web interface)
 * Plug an embeddable Genome Browser (e. g. igv.js)
 * More coherent system of keeping params in configuration for more different analyses
+* Fix error when PouchDB executed for first time (empty store)
 
