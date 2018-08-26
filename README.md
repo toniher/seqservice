@@ -27,6 +27,7 @@ NodeJS express API for handling biological sequences analyses
 
 Check example `nginx.conf` file
 
+Info about WebSocket and NGINX: https://www.nginx.com/blog/websocket-nginx/
 
 ### Application start
 
