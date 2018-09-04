@@ -8,7 +8,7 @@ pouchdbInterface.report = function( dbname, obj, cb ) {
 	let db = new PouchDB(dbname);
 
 
-	pouchdbInterface.add_indexes( db, null );
+	pouchdbInterface.add_indexes( db, function() {} );
 
 	
 	db.get(obj._id).then(function (doc) {

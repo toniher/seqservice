@@ -50,7 +50,6 @@ From this repository:
 
 
 ## TODO
-* FIXING Websocket access behind proxies such as NGINX
 * Webpack: Consider putting manifest for hashed version
 * Webpack and npm run: enable proper PRODUCTION and DEVELOPMENT behaviour 
 * Allow single-hit accompanying analyses (e.g. ProtLoc or GO)
@@ -63,5 +62,4 @@ From this repository:
 * Download input databases if needed (through CLI or web interface)
 * Plug an embeddable Genome Browser (e. g. igv.js)
 * More coherent system of keeping params in configuration for more different analyses
-* Fix error when PouchDB executed for first time (empty store)
 

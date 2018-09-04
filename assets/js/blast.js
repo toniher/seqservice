@@ -199,7 +199,12 @@ $(function() {
 		
 		$.post( reqexec, reqparams ).done( function( request ) {
 			
-			if ( request && request._id ) {
+			// Just in case returned string
+			if (typeof request === 'string' || request instanceof String) {
+				request = JSON.parse( resquest );
+			}
+			
+			if ( request && request.hasOwnProperty("_id") ) {
 				
 				params.refid = request._id;
 				request.type = "submit";
