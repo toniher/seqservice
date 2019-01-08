@@ -6,6 +6,7 @@ MAINTAINER toniher <toniher@cau.cat>
 
 ARG BLAST_VERSION=2.8.1
 ARG SAMTOOLS_VERSION=1.9
+ARG HMMER_VERSION=3.2.1
 
 # Handle dependencies
 RUN apt-get update && apt-get -y upgrade && apt-get -y install xsltproc && \
@@ -29,6 +30,13 @@ RUN wget -q https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VE
 	make prefix=/data/soft/samtools install && \
 	cd /data/soft/bin && ln -s /data/soft/samtools/bin/* . && cd /data/soft && \
 	rm -rf *tar.bz2
+
+RUN wget -q http://eddylab.org/software/hmmer/hmmer-${HMMER_VERSION}.tar.gz && \
+	tar zxf hmmer-${HMMER_VERSION}.tar.gz && \
+	cd hmmer-${HMMER_VERSION} && \
+	./configure prefix=/data/soft/hmmer;  make; make install && \
+	cd /data/soft/bin && ln -s /data/soft/hmmer/bin/* . && cd /data/soft && \
+	rm -rf *tar.gz
 
 # TEMPORARY. IN FUTURE HANDLED by App
 # Download DBs
@@ -63,6 +71,9 @@ RUN npm install
 
 # Execute npm run
 RUN npm run build
+
+# PATH
+ENV PATH $PATH:/data/soft/bin
 
 #Default port, change if necessary
 EXPOSE 10030 
