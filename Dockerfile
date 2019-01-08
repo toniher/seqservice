@@ -9,7 +9,7 @@ ARG SAMTOOLS_VERSION=1.9
 ARG HMMER_VERSION=3.2.1
 
 # Handle dependencies
-RUN apt-get update && apt-get -y upgrade && apt-get -y install xsltproc && \
+RUN apt-get update && apt-get -y upgrade && apt-get -y install xsltproc perl-doc && \
 	 apt-get clean && echo -n > /var/lib/apt/extended_states
 
 # Blast and samtools
