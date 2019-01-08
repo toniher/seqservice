@@ -24,7 +24,7 @@
     "async": "2.x",
     "biojs-io-fasta": "^0.1.17",
     "body-parser": "^1.18.3",
-    "bootstrap": "3.x",
+    "bootstrap": "3.4.x",
     "compression": "^1.7.3",
     "ejs": "^2.6.1",
     "errorhandler": "^1.5.0",
