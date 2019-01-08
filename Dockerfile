@@ -1,28 +1,31 @@
 # seqservice image
 # from node image
-FROM node:boron
+FROM node:carbon
 
 MAINTAINER toniher <toniher@cau.cat>
+
+ARG BLAST_VERSION=2.8.1
+ARG SAMTOOLS_VERSION=1.9
 
 # Handle dependencies
 RUN apt-get update && apt-get -y upgrade && apt-get -y install xsltproc && \
 	 apt-get clean && echo -n > /var/lib/apt/extended_states
 
 # Blast and samtools
-RUN mkdir -p /data/soft
+RUN mkdir -p /data/soft/seqservice
 RUN mkdir -p /data/soft/bin
 
 WORKDIR /data/soft
 
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
-	tar zxf ncbi-blast-2.6.0+-x64-linux.tar.gz && \
-	ln -s ncbi-blast-2.6.0+ blast && \
+RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${BLAST_VERSION}/ncbi-blast-${BLAST_VERSION}+-x64-linux.tar.gz && \
+	tar zxf ncbi-blast-${BLAST_VERSION}+-x64-linux.tar.gz && \
+	ln -s ncbi-blast-${BLAST_VERSION}+ blast && \
 	cd /data/soft/bin && ln -s /data/soft/blast/bin/* . && cd /data/soft && \
 	rm -rf *tar.gz
 
-RUN wget -q https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
-	tar jxf samtools-1.3.1.tar.bz2 && \
-	cd samtools-1.3.1 && \
+RUN wget -q https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 && \
+	tar jxf samtools-${SAMTOOLS_VERSION}.tar.bz2 && \
+	cd samtools-${SAMTOOLS_VERSION} && \
 	make prefix=/data/soft/samtools install && \
 	cd /data/soft/bin && ln -s /data/soft/samtools/bin/* . && cd /data/soft && \
 	rm -rf *tar.bz2
@@ -46,13 +49,10 @@ RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz && tar zxf swis
 	/data/soft/bin/blastdbcmd -db swissprot -entry all > swissprot && \
 	/data/soft/bin/samtools faidx swissprot
 	
-# Create App Directory and cd into it
-WORKDIR /data/soft
+# Copy contents to /data/soft/seqservice
+COPY . /data/soft/seqservice
 
-# Clone Master and Install dependencies
-RUN git clone https://github.com/toniher/seqservice.git
- 
-# Run App
+# Create App Directory and cd into it
 WORKDIR /data/soft/seqservice
 
 # Install forever

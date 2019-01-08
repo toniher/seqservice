@@ -1,6 +1,7 @@
 const Webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const rootAssetPath = path.join(__dirname, 'assets');
 
@@ -32,11 +33,11 @@ if ( ! dev ) {
 			NODE_ENV: JSON.stringify('production'),
 		}
 		}),
-		new Webpack.optimize.UglifyJsPlugin({
-			sourceMap: true,
-            mangle: {
-                except: ['$super', '$', 'exports', 'require']
-            }
+		new UglifyJSPlugin({
+			sourceMap: true
+            //mangle: {
+            //    except: ['$super', '$', 'exports', 'require']
+            //}
 		})
 	);
     
