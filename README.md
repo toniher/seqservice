@@ -10,6 +10,7 @@ NodeJS express API for handling biological sequences analyses
 * Dependencies
 	* NCBI-BLAST
 	* Samtools (optional)
+	* HMMER (optional)
 
 * Assuming we define /seqservice as basepath, and we keep 10030 port in config.json
 
