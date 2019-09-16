@@ -52,7 +52,7 @@ exports.performExec = function (req, res) {
 						temp.open('tmp', function(err, info) {
 							if (!err) {
 																
-								fs.write( info.fd, input );
+								fs.write( info.fd, input, function( err ) { if ( err ) { console.error( err ) } } );
 								
 								if ( progconf.input_param ) {
 									execparams[  progconf.input_param ] = info.path;

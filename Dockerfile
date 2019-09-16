@@ -1,6 +1,6 @@
 # seqservice image
 # from node image
-FROM node:carbon
+FROM node:dubnium
 
 MAINTAINER toniher <toniher@cau.cat>
 
