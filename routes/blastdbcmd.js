@@ -202,7 +202,7 @@ exports.getBlastDBcmd = function(req, res) {
 						// Process the data (note: error handling omitted)
 						temp.open('tmp', function(err, info) {
 							if (!err) {
-								fs.write(info.fd, listID.join("\n"));
+								fs.write(info.fd, listID.join("\n"), function( err ) { if ( err ) { console.error( err ) } } );
 								fs.close(info.fd, function(err) {
 									// Entry batch generated automatically
 									if ( method === 'samtools ') {
@@ -233,7 +233,7 @@ exports.getBlastDBcmd = function(req, res) {
 				}
 			} else {
 				// Entry batch passed as param
-				if ( method === 'samtools ') {
+				if ( method === 'samtools') {
 					cmd = "xargs "+ blastdbcmd + " faidx "+ fullpath + " < " + entry_batch;
 				} else {
 					cmd = blastdbcmd+" -dbtype " + dbtype+" -db " + fullpath+" -entry_batch " + entry_batch+" -outfmt " + outfmt;
@@ -266,7 +266,7 @@ function execBlastChild( cmd, req, res, params ) {
 					// Write temp file
 					temp.open('tmp', function(err, info) {
 						if (!err) {
-							fs.write(info.fd, stdout);
+							fs.write(info.fd, stdout, function( err ) { if ( err ) { console.error( err ) } } );
 							fs.close(info.fd, function(err) {
 								if ( ! err ) {
 									outcome.path = info.path;

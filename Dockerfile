@@ -1,10 +1,10 @@
 # seqservice image
 # from node image
-FROM node:carbon
+FROM node:dubnium
 
 MAINTAINER toniher <toniher@cau.cat>
 
-ARG BLAST_VERSION=2.8.1
+ARG BLAST_VERSION=2.9.0
 ARG SAMTOOLS_VERSION=1.9
 ARG HMMER_VERSION=3.2.1
 
@@ -38,25 +38,9 @@ RUN wget -q http://eddylab.org/software/hmmer/hmmer-${HMMER_VERSION}.tar.gz && \
 	cd /data/soft/bin && ln -s /data/soft/hmmer/bin/* . && cd /data/soft && \
 	rm -rf *tar.gz
 
-# TEMPORARY. IN FUTURE HANDLED by App
 # Download DBs
-RUN mkdir -p /data/db/seqservice
-WORKDIR /data/db/seqservice
+VOLUME /data/db/seqservice
 
-# They could be retrieved via update_blast.pl
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.aa.gz && gunzip drosoph.aa.gz && \
-	/data/soft/bin/makeblastdb -dbtype prot -parse_seqids -in drosoph.aa && \
-	/data/soft/bin/samtools faidx drosoph.aa
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/drosoph.nt.gz && gunzip drosoph.nt.gz && \
-	/data/soft/bin/makeblastdb -dbtype nucl -parse_seqids -in drosoph.nt && \
-	/data/soft/bin/samtools faidx drosoph.nt
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/16SMicrobial.tar.gz && tar zxf 16SMicrobial.tar.gz && \
-	/data/soft/bin/blastdbcmd -db 16SMicrobial -entry all > 16SMicrobial && \
-	/data/soft/bin/samtools faidx 16SMicrobial
-RUN wget -q ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz && tar zxf swissprot.tar.gz && \
-	/data/soft/bin/blastdbcmd -db swissprot -entry all > swissprot && \
-	/data/soft/bin/samtools faidx swissprot
-	
 # Copy contents to /data/soft/seqservice
 COPY . /data/soft/seqservice
 
@@ -74,6 +58,9 @@ RUN npm run build
 
 # PATH
 ENV PATH $PATH:/data/soft/bin
+
+# Config file
+VOLUME /data/soft/seqservice/config.json
 
 #Default port, change if necessary
 EXPOSE 10030 
