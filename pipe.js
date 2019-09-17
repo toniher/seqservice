@@ -2,7 +2,6 @@ var $p = require('procstreams');
 
 var args = process.argv.slice(2);
 
-
 if ( args.length > 0 ) {
 	
 	var baseText = null;
@@ -51,7 +50,7 @@ function runPipe( baseText, apps, callBack ) {
 	if ( baseText && ( baseText !== "" ) ) {
 		commandline = $p("echo \"" + baseText + "\"" );
 	}
-		
+	
 	for ( var a = 0; a < apps.length; a = a + 1 ) {
 		var command = apps[a].app + " " + apps[a].params;
 		commandline = commandline.pipe( command );
@@ -64,8 +63,8 @@ function runPipe( baseText, apps, callBack ) {
 		if ( stdout ) {
 			resp += stdout.toString();
 		}
-				
-		callBack( err, stderr, resp);
+
+		callBack( err, stderr, resp );
 	});
 
 }
