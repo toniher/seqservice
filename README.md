@@ -36,7 +36,7 @@ From the directory of the application
 
 	npm install
 	npm run build
-	NODE_ENV=production node index.js
+	NODE_ENV=production node index.js config.json
 
 	FUN!
 
@@ -44,11 +44,12 @@ From the directory of the application
 
 From this repository:
 
-	sudo docker build -t seqservice .
-	sudo docker run -p 10030:10030 -d seqservice
+	docker build -t seqservice .
+	docker run -p 10030:10030 -v /path/to/db:/data/db/seqservice -v /path/to/config.json:/data/soft/config.json -d seqservice
 	
 	Open your browser at http://localhost:10030/seqservice/
 
+In any case, adapt database and config.json path and contents to fit your needs
 
 ## TODO
 * Webpack: Consider putting manifest for hashed version

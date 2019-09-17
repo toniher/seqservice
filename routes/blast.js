@@ -149,11 +149,11 @@ function run_blast( params, req, res, seqidpath ){
 		
 		output += data;
 	});
-	
+	    
 	child.on('close', function ( code ) {
 
 		var object = {};
-		
+        
 		if ( ( output.match(/report/g)||[]).length > 1 ) {
 			// output = processMultiOutput( output ); TODO: Temporary outp
 			object = JSON.parse(output);

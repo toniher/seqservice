@@ -60,8 +60,8 @@ RUN npm run build
 ENV PATH $PATH:/data/soft/bin
 
 # Config file
-VOLUME /data/soft/seqservice/config.json
+VOLUME /data/soft/config.json
 
 #Default port, change if necessary
 EXPOSE 10030 
-CMD NODE_ENV=production forever index.js
+CMD NODE_ENV=production forever index.js /data/soft/config.json
