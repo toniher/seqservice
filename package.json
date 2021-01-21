@@ -39,7 +39,7 @@
     "pouchdb": "^7.0.0",
     "procstreams": "^0.3.0",
     "request": "^2.88.0",
-    "socket.io": "2.2.x",
+    "socket.io": "2.4.x",
     "temp": "0.9.x",
     "tinysort": "2.x"
   },
