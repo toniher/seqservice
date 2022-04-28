@@ -21,7 +21,7 @@
     "api"
   ],
   "dependencies": {
-    "async": "^2.6.3",
+    "async": "^2.6.4",
     "biojs-io-fasta": "^0.1.17",
     "body-parser": "^1.18.3",
     "bootstrap": "^3.4.1",
